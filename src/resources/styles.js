@@ -1,5 +1,6 @@
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { UseDarkTheme } from "./ContextProvider";
 
 export const inputWrapperStyle = {
     display: 'flex',
@@ -14,31 +15,16 @@ export const confirmWrapperStyle = {
     width: '80%',
     margin: '20px auto',
     padding: '2px 0',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
 }
 
-const initAnim = keyframes`
-        from{
-            width: 0;
-            height: 25%;
-        }
-        to{
-            width: 450px;
-            height: 25%;
-        }
-    `
-
-const LoginModal = styled.div`
-        position: relative;
-        width: 450px;
-        height: 250px;
-        margin: auto;
-        background-color: ${props => props.darkTheme ? '#444' : '#ddd'};
-        color: ${props => props.darkTheme ? '#ddd' : '#333'};
-        border-radius: 6px;
-        box-shadow: ${props => props.darkTheme ? '1px 1px 8px 2px white' : '1px 1px 8px 2px black'};
-        animation: ${initAnim} .35s ease-out;
-    `
+const ScreenWrapperStyle = styled.div`
+    width: 100vw;
+    height: 100vh;
+    text-align: center;
+    display: flex;
+    background-color: ${props => props.darkTheme? '#333' : '#fff'};
+`
 
 const InputBoxStyle = styled.input`
         width: 70%;
@@ -46,21 +32,28 @@ const InputBoxStyle = styled.input`
         fontSize: 15px;
         border: 0;
         border-bottom: 1px solid ${props => props.darkTheme ? 'white' : 'black'};
-        background-color:rgba(0,0,0,0);
+        background-color:transparent;
         color: ${props => props.darkTheme ? 'white' : 'black'};
         
         &:focus{
             outline:none;
         }
+        &:autofill:hover,
+        &:autofill:fill,
+        &:autofill:active,
+        {
+            background-color: ${props => props.darkTheme? '#444':'#ddd'};
+            color: ${props => props.darkTheme? '#ddd':'#333'};
+        }
     `
 
 const ConfirmButtonStyle = styled.input.attrs({ type: 'submit' })`
-        width: 70px;
-        height: 30px;
         border: 0;
+        padding: 10px 16px;
         border-radius: 4px;
         background-color: #888;
         transition : .1s;
+        font-size: 1rem;
         color: #fff;
         &:hover{
             transform:scale(1.1,1.1);
@@ -71,7 +64,7 @@ const ConfirmButtonStyle = styled.input.attrs({ type: 'submit' })`
         }
     `
 
-const StyledLink = styled(Link)`
+const ForgetPasswordTextStyle = styled(Link)`
         text-decoration: none;
         color: ${props => props.darkTheme ? 'white' : 'black'};    
         transition: .1s;
@@ -80,14 +73,27 @@ const StyledLink = styled(Link)`
             transform: scale(1.1,1.1);
         }
     `
-
-export const InputBox = ({darkTheme}) => {
+export const ScreenWrapper = ({children}) => {
+    const darkTheme = UseDarkTheme();
     return(
-        <InputBoxStyle darkTheme = {darkTheme} />
+        <ScreenWrapperStyle darkTheme={darkTheme}>
+            {children}
+        </ScreenWrapperStyle>
     )
 }
-export const ConfirmButton = () =>{
+export const InputBox = ({darkTheme, type, onChange, val, id}) => {
     return(
-        <ConfirmButtonStyle /> 
+        <InputBoxStyle darkTheme = {darkTheme} type={type} onChange={onChange} value={val} id={id}/>
+    )
+}
+export const ConfirmButton = ({val}) =>{
+    return(
+        <ConfirmButtonStyle value={val}/> 
+    )
+}
+
+export const ForgetPasswordText = ({darkTheme, val}) => {
+    return(
+        <ForgetPasswordTextStyle to="/forgetpw" darkTheme={darkTheme}>{val}</ForgetPasswordTextStyle>
     )
 }

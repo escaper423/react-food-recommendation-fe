@@ -1,36 +1,34 @@
-import React from 'react';
-import { UseDarkTheme } from '../ContextProvider';
-import styled, {keyframes} from 'styled-components';
-import { confirmWrapperStyle, inputWrapperStyle } from '../resources/styles';
-
-const initAnim = keyframes`
-        from{
-            width: 0;
-            height: 25%;
-        }
-        to{
-            width: 450px;
-            height: 25%;
-        }
-    `
+import React, { useState } from 'react';
+import { UseAuthUser, UseDarkTheme, UseSetAuthUser } from '../resources/ContextProvider';
+import styled from 'styled-components';
+import {
+    confirmWrapperStyle, inputWrapperStyle,
+    InputBox, ConfirmButton
+} from '../resources/styles';
+import axios from 'axios';
+import { useHistory } from 'react-router-dom';
 
 const RegisterModal = styled.div`
         position: relative;
         width: 450px;
-        height: 650px;
         margin: auto;
         background-color: ${props => props.darkTheme ? '#444' : '#ddd'};
         color: ${props => props.darkTheme ? '#ddd' : '#333'};
         border-radius: 6px;
         box-shadow: ${props => props.darkTheme ? '1px 1px 8px 2px white' : '1px 1px 8px 2px black'};
-        animation: ${initAnim} .35s ease-out;
     `
-const RegisterUser = () => {
-    return;
-}
 
 const SignUp = () => {
+    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+
     const darkTheme = UseDarkTheme();
+    const setAuthUser = UseSetAuthUser();
+    const authUser = UseAuthUser();
+    const history = useHistory();
+
 
     const screenStyle = {
         width: '100vw',
@@ -40,45 +38,102 @@ const SignUp = () => {
         backgroundColor: darkTheme ? '#333' : '#fff'
     }
 
+    const HandleUsername = (e) => {
+        return setUsername(e.target.value);
+    }
+
+    const HandlePassword = (e) => {
+        return setPassword(e.target.value);
+    }
+
+    const HandleEmail = (e) => {
+        return setEmail(e.target.value);
+    }
+    const HandleConfirmPassword = (e) => {
+        return setConfirmPassword(e.target.value);
+    }
+
+    const RegisterUser = (e) => {
+        e.preventDefault();
+
+        let msg = document.querySelector('.app-register__message');
+        const vaildEmail = new RegExp
+            ("^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$");
+
+        //validate before sending a query
+        if (username.length === 0) {
+            msg.innerHTML = "User id is required.";
+        }
+        else if (!vaildEmail.test(email)) {
+            msg.innerHTML = "E-mail is invalid.";
+        }
+        else if (password !== confirmPassword) {
+            msg.innerHTML = "Passwords did not match.";
+        }
+        else {
+            console.log("Request sent. ")
+            msg.style.color="yellow";
+            msg.innerHTML = "Signing up...";
+            axios(
+                {
+                    method: 'POST',
+                    url: 'http://127.0.0.1:3001/register',
+                    data: {
+                        username: username,
+                        email: email,
+                        password: password
+                    }
+                }).then(res => {
+                    console.log(res.data);
+                    history.push('/login');
+                })
+                .catch(err => {
+                    console.log(err.response);
+                    if (err.response)
+                        msg.innerHTML = err.response.data;
+                    else
+                        msg.innerHTML = "Failed to connect.";
+                    
+                })
+                .finally(() => {
+                    msg.style.color = "red";
+                })
+        }
+        return; 
+    }
     return (
-        
-        <form onSubmit={RegisterUser}>  
+        <form onSubmit={RegisterUser} method="POST">
             <div className="app-register" style={screenStyle}>
                 <RegisterModal darkTheme={darkTheme}>
-                    <h1 style={{paddingTop: '10px', paddingBottom: '14px'}}>Sign in</h1>
+                    <h1 style={{ paddingTop: '10px', paddingBottom: '14px' }}>Register</h1>
+
+                    <div className="app-register__user" style={inputWrapperStyle}>
+                        <label htmlFor='enter_id'>Username</label>
+                        <InputBox darkTheme={darkTheme} type='text' onChange={HandleUsername} id='enter_id'/>
+                    </div>
+                    <div className="app-register__email" style={inputWrapperStyle}>
+                        <label htmlFor='enter_email'>E-mail</label>
+                        <InputBox darkTheme={darkTheme} type='text' onChange={HandleEmail} id='enter_email'/>
+                    </div>
+                    <div className="app-register__pw" style={inputWrapperStyle}>
+                        <label htmlFor='enter_pw'>Password</label>
+                        <InputBox darkTheme={darkTheme} type='password' onChange={HandlePassword} id='enter_pw'/>
+                    </div>
+                    <div className="app-register__confirm-pw" style={inputWrapperStyle}>
+                        <label htmlFor='enter_cpw'>Confirm</label>
+                        <InputBox darkTheme={darkTheme} type='password' onChange={HandleConfirmPassword} id='enter_cpw' />
+                    </div>
+                    <span className="app-register__message" style={{ paddingTop: '15px', display: 'block', color: 'red' }}></span>
+                    <div className="app-register__confirm" style={confirmWrapperStyle}>
+                        <ConfirmButton val="Register" />
+                    </div>
                 </RegisterModal>
+
             </div>
         </form>
-        
+
 
     )
 }
 
 export default SignUp;
-
-
-/*
-                    <div className="app-register__user" style={inputWrapperStyle}>
-                        <label for='enter_id'>Username</label>
-                        <InputBox darkTheme={darkTheme} type='text' onChange={handleUsername}/>
-                    </div>
-                    <div className="app-register__email" style={inputWrapperStyle}>
-                        <label for='enter_id'>Username</label>
-                        <InputBox darkTheme={darkTheme} type='text' onChange={handleUsername}/>
-                    </div>
-                    <div className="app-register__pw" style={inputWrapperStyle}>
-                        <label for='enter_pw'>Password</label>
-                        <InputBox darkTheme={darkTheme} type='password' onChange={handlePassword}/>
-                    </div>
-                    <div className="app-register__confirm-pw" style={inputWrapperStyle}>
-                        <label for='enter_pw'>Password</label>
-                        <InputBox darkTheme={darkTheme} type='password' onChange={handlePassword}/>
-                    </div>
-                    <div className="app-register__confirm" style={confirmWrapperStyle}>
-                        <div style={{ position: 'relative', marginTop: '3px' }}>
-                            <input type="checkbox" id="rememberme" checked={rememberName} onChange={toggleRemember}></input>
-                            <label for="rememberme" > Remember me</label>
-                        </div>
-                        <ConfirmButton value="Register" />
-                    </div>
-                    */

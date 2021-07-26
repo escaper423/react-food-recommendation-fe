@@ -1,7 +1,7 @@
 import React from 'react';
-import { UseDarkTheme } from './ContextProvider';
+import { UseDarkTheme } from '../resources/ContextProvider';
 import NavBar from './NavBar';
-import { headerDark, headerLight } from './resources/colors';
+import { headerDark, headerLight } from '../resources/colors';
 
 function Header() {
     const darkTheme = UseDarkTheme();
@@ -23,7 +23,7 @@ function Header() {
     return (
         <div id='app-header' style={headerStyle}>
             <div id='app-header-menu' style={menuStyle}>
-                <NavBar darkTheme={darkTheme}/>
+                <NavBar />
             </div>
         </div>
     )

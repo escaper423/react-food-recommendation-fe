@@ -13,3 +13,13 @@
 .app-body-search{
   margin: 10px;
 }
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active  {
+  transition: background-color 5000s;
+  color: #fff;
+  -webkit-text-fill-color: #fff !important;
+  caret-color: currentcolor !important;
+}

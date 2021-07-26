@@ -23,10 +23,10 @@ export function UseSetAuthUser(){
 
 function ContextProvider({ children }) {
     const [darkTheme, setDarkTheme] = useState(true);
-    const [authUser, setAuthUser] = useState(null);
-
-    function ToggleTheme() {
-        return setDarkTheme(prev => !prev);
+    const [authUser, setAuthUser] = useState(null); //login info: tokens, name
+   
+    function ToggleTheme(to) {
+        return setDarkTheme(to);
     }
 
     function UpdateAuthUser(to) {
