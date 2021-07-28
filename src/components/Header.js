@@ -21,11 +21,11 @@ function Header() {
     }
 
     return (
-        <div id='app-header' style={headerStyle}>
+        <section id='app-header' style={headerStyle}>
             <div id='app-header-menu' style={menuStyle}>
                 <NavBar />
             </div>
-        </div>
+        </section>
     )
 }
 

@@ -1,7 +1,7 @@
 import './App.css';
 import React, { useEffect, useRef } from 'react';
-import { UseAuthUser, UseSetAuthUser, UseSetDarkTheme } from './resources/ContextProvider';
-import { BrowserRouter as Router, Route, Switch, useHistory } from 'react-router-dom';
+import { UseDarkTheme, UseSetAuthUser, UseSetDarkTheme } from './resources/ContextProvider';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Home from './pages/Home';
 import About from './pages/About';
 import Contact from './pages/Contact';
@@ -11,10 +11,12 @@ import Logout from './pages/Logout';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import Freeboard from './pages/Freeboard';
+import { screenDark, screenLight, textDark, textLight } from './resources/colors';
 
 function App() {
   const SetDarkTheme = UseSetDarkTheme();
   const SetUser = UseSetAuthUser();
+  const darkTheme = UseDarkTheme();
 
   let mode = useRef(localStorage.getItem('darktheme'));
 
@@ -36,13 +38,20 @@ function App() {
     });
   }, [])
 
+  const appStyle = {
+    overflow: 'hidden',
+    minWidth: '100vw',
+    minHeight: '100vh',
+    backgroundColor: darkTheme? screenDark: screenLight,
+    color: darkTheme?  textDark:textLight
+  }
 
   return (
 
     <Router>
       <Switch>
         <React.Fragment>
-          <div className="app">
+          <div className="app" style={appStyle}>
             <Route exact path='/' component={Home} />
             <Route path='/about' component={About} />
             <Route path='/contact' component={Contact} />

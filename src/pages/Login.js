@@ -2,15 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { UseDarkTheme, UseSetAuthUser } from '../resources/ContextProvider';
 import styled from 'styled-components';
 import { confirmWrapperStyle,inputWrapperStyle,
-    ScreenWrapper, InputBox, ConfirmButton, ForgetPasswordText } from '../resources/styles';
+    FlexScreenWrapper, InputBox, ConfirmButton, ForgetPasswordText } from '../resources/styles';
 import {useHistory} from 'react-router-dom';
 import axios from 'axios';
 
 const LoginModal = styled.div`
         position: relative;
         width: 450px;
-        height: 280px;
+        height: 260px;
         margin: auto;
+        padding: 10px;
         background-color: ${props => props.darkTheme ? '#444' : '#ddd'};
         color: ${props => props.darkTheme ? '#ddd' : '#333'};
         border-radius: 6px;
@@ -87,7 +88,7 @@ const Login = () => {
 
     return (
         <form onSubmit={LoginUser}> 
-            <ScreenWrapper darkTheme={darkTheme}>
+            <FlexScreenWrapper darkTheme={darkTheme}>
                 <LoginModal darkTheme={darkTheme}>
                     <h1 style={{ paddingTop: '10px', paddingBottom: '14px' }}>Login</h1>
                     <div className="app-login__user" style={inputWrapperStyle}>
@@ -110,7 +111,7 @@ const Login = () => {
                         <ForgetPasswordText darkTheme={darkTheme} val="Forgot Password?"/>
                     </div>
                 </LoginModal>
-            </ScreenWrapper>
+            </FlexScreenWrapper>
         </form>
     )
 }

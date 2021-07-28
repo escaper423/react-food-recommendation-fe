@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { UseAuthUser, UseDarkTheme, UseSetAuthUser } from '../resources/ContextProvider';
+import { UseDarkTheme } from '../resources/ContextProvider';
 import styled from 'styled-components';
 import {
     confirmWrapperStyle, inputWrapperStyle,
-    InputBox, ConfirmButton
+    InputBox, ConfirmButton, FlexScreenWrapper
 } from '../resources/styles';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
@@ -25,18 +25,7 @@ const SignUp = () => {
     const [confirmPassword, setConfirmPassword] = useState("");
 
     const darkTheme = UseDarkTheme();
-    const setAuthUser = UseSetAuthUser();
-    const authUser = UseAuthUser();
     const history = useHistory();
-
-
-    const screenStyle = {
-        width: '100vw',
-        height: '100vh',
-        textAlign: 'center',
-        display: 'flex',
-        backgroundColor: darkTheme ? '#333' : '#fff'
-    }
 
     const HandleUsername = (e) => {
         return setUsername(e.target.value);
@@ -103,7 +92,7 @@ const SignUp = () => {
     }
     return (
         <form onSubmit={RegisterUser} method="POST">
-            <div className="app-register" style={screenStyle}>
+            <FlexScreenWrapper className="app-register">
                 <RegisterModal darkTheme={darkTheme}>
                     <h1 style={{ paddingTop: '10px', paddingBottom: '14px' }}>Register</h1>
 
@@ -128,8 +117,7 @@ const SignUp = () => {
                         <ConfirmButton val="Register" />
                     </div>
                 </RegisterModal>
-
-            </div>
+            </FlexScreenWrapper>
         </form>
 
 

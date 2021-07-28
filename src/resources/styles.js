@@ -18,11 +18,18 @@ export const confirmWrapperStyle = {
     justifyContent: 'space-around',
 }
 
-const ScreenWrapperStyle = styled.div`
+const FlexScreenWrapperStyle = styled.section`
     width: 100vw;
-    height: 100vh;
+    height: calc(100vh - 60px);
     text-align: center;
     display: flex;
+    background-color: ${props => props.darkTheme? '#333' : '#fff'};
+`
+
+const BlockScreenWrapperStyle = styled.section`
+    width: 100vw;
+    height: calc(100vh - 60px);
+    display: block;
     background-color: ${props => props.darkTheme? '#333' : '#fff'};
 `
 
@@ -73,14 +80,98 @@ const ForgetPasswordTextStyle = styled(Link)`
             transform: scale(1.1,1.1);
         }
     `
-export const ScreenWrapper = ({children}) => {
-    const darkTheme = UseDarkTheme();
-    return(
-        <ScreenWrapperStyle darkTheme={darkTheme}>
+
+export const BoardItemWrapper = styled.article`
+    position: relative;
+    width: 90%;
+    min-width: 550px;
+    height: 81px;
+    background-color: #777;
+    display: table;
+    z-index: 1;
+    box-sizing: border-box;
+    padding: 8px;
+    box-shadow: 2px 2px 10px black;
+    margin: 8px auto;
+`
+
+const CommendsStyle = styled.div`
+    background-color: #777;
+    text-align: center;
+    display: table-cell;
+    width: 26px;
+    padding: 2px;
+    vertical-align: middle;
+`
+
+const BoardInfoStyle = styled.div`
+    background-color: #777;
+    cursor: pointer;
+    display: table-cell;
+    padding: 2px;
+`
+
+const ThumbnailStyle = styled.div`
+    background-color: #555;
+
+    display: table-cell;
+    width: 100px;
+    vertical-align: middle;
+    padding: 2px;
+`
+export const VoteStyle = styled.a`
+        color: #ccc;
+        display: inline-block;
+        &:hover{
+            color: yellow;
+        }
+        &:active{
+            color: #3e3;
+        }
+`
+
+export const Commends = ({children}) =>{
+    return (
+        <CommendsStyle>
             {children}
-        </ScreenWrapperStyle>
+        </CommendsStyle>
     )
 }
+
+export const BoardInfo = ({children}) =>{
+    return (
+        <BoardInfoStyle>
+            {children}
+        </BoardInfoStyle>
+    )
+}
+
+export const Thumbnail = ({children}) =>{
+    return (
+        <ThumbnailStyle>
+            {children}
+        </ThumbnailStyle>
+    )
+}
+
+export const FlexScreenWrapper = ({children}) => {
+    const darkTheme = UseDarkTheme();
+    return(
+        <FlexScreenWrapperStyle darkTheme={darkTheme}>
+            {children}
+        </FlexScreenWrapperStyle>
+    )
+}
+
+export const BlockScreenWrapper = ({children}) => {
+    const darkTheme = UseDarkTheme();
+    return(
+        <BlockScreenWrapperStyle darkTheme={darkTheme}>
+            {children}
+        </BlockScreenWrapperStyle>
+    )
+}
+
 export const InputBox = ({darkTheme, type, onChange, val, id}) => {
     return(
         <InputBoxStyle darkTheme = {darkTheme} type={type} onChange={onChange} value={val} id={id}/>

@@ -114,6 +114,7 @@ overflow: hidden;
         top: 60px;
         width: 100%;
         height: 100vh;
+        z-index: 100;
         background-color: ${props => props.darkTheme ? headerDark : headerLight};
     }
 `
@@ -122,6 +123,8 @@ const BarLink = styled(Link)`
     box-sizing: border-box;
     display: block;
     text-decoration: none;
+    
+    z-index: 100;
     background-color: ${props => props.darkTheme ? headerDark : headerLight};
     color: ${props => props.darkTheme ? linkDark : linkLight};
     padding: 20px 20px;
