@@ -40,8 +40,6 @@ function App() {
 
   const appStyle = {
     overflow: 'hidden',
-    minWidth: '100vw',
-    minHeight: '100vh',
     backgroundColor: darkTheme? screenDark: screenLight,
     color: darkTheme?  textDark:textLight
   }

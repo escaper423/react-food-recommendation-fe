@@ -82,16 +82,13 @@ const ForgetPasswordTextStyle = styled(Link)`
     `
 
 export const BoardItemWrapper = styled.article`
-    position: relative;
     width: 90%;
     min-width: 550px;
     height: 81px;
     background-color: #777;
     display: table;
     z-index: 1;
-    box-sizing: border-box;
     padding: 8px;
-    box-shadow: 2px 2px 10px black;
     margin: 8px auto;
 `
 
@@ -101,6 +98,7 @@ const CommendsStyle = styled.div`
     display: table-cell;
     width: 26px;
     padding: 2px;
+    margin-right: 15px;
     vertical-align: middle;
 `
 
@@ -113,11 +111,11 @@ const BoardInfoStyle = styled.div`
 
 const ThumbnailStyle = styled.div`
     background-color: #555;
-
     display: table-cell;
-    width: 100px;
+    width: 115px;
     vertical-align: middle;
     padding: 2px;
+    margin-left: 18px;
 `
 export const VoteStyle = styled.a`
         color: #ccc;

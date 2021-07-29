@@ -17,8 +17,6 @@ const popupAnim = keyframes`
 //styling navbar
 const Nav = styled.div`
 z-index: 1000;
-position: absolute;
-display: flex;
 float: right;
 height: 100%;
 width: 100%;
@@ -123,7 +121,6 @@ const BarLink = styled(Link)`
     box-sizing: border-box;
     display: block;
     text-decoration: none;
-    
     z-index: 100;
     background-color: ${props => props.darkTheme ? headerDark : headerLight};
     color: ${props => props.darkTheme ? linkDark : linkLight};
