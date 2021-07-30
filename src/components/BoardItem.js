@@ -46,7 +46,7 @@ const BoardItem = () => {
                     <div style={{whiteSpace:'nowrap', display: 'inline-block', width: '100%'}}>
                         <div style={{display:'inherit', paddingRight: '6px', borderRight: '1px solid white'}}>{itemData.category}</div> 
                         <div style={{display:'inherit', paddingLeft: '8px'}}>{itemData.date}</div>
-                        <div style={{display:'inherit', float:'right', right: '20px'}}>작성자: {itemData.writer}</div>
+                        <div style={{display:'inherit', float:'right', right: '20px'}}>{itemData.writer}</div>
                     </div>
                     </div>
                 </a>

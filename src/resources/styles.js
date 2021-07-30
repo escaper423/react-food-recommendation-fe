@@ -19,7 +19,7 @@ export const confirmWrapperStyle = {
 }
 
 const FlexScreenWrapperStyle = styled.section`
-    width: 100vw;
+    width: 100%;
     height: calc(100vh - 60px);
     text-align: center;
     display: flex;
@@ -27,10 +27,9 @@ const FlexScreenWrapperStyle = styled.section`
 `
 
 const BlockScreenWrapperStyle = styled.section`
-    width: 100vw;
+    width: 100%;
     height: calc(100vh - 60px);
     display: block;
-    background-color: ${props => props.darkTheme? '#333' : '#fff'};
 `
 
 const InputBoxStyle = styled.input`

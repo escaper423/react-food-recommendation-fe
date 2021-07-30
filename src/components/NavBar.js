@@ -17,6 +17,7 @@ const popupAnim = keyframes`
 //styling navbar
 const Nav = styled.div`
 z-index: 1000;
+display: flex;
 float: right;
 height: 100%;
 width: 100%;
@@ -104,7 +105,7 @@ const BarMenu = styled.div`
 display: none;
 text-align: center;
 align-items: center;
-animation: ${popupAnim} 1s;
+animation: ${popupAnim} .4s;
 overflow: hidden;
     @media screen and (max-width: 768px){
         display: block;

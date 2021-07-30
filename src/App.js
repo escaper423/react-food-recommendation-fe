@@ -39,7 +39,6 @@ function App() {
   }, [])
 
   const appStyle = {
-    overflow: 'hidden',
     backgroundColor: darkTheme? screenDark: screenLight,
     color: darkTheme?  textDark:textLight
   }
