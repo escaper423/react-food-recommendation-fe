@@ -8,6 +8,7 @@ import Contact from './pages/Contact';
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
 import Logout from './pages/Logout';
+import Write from './pages/Wrtie';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import Freeboard from './pages/Freeboard';
@@ -56,6 +57,7 @@ function App() {
             <Route path='/signup' component={SignUp} />
             <Route path='/login' component={Login} />
             <Route path='/logout' component={Logout} />
+            <Route path='/write' component={Write} />
           </div>
         </React.Fragment>
       </Switch>

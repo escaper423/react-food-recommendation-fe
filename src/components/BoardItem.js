@@ -10,6 +10,7 @@ const BoardItem = () => {
         id: 1,
         writer: "Trollman",
         date: new Date().toUTCString(),
+        views: 0,
         title: "아",
         category: "똥글",
 
@@ -46,7 +47,8 @@ const BoardItem = () => {
                     <div style={{whiteSpace:'nowrap', display: 'inline-block', width: '100%'}}>
                         <div style={{display:'inherit', paddingRight: '6px', borderRight: '1px solid white'}}>{itemData.category}</div> 
                         <div style={{display:'inherit', paddingLeft: '8px'}}>{itemData.date}</div>
-                        <div style={{display:'inherit', float:'right', right: '20px'}}>{itemData.writer}</div>
+                        <div style={{display:'inherit', paddingLeft: '8px'}}>{itemData.writer}</div>
+                        <div style={{display:'inherit', float:'right', right: '20px'}}>조회 수: {itemData.views}</div>
                     </div>
                     </div>
                 </a>

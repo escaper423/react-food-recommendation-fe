@@ -33,7 +33,7 @@ const BlockScreenWrapperStyle = styled.section`
 `
 
 const InputBoxStyle = styled.input`
-        width: 70%;
+        width: ${props => props.width ? props.width:'70%'};
         height: 25px;
         fontSize: 15px;
         border: 0;
@@ -169,9 +169,9 @@ export const BlockScreenWrapper = ({children}) => {
     )
 }
 
-export const InputBox = ({darkTheme, type, onChange, val, id}) => {
+export const InputBox = ({darkTheme, type, onChange, val, id, width}) => {
     return(
-        <InputBoxStyle darkTheme = {darkTheme} type={type} onChange={onChange} value={val} id={id}/>
+        <InputBoxStyle darkTheme = {darkTheme} type={type} onChange={onChange} value={val} id={id} width={width}/>
     )
 }
 export const ConfirmButton = ({val}) =>{
