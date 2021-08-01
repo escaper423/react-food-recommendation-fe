@@ -2,8 +2,11 @@ import React from 'react'
 import Header from '../components/Header'
 import { categories } from '../resources/config'
 import { UseDarkTheme } from '../resources/ContextProvider'
-import { BlockScreenWrapper, ConfirmButton, InputBox } from '../resources/styles'
+import { BlockScreenWrapper, ConfirmButton, InputBox, SelectStyle } from '../resources/styles'
 import _ from 'lodash'
+import styled  from 'styled-components'
+
+
 const TmpStyle = {
     width: '80px',
     padding: '5px 3px',
@@ -12,6 +15,7 @@ const TmpStyle = {
 const FlexDiv = {
     display: 'flex'
 }
+
 const Wrtie = () => {
     const darkTheme = UseDarkTheme();
     return (
@@ -19,28 +23,28 @@ const Wrtie = () => {
             <Header />
             <BlockScreenWrapper>
                 <div className="app-board-write-head" style={{
-                    marginTop: '60px',
+                    margin: '40px 0',
                     textAlign: 'center',
                 }}>
                     <h1>글 싸기</h1>
                     <p>아무 글이나 싸주세요.</p>
                 </div>
                 <div className="app-board-write-body" style={{
-                    width: '90%',
-                    margin: 'auto'
+                    width: '70%',
+                    margin:'auto'
 
                 }}>
                     <form>
                         <div className="app-board-write__category" style={FlexDiv}>
                             <div style={TmpStyle}>종류:</div>
-                            <select>
+                            <SelectStyle width="60px">
                                 {_.map(categories, (elem) => {
                                     return (
                                         <option value={elem}>{elem}</option>
                                     )
                                 })  
                                 }
-                            </select>
+                            </SelectStyle>
                         </div>
                         <div className="app-board-write__title" style={FlexDiv}>
                             <div style={TmpStyle}>제목:</div><InputBox darkTheme={darkTheme} width='60%' />

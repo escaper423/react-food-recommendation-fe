@@ -1,7 +1,11 @@
 export const categories = [
-    "공지","일반","똥글","의견","질문"
+    "모두","공지","일반","의견","질문"
 ];
 
 export const sortOrder = [
-    "조회수","추천수","최근 글 우선"
+    "최근 글 우선","조회수","추천수",
+]
+
+export const searchOption = [
+    "제목","글쓴이"
 ]

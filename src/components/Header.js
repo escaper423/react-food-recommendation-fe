@@ -1,12 +1,20 @@
 import React from 'react';
-import { UseDarkTheme, UseSetAuthUser, UseSetDarkTheme } from '../resources/ContextProvider';
+import { UseDarkTheme, UseSetDarkTheme } from '../resources/ContextProvider';
 import NavBar from './NavBar';
 import { headerDark, headerLight, textDark, textLight } from '../resources/colors';
 import { FaLightbulb } from 'react-icons/fa'
 import styled from 'styled-components';
+
+const ThemeButton = styled(FaLightbulb)`
+        &:hover{
+            transform: scale(1.15,1.15);
+        }
+    `
+
 function Header() {
     const darkTheme = UseDarkTheme();
     const SetDarkTheme = UseSetDarkTheme();
+
     const ToggleTheme = () => {
         let theme = localStorage.getItem('darktheme');
         console.log(theme);
@@ -34,11 +42,7 @@ function Header() {
         width: '100%',
     }
 
-    const ThemeButton = styled(FaLightbulb)`
-        &:hover{
-            transform: scale(1.15,1.15);
-        }
-    `
+    
     return (
         <>
         <div className='app-header' style={headerStyle}>

@@ -12,7 +12,7 @@ const BoardItem = () => {
         date: new Date().toUTCString(),
         views: 0,
         title: "아",
-        category: "똥글",
+        category: "일반",
 
     }
     function doUpVote() {
@@ -42,7 +42,7 @@ const BoardItem = () => {
             <BoardInfo>
                 <a onClick={Troll}>
                 <div style={{paddingLeft: '15px', display:'block', height: '80%'}}>
-                    <h2 style={{height: "100%"}}>Title</h2>
+                    <h2 style={{height: "100%"}}>{itemData.title}</h2>
                 
                     <div style={{whiteSpace:'nowrap', display: 'inline-block', width: '100%'}}>
                         <div style={{display:'inherit', paddingRight: '6px', borderRight: '1px solid white'}}>{itemData.category}</div> 

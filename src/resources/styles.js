@@ -32,6 +32,7 @@ const BlockScreenWrapperStyle = styled.section`
     display: block;
 `
 
+
 const InputBoxStyle = styled.input`
         width: ${props => props.width ? props.width:'70%'};
         height: 25px;
@@ -80,17 +81,6 @@ const ForgetPasswordTextStyle = styled(Link)`
         }
     `
 
-export const BoardItemWrapper = styled.article`
-    width: 90%;
-    min-width: 550px;
-    height: 81px;
-    background-color: #777;
-    display: table;
-    z-index: 1;
-    padding: 8px;
-    margin: 8px auto;
-`
-
 const CommendsStyle = styled.div`
     background-color: #777;
     text-align: center;
@@ -116,6 +106,18 @@ const ThumbnailStyle = styled.div`
     padding: 2px;
     margin-left: 18px;
 `
+
+export const BoardItemWrapper = styled.article`
+    width: 90%;
+    min-width: 550px;
+    height: 81px;
+    background-color: #777;
+    display: table;
+    z-index: 1;
+    padding: 8px;
+    margin: 8px auto;
+`
+
 export const VoteStyle = styled.a`
         color: #ccc;
         display: inline-block;
@@ -125,6 +127,13 @@ export const VoteStyle = styled.a`
         &:active{
             color: #3e3;
         }
+`
+
+export const SelectStyle = styled.select`
+    font-size: 14px;
+    padding: 6px;
+    width: ${props => props.width};
+    border-radius: 4px;
 `
 
 export const Commends = ({children}) =>{

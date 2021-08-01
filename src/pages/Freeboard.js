@@ -1,12 +1,12 @@
-import React from 'react'
+import React, {useState, useRef} from 'react'
 import Header from '../components/Header'
 import BoardItem from '../components/BoardItem'
-import { BlockScreenWrapper } from '../resources/styles'
+import { BlockScreenWrapper, SelectStyle } from '../resources/styles'
 import styled from 'styled-components'
 import { BsPencil, BsSearch } from 'react-icons/bs'
 import { screenDark, screenLight, textDark, textLight } from '../resources/colors'
 import { UseDarkTheme } from '../resources/ContextProvider'
-import { categories, sortOrder } from '../resources/config'
+import { categories, searchOption, sortOrder } from '../resources/config'
 import _ from 'lodash'
 
 
@@ -50,14 +50,27 @@ const SearchTextArea = styled.input`
 
 const BoardFooterStyle = {
     textAlign: 'center',
+    display: 'flex',
+    justifyContent: 'center',
 }
 
+
 const Freeboard = () => {
+    const [searchWord,setSearchWord] = useState("");
     const darkTheme = UseDarkTheme();
+
+    function InputSearchWord(e){
+        return setSearchWord(e.target.value);
+    }
+
+    const SearchBoard = (e) => {
+        e.preventDefault();
+        console.log("Searching Board with word "+searchWord);
+    }
     return (
         <>
             <Header />
-            <div className="app-board-title" style={{ marginTop: '25px', textAlign: 'center' }}>
+            <div className="app-board-title" style={{ marginTop: '40px', textAlign: 'center' }}>
                 <h1>Free Board</h1>
                 <p>free gesipan do excrete any letters</p>
             </div>
@@ -65,21 +78,21 @@ const Freeboard = () => {
             <BlockScreenWrapper>
                 <div className="app-board-header" style={BoardHeaderStyle}>
                     <div className="app-board-header-dropdown">
-                        <select className="app-board-category-selector">
+                        <SelectStyle width="80px" className="app-board-category-selector">
                             {_.map(categories, (elem) => {
                                 return (
-                                    <option>{elem}</option>
+                                    <option key={elem} value={elem}>{elem}</option>
                                 )})
                             }
-                        </select>
+                        </SelectStyle>
 
-                        <select className="app-board-sort-selector" style={{marginLeft: '10px'}}>
+                        <SelectStyle width="120px" className="app-board-sort-selector" style={{marginLeft: '10px'}}>
                             {_.map(sortOrder, (elem) => {
                                 return (
-                                    <option>{elem}</option>
+                                    <option key={elem} value={elem}>{elem}</option>
                                 )})
                             }
-                        </select>
+                        </SelectStyle>
                     </div>
                     <a style={{ float: 'right', color: 'inherit', textDecoration: 'none' }} href="/write">
                         <WriteButton size='1.6rem' />
@@ -89,12 +102,17 @@ const Freeboard = () => {
                 <BoardItem />
                 <BoardItem />
                 <div className="app-board-footer" style={BoardFooterStyle}>
-                    <form className="app-board-search">
-                        <SearchTextArea darkTheme={darkTheme} placeholder="Search..." />
+                    <SelectStyle width="80px" style={{marginRight: '10px'}}>
+                        {_.map(searchOption, (elem) => {
+                            return(
+                                <option key={elem} value={elem}>{elem}</option>
+                            )
+                        })}
+                    </SelectStyle>
+                        <SearchTextArea onChange={InputSearchWord} darkTheme={darkTheme} placeholder="Search..." />
                         <a>
-                            <SearchButton size='1.4rem' style={{ verticalAlign: "middle" }} />
+                            <SearchButton size='1.4rem' style={{ verticalAlign: "middle" }} onClick={SearchBoard} />
                         </a>
-                    </form>
                 </div>
             </BlockScreenWrapper>
 

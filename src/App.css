@@ -16,6 +16,7 @@ ul{
 li{
   display: inline-block;
 }
+
 input:-webkit-autofill,
 input:-webkit-autofill:hover, 
 input:-webkit-autofill:focus, 
@@ -24,4 +25,20 @@ input:-webkit-autofill:active  {
   color: #fff;
   -webkit-text-fill-color: #fff !important;
   caret-color: currentcolor !important;
+}
+
+select {
+  border: 0;
+  background: url('./resources/down_arrow1.png') no-repeat right #fff;
+  background-position-x: 100%;
+  background-size: 1.4rem;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  outline: none;
+  appearance: none;       /* Remove default arrow */
+  
+}
+
+select::-ms-expand {
+  display: none; /* Hide the default arrow in Internet Explorer 10 and Internet Explorer 11 */
 }
