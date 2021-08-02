@@ -10,6 +10,7 @@ import Login from './pages/Login';
 import Logout from './pages/Logout';
 import Write from './pages/Wrtie';
 import Cookies from 'js-cookie';
+import InBoard from './pages/InBoard';
 import axios from 'axios';
 import Freeboard from './pages/Freeboard';
 import { screenDark, screenLight, textDark, textLight } from './resources/colors';
@@ -53,11 +54,12 @@ function App() {
             <Route exact path='/' component={Home} />
             <Route path='/about' component={About} />
             <Route path='/contact' component={Contact} />
-            <Route path='/board' component={Freeboard} />
+            <Route exact path='/board' component={Freeboard} />
             <Route path='/signup' component={SignUp} />
             <Route path='/login' component={Login} />
             <Route path='/logout' component={Logout} />
             <Route path='/write' component={Write} />
+            <Route path='/board/:category/:id' component={InBoard} />
           </div>
         </React.Fragment>
       </Switch>

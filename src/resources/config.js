@@ -1,7 +1,10 @@
-export const categories = [
-    "모두","공지","일반","의견","질문"
+export const categoryContents = [
+    "모두","일반","공지","의견","질문"
 ];
 
+export const categoryId = [
+    "all","general","notice","feedback","question"
+]
 export const sortOrder = [
     "최근 글 우선","조회수","추천수",
 ]

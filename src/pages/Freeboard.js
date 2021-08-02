@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react'
+import React, { useState, useRef } from 'react'
 import Header from '../components/Header'
 import BoardItem from '../components/BoardItem'
 import { BlockScreenWrapper, SelectStyle } from '../resources/styles'
@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { BsPencil, BsSearch } from 'react-icons/bs'
 import { screenDark, screenLight, textDark, textLight } from '../resources/colors'
 import { UseDarkTheme } from '../resources/ContextProvider'
-import { categories, searchOption, sortOrder } from '../resources/config'
+import { categoryContents, categoryId, searchOption, sortOrder } from '../resources/config'
 import _ from 'lodash'
 
 
@@ -52,20 +52,56 @@ const BoardFooterStyle = {
     textAlign: 'center',
     display: 'flex',
     justifyContent: 'center',
+    marginTop: '20px',
 }
 
+const boardItems = [{
+    id: 1,
+    writer: "TrollMan",
+    date: new Date().toUTCString(),
+    views: 0,
+    title: "아",
+    content: "tlqkf",
+    categoryId: categoryId[1],
+    categoryContent: categoryContents[1],
+    comments: [],
+},
+{
+    id: 2,
+    writer: "userman",
+    date: new Date().toUTCString(),
+    views: 3,
+    title: "개",
+    content: "?",
+    categoryId: categoryId[2],
+    categoryContent: categoryContents[2],
+    comments: [],
+},
+{
+    id: 3,
+    writer: "ncpc",
+    date: new Date().toUTCString(),
+    views: 333,
+    title: "님들",
+    content: "모함",
+    categoryId: categoryId[3],
+    categoryContent: categoryContents[3],
+    comments: [],
+}
+
+]
 
 const Freeboard = () => {
-    const [searchWord,setSearchWord] = useState("");
+    const [searchWord, setSearchWord] = useState("");
     const darkTheme = UseDarkTheme();
 
-    function InputSearchWord(e){
+    function InputSearchWord(e) {
         return setSearchWord(e.target.value);
     }
 
     const SearchBoard = (e) => {
         e.preventDefault();
-        console.log("Searching Board with word "+searchWord);
+        console.log("Searching Board with word " + searchWord);
     }
     return (
         <>
@@ -79,18 +115,20 @@ const Freeboard = () => {
                 <div className="app-board-header" style={BoardHeaderStyle}>
                     <div className="app-board-header-dropdown">
                         <SelectStyle width="80px" className="app-board-category-selector">
-                            {_.map(categories, (elem) => {
+                            {_.map(categoryContents, (elem) => {
                                 return (
                                     <option key={elem} value={elem}>{elem}</option>
-                                )})
+                                )
+                            })
                             }
                         </SelectStyle>
 
-                        <SelectStyle width="120px" className="app-board-sort-selector" style={{marginLeft: '10px'}}>
+                        <SelectStyle width="120px" className="app-board-sort-selector" style={{ marginLeft: '10px' }}>
                             {_.map(sortOrder, (elem) => {
                                 return (
                                     <option key={elem} value={elem}>{elem}</option>
-                                )})
+                                )
+                            })
                             }
                         </SelectStyle>
                     </div>
@@ -98,21 +136,21 @@ const Freeboard = () => {
                         <WriteButton size='1.6rem' />
                     </a>
                 </div>
-                <BoardItem />
-                <BoardItem />
-                <BoardItem />
+                <BoardItem data={boardItems[0]}/>
+                <BoardItem data={boardItems[1]}/>
+                <BoardItem data={boardItems[2]}/>
                 <div className="app-board-footer" style={BoardFooterStyle}>
-                    <SelectStyle width="80px" style={{marginRight: '10px'}}>
+                    <SelectStyle width="80px" style={{ marginRight: '10px' }}>
                         {_.map(searchOption, (elem) => {
-                            return(
+                            return (
                                 <option key={elem} value={elem}>{elem}</option>
                             )
                         })}
                     </SelectStyle>
-                        <SearchTextArea onChange={InputSearchWord} darkTheme={darkTheme} placeholder="Search..." />
-                        <a>
-                            <SearchButton size='1.4rem' style={{ verticalAlign: "middle" }} onClick={SearchBoard} />
-                        </a>
+                    <SearchTextArea onChange={InputSearchWord} darkTheme={darkTheme} placeholder="Search..." />
+                    <a>
+                        <SearchButton size='1.4rem' style={{ verticalAlign: "middle" }} onClick={SearchBoard} />
+                    </a>
                 </div>
             </BlockScreenWrapper>
 

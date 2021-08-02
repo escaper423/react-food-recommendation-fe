@@ -2,7 +2,6 @@ import React from 'react';
 import { UseAuthUser, UseSetAuthUser, UseDarkTheme } from '../resources/ContextProvider';
 import Header from '../components/Header';
 import axios from 'axios';
-import Cookies from 'js-cookie';
 
 const Home = () => {
     const darkTheme = UseDarkTheme();
