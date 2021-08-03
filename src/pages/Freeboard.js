@@ -64,6 +64,7 @@ const boardItems = [{
     content: "tlqkf",
     categoryId: categoryId[1],
     categoryContent: categoryContents[1],
+    commends: 11,
     comments: [],
 },
 {
@@ -75,6 +76,7 @@ const boardItems = [{
     content: "?",
     categoryId: categoryId[2],
     categoryContent: categoryContents[2],
+    commends: -33,
     comments: [],
 },
 {
@@ -86,7 +88,27 @@ const boardItems = [{
     content: "모함",
     categoryId: categoryId[3],
     categoryContent: categoryContents[3],
-    comments: [],
+    commends: -37,
+    comments: [{
+        depth: 0,
+        writer: "qt",
+        date: "1 hours ago",
+        content: "qt아",
+    },
+    {
+        depth: 0,
+        writer: "ㅇㅇ",
+        date: "just now",
+        content: "응-가",
+    },
+    {
+        depth: 0,
+        writer: "qt",
+        date: "1 hours ago",
+        content: "응가가",
+    }
+
+],
 }
 
 ]
@@ -106,7 +128,7 @@ const Freeboard = () => {
     return (
         <>
             <Header />
-            <div className="app-board-title" style={{ marginTop: '40px', textAlign: 'center' }}>
+            <div className="app-board-title" style={{ margin: '40px 0', textAlign: 'center' }}>
                 <h1>Free Board</h1>
                 <p>free gesipan do excrete any letters</p>
             </div>

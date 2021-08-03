@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { BsCaretUpFill, BsCaretDownFill } from 'react-icons/bs'
 import { Link } from 'react-router-dom';
 import { textDark, textLight } from '../resources/colors';
@@ -8,9 +8,7 @@ import { VoteStyle, BoardItemWrapper, Commends, BoardInfo, Thumbnail } from '../
 
 
 const BoardItem = ({data}) => {
-    const darkTheme = UseDarkTheme();
-    const [commends, setCommends] = useState(0);
-    const itemData = {
+    let itemData = {
         id: data.id,
         writer: data.writer,
         date: new Date().toUTCString(),
@@ -19,20 +17,25 @@ const BoardItem = ({data}) => {
         categoryId: data.categoryId,
         categoryContent: data.categoryContent,
         content: data.content,
+        commends: data.commends,
         comments: data.comments,
     }
 
+    const darkTheme = UseDarkTheme();
+    const [commends, setCommends] = useState(itemData.commends);
+    
+
+    useEffect(() => {
+        itemData.commends = commends;
+        console.log(commends);
+    }, [commends])
+
     function doUpVote() {
-        return setCommends(commends + 1);
+        setCommends(commends + 1);
     }
 
     function doDownVote() {
-        return setCommends(commends - 1);
-    }
-
-    function Troll(e) {
-        e.preventDefault();
-        return console.log(e.target.innerHTML);
+        setCommends(commends - 1);
     }
     
     return (
@@ -47,7 +50,13 @@ const BoardItem = ({data}) => {
 
             </Thumbnail>
             <BoardInfo>
-                <Link style={{outline:'none', textDecoration: 'none', color:darkTheme?textDark:textLight}}to={`/board/${itemData.categoryId}/${itemData.id}`}>
+                <Link 
+                    style={{outline:'none', textDecoration: 'none', color:darkTheme?textDark:textLight}}
+                    to={
+                        { pathname:`/board/${itemData.categoryId}/${itemData.id}`, state: itemData }
+                    }
+                    params={itemData}
+                >
                 <div style={{paddingLeft: '15px', display:'block', height: '80%'}}>
                     <h2 style={{height: "100%"}}>{itemData.title}</h2>
                 

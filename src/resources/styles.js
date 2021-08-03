@@ -23,7 +23,7 @@ const FlexScreenWrapperStyle = styled.section`
     height: calc(100vh - 60px);
     text-align: center;
     display: flex;
-    background-color: ${props => props.darkTheme? '#333' : '#fff'};
+    background-color: ${props => props.darkTheme ? '#333' : '#fff'};
 `
 
 const BlockScreenWrapperStyle = styled.section`
@@ -34,7 +34,7 @@ const BlockScreenWrapperStyle = styled.section`
 
 
 const InputBoxStyle = styled.input`
-        width: ${props => props.width ? props.width:'70%'};
+        width: ${props => props.width ? props.width : '70%'};
         height: 25px;
         fontSize: 15px;
         border: 0;
@@ -49,10 +49,22 @@ const InputBoxStyle = styled.input`
         &:autofill:fill,
         &:autofill:active,
         {
-            background-color: ${props => props.darkTheme? '#444':'#ddd'};
-            color: ${props => props.darkTheme? '#ddd':'#333'};
+            background-color: ${props => props.darkTheme ? '#444' : '#ddd'};
+            color: ${props => props.darkTheme ? '#ddd' : '#333'};
         }
     `
+
+const TextAreaStyle = styled.textarea`
+    width: 95%;
+    min-height: 90%;
+    font-size: 15px;
+    border-radius: 4px;
+    box-shadow: ${props => props.darkTheme? '0 0 4px white':'0 0 7px black'};
+    background-color: transparent;
+    outline: none;
+    resize: none;
+    color: ${props => props.darkTheme ? 'white' : 'black'};
+`
 
 const ConfirmButtonStyle = styled.input.attrs({ type: 'submit' })`
         border: 0;
@@ -107,6 +119,29 @@ const ThumbnailStyle = styled.div`
     margin-left: 18px;
 `
 
+export const StyledButton = styled.button`
+display: flex;
+justify-content: center;
+align-items: center;
+width: ${props => props.width?props.width:'60px'};
+height: ${props => props.height?props.height:'50px'};
+border-radius: 4px;
+background: #256ce1;
+padding: 10px 12px;
+color: #fff;
+border: none;
+outline: none;
+cursor: pointer;
+transition: all .2s ease-in-out;
+text-decoration: none;
+
+&:hover{
+    transition: all .2s ease-in-out;
+    background: #fff;
+    color: #010606;
+}
+`
+
 export const BoardItemWrapper = styled.article`
     width: 90%;
     min-width: 550px;
@@ -136,7 +171,8 @@ export const SelectStyle = styled.select`
     border-radius: 4px;
 `
 
-export const Commends = ({children}) =>{
+//wrapper styles
+export const Commends = ({ children }) => {
     return (
         <CommendsStyle>
             {children}
@@ -144,7 +180,7 @@ export const Commends = ({children}) =>{
     )
 }
 
-export const BoardInfo = ({children}) =>{
+export const BoardInfo = ({ children }) => {
     return (
         <BoardInfoStyle>
             {children}
@@ -152,7 +188,7 @@ export const BoardInfo = ({children}) =>{
     )
 }
 
-export const Thumbnail = ({children}) =>{
+export const Thumbnail = ({ children }) => {
     return (
         <ThumbnailStyle>
             {children}
@@ -160,37 +196,44 @@ export const Thumbnail = ({children}) =>{
     )
 }
 
-export const FlexScreenWrapper = ({children}) => {
+export const FlexScreenWrapper = ({ children }) => {
     const darkTheme = UseDarkTheme();
-    return(
+    return (
         <FlexScreenWrapperStyle darkTheme={darkTheme}>
             {children}
         </FlexScreenWrapperStyle>
     )
 }
 
-export const BlockScreenWrapper = ({children}) => {
+export const BlockScreenWrapper = ({ children }) => {
     const darkTheme = UseDarkTheme();
-    return(
+    return (
         <BlockScreenWrapperStyle darkTheme={darkTheme}>
             {children}
         </BlockScreenWrapperStyle>
     )
 }
 
-export const InputBox = ({darkTheme, type, onChange, val, id, width}) => {
-    return(
-        <InputBoxStyle darkTheme = {darkTheme} type={type} onChange={onChange} value={val} id={id} width={width}/>
+//input styles
+export const InputBox = ({ darkTheme, type, onChange, val, id, width }) => {
+    return (
+        <InputBoxStyle darkTheme={darkTheme} type={type} onChange={onChange} value={val} id={id} width={width} />
     )
 }
-export const ConfirmButton = ({val}) =>{
-    return(
-        <ConfirmButtonStyle value={val}/> 
+export const ConfirmButton = ({ val }) => {
+    return (
+        <ConfirmButtonStyle value={val} />
     )
 }
 
-export const ForgetPasswordText = ({darkTheme, val}) => {
-    return(
+export const TextArea = ({ darkTheme }) => {
+    return (
+        <TextAreaStyle darkTheme={darkTheme}></TextAreaStyle>
+    )
+}
+
+export const ForgetPasswordText = ({ darkTheme, val }) => {
+    return (
         <ForgetPasswordTextStyle to="/forgetpw" darkTheme={darkTheme}>{val}</ForgetPasswordTextStyle>
     )
 }
