@@ -58,7 +58,7 @@ const BoardFooterStyle = {
 const boardItems = [{
     id: 1,
     writer: "TrollMan",
-    date: new Date().toUTCString(),
+    date: new Date("8/4/21"),
     views: 0,
     title: "아",
     content: "tlqkf",
@@ -70,7 +70,7 @@ const boardItems = [{
 {
     id: 2,
     writer: "userman",
-    date: new Date().toUTCString(),
+    date: new Date("7/3/21"),
     views: 3,
     title: "개",
     content: "?",
@@ -82,7 +82,7 @@ const boardItems = [{
 {
     id: 3,
     writer: "ncpc",
-    date: new Date().toUTCString(),
+    date: new Date("6/3/21"),
     views: 333,
     title: "님들",
     content: "모함",
@@ -90,18 +90,21 @@ const boardItems = [{
     categoryContent: categoryContents[3],
     commends: -37,
     comments: [{
+        id: 1,
         depth: 0,
         writer: "qt",
         date: "1 hours ago",
         content: "qt아",
     },
     {
+        id: 2,
         depth: 0,
         writer: "ㅇㅇ",
         date: "just now",
         content: "응-가",
     },
     {
+        id: 3,
         depth: 0,
         writer: "qt",
         date: "1 hours ago",
@@ -170,7 +173,7 @@ const Freeboard = () => {
                         })}
                     </SelectStyle>
                     <SearchTextArea onChange={InputSearchWord} darkTheme={darkTheme} placeholder="Search..." />
-                    <a>
+                    <a style={{cursor: 'pointer'}} >
                         <SearchButton size='1.4rem' style={{ verticalAlign: "middle" }} onClick={SearchBoard} />
                     </a>
                 </div>

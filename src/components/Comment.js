@@ -1,39 +1,86 @@
-import React from 'react'
-import { UseDarkTheme } from '../resources/ContextProvider'
-import {FiDelete} from 'react-icons/fi'
+import React, {useState} from 'react'
+import { UseAuthUser, UseDarkTheme } from '../resources/ContextProvider'
+import { InputBox, TextArea, StyledButton } from '../resources/styles';
+
+
 
 const CommentWrapperStyle = {
     width: '100%',
-    borderTop: '1px solid',
     borderBottom: '1px solid',
     padding: '6px 12px',
 }
 
 
-const Comment = ({props}) => {
+const Comment = ({data}) => {
     const darkTheme = UseDarkTheme();
+    const user = UseAuthUser();
+    const [isReply, setIsReply] = useState(false);
+    const DeleteComment = (e) => {
+        e.preventDefault();
+        console.log("delete comment id:"+data.id);
+    }
+
+    const PostReply = (e) => {
+        e.preventDefault();
+        console.log("posting reply depth:"+data.depth);
+        setIsReply(prev => !prev);
+    }
     return (
+        <>
         <div className="app-board-comment" style={CommentWrapperStyle}>
             <div className="app-board_comment__meta" style={{
                 
-                width: '15%',
+                width: '100%',
                 minWidth: '60px',
                 padding: '8px',
                 
             }}>
-                <div style={{display: 'inline', marginRight: '10px', paddingRight: '10px',borderRight: '1px solid'}}>이름</div>
-                <div style={{display: 'inline'}}>날짜</div>
+                <div style={{display: 'inline', marginRight: '10px', paddingRight: '10px',borderRight: '1px solid'}}>{data.writer}</div>
+                <div style={{display: 'inline'}}>{data.date}</div>
                 </div>
             <div className="app-board_comment__content" style={{
                 
                 width: '15%',
                 minWidth: '60px',
                 padding: '8px',
-            }}>내용</div>
+            }}>{data.content}</div>
             <div className="app-board_comment__option">
-                Delete Report
+                <a style={{cursor: 'pointer', marginRight: '10px'}} onClick={DeleteComment}>Delete</a>
+                <a style={{cursor: 'pointer'}} onClick={PostReply}>Reply</a>
             </div>
         </div>
+        { isReply &&
+            <div className="app-board-comment__reply" style={{
+                display: 'table',
+                width: '100%',
+                margin: 'auto',
+                padding: '12px'
+            }}>
+                <div className="app-board-comment__reply__user" style={{
+                    display: 'table-cell',
+                    width: '60px',
+                    padding: '4px'
+                }}>
+                    <div>Name: {user?user.username:<InputBox darkTheme={darkTheme} width='60px'/>}</div>
+                    <div>Password: {user?user.username:<InputBox darkTheme={darkTheme} type='password' width='60px'/>}</div>
+                </div>
+                <div className="app-board-comment__reply__content" style={{
+                    display:'table-cell',
+                    textAlign: 'center',
+                    verticalAlign:'middle',
+                }}>
+                    <TextArea darkTheme={darkTheme} height='70px' width='90%'/>
+                </div>
+                <div className="app-board-comment__reply__confirm" style={{
+                    display: 'table-cell',
+                    verticalAlign: 'middle',
+                    width: '20%'
+                }}>
+                    <StyledButton width='60px'>등록</StyledButton>
+                </div>
+            </div>
+        }
+        </>
     )
 }
 

@@ -27,9 +27,12 @@ const FlexScreenWrapperStyle = styled.section`
 `
 
 const BlockScreenWrapperStyle = styled.section`
-    width: 100%;
-    height: calc(100vh - 60px);
+    width: 65%;
     display: block;
+    margin: auto;
+    @media only screen and (max-width: 768px){
+        width: 99%;
+    }
 `
 
 
@@ -55,8 +58,8 @@ const InputBoxStyle = styled.input`
     `
 
 const TextAreaStyle = styled.textarea`
-    width: 95%;
-    min-height: 90%;
+    width: ${props => props.width? props.width:'95%'};
+    height: ${props => props.height?props.height:'90%'};
     font-size: 15px;
     border-radius: 4px;
     box-shadow: ${props => props.darkTheme? '0 0 4px white':'0 0 7px black'};
@@ -144,7 +147,7 @@ text-decoration: none;
 
 export const BoardItemWrapper = styled.article`
     width: 90%;
-    min-width: 550px;
+    min-width: 350px;
     height: 81px;
     background-color: #777;
     display: table;
@@ -226,9 +229,9 @@ export const ConfirmButton = ({ val }) => {
     )
 }
 
-export const TextArea = ({ darkTheme }) => {
+export const TextArea = ({ darkTheme, width, height }) => {
     return (
-        <TextAreaStyle darkTheme={darkTheme}></TextAreaStyle>
+        <TextAreaStyle width={width} height={height} darkTheme={darkTheme}></TextAreaStyle>
     )
 }
 

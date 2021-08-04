@@ -5,6 +5,7 @@ import Header from '../components/Header'
 import { UseAuthUser, UseDarkTheme } from '../resources/ContextProvider'
 import { BlockScreenWrapper,InputBox,StyledButton,TextArea } from '../resources/styles'
 import _ from 'lodash'
+import { GetTimeGap } from '../resources/utils'
 
 const boardContentStyle = {
     width: '85%',
@@ -16,41 +17,27 @@ const CommentStyle = {
     display: 'flex',
     justifyContent:'center',
     margin: '30px auto',
-    width: '95%',
+    width: '100%',
     padding: '12px',
-    borderRadius: '4px',
     backgroundColor:'grey'
 }
 
 const CommentUserStyle = {
-    marginRight: '30px',
-    width: '10%',
-    minWidth: '80px'
+    marginRight: '10px',
+    width: '15%',
+    minWidth: '90px'
 }
 
 const CommentContentStyle = {
     alignItems: 'center',
-    width: '80%'   
+    width: '70%'   
 }
 
 const CommentConfirmStyle = {
-    width: '10%',
+    width: '15%',
     alignItems: 'center',
     display: 'flex',
 }
-
-
-/*
-id: 3,
-    writer: "ncpc",
-    date: new Date().toUTCString(),
-    views: 333,
-    title: "님들",
-    content: "모함",
-    categoryId: categoryId[3],
-    categoryContent: categoryContents[3],
-    comments: [],
-*/
 
 const InBoard = () => {
     //const userInfo = useParams();
@@ -74,10 +61,10 @@ const InBoard = () => {
                 <div className="app-board-content" style={boardContentStyle}>
                     <div className="app-board-content__title"><h1>{itemInfo.title}</h1></div>
                     <div className="app-board-content__meta" style={
-                        {display: 'table', textAlign: 'center', marginTop:'20px', padding:'10px 10px', borderRadius:'4px'}}>
-                        <div style={{display: 'table-cell',  padding: '0 12px', borderRight: 'solid 1px', minWidth:'40px'}}>{itemInfo.categoryContent}</div>
-                        <div style={{display: 'table-cell',  padding: '0 12px', borderRight: 'solid 1px'}}>{itemInfo.date}</div>
-                        <div style={{display: 'table-cell',  padding: '0 12px', borderRight: 'solid 1px', minWidth:'100px'}}>{itemInfo.writer}</div>
+                        {display: 'table', textAlign: 'center', marginTop:'20px', padding:'10px 0', borderRadius:'4px'}}>
+                        <div style={{display: 'table-cell',  paddingRight: '12px', borderRight: 'solid 1px', minWidth:'40px'}}>{itemInfo.categoryContent}</div>
+                        <div style={{display: 'table-cell',  padding: '0 12px', borderRight: 'solid 1px'}}>{GetTimeGap(itemInfo.date)}</div>
+                        <div style={{display: 'table-cell',  padding: '0 12px', borderRight: 'solid 1px', minWidth:'60px'}}>{itemInfo.writer}</div>
                         <div style={{display: 'table-cell',  padding: '0 12px', borderRight: 'solid 1px',minWidth:'40px'}}>조회: {itemInfo.views}</div>
                         <div style={{display: 'table-cell',  padding: '0 12px', borderRight: 'solid 1px',minWidth:'40px'}}>추천: {itemInfo.commends}</div>
                     </div>
@@ -93,9 +80,9 @@ const InBoard = () => {
                     <div className="app-board-content__comments" style={CommentStyle}>
                         <div className="app-board-content__comments__user" style={CommentUserStyle}>
                             <div>Name:</div>
-                            <div>{user?user.username:<InputBox width="100%" darkTheme={darkTheme} onChange={(e) => {setCommentUser(e.target.value)}}/>}</div>
+                            <div>{user?user.username:<InputBox width="80%" darkTheme={darkTheme} onChange={(e) => {setCommentUser(e.target.value)}}/>}</div>
                             <div>Password:</div>
-                            <div><InputBox type="password" width="100%" darkTheme={darkTheme} onChange={(e) => {setCommentPass(e.target.value)}}/></div>
+                            <div><InputBox type="password" width="80%" darkTheme={darkTheme} onChange={(e) => {setCommentPass(e.target.value)}}/></div>
                         </div>
                         <div className="app-board-content__comments__content" style={CommentContentStyle}>
                             <TextArea darkTheme={darkTheme} />
@@ -104,9 +91,13 @@ const InBoard = () => {
                             <StyledButton onClick={postComment} width='100px'>등록</StyledButton>
                         </div>
                     </div>
+                    <div style={{width: '100%', padding: '12px', borderBottom: '1px solid'}}>
+                    
+                    </div>
+                    
                     {
                         _.map(itemInfo.comments, (comment) => {
-                            return <Comment data={comment}/>
+                            return <Comment key={comment.id} data={comment}/>
                         })
                     }
                     
