@@ -3,6 +3,10 @@
   height: 70%;
 }
 
+html{
+  height: 100%;
+  width: 100%;
+}
 .app-body-search{
   margin: 10px;
 }
@@ -41,9 +45,4 @@ select {
 
 select::-ms-expand {
   display: none; /* Hide the default arrow in Internet Explorer 10 and Internet Explorer 11 */
-}
-
-html{
-  height: 100%;
-  width: 100%;
 }

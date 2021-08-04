@@ -62,7 +62,7 @@ const Comment = ({data}) => {
                     padding: '4px'
                 }}>
                     <div>Name: {user?user.username:<InputBox darkTheme={darkTheme} width='60px'/>}</div>
-                    <div>Password: {user?user.username:<InputBox darkTheme={darkTheme} type='password' width='60px'/>}</div>
+                    <div>Password: <InputBox darkTheme={darkTheme} type='password' width='60px'/></div>
                 </div>
                 <div className="app-board-comment__reply__content" style={{
                     display:'table-cell',
