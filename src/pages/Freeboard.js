@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import Header from '../components/Header'
 import BoardItem from '../components/BoardItem'
 import { BlockScreenWrapper, SelectStyle } from '../resources/styles'
@@ -6,8 +6,9 @@ import styled from 'styled-components'
 import { BsPencil, BsSearch } from 'react-icons/bs'
 import { screenDark, screenLight, textDark, textLight } from '../resources/colors'
 import { UseDarkTheme } from '../resources/ContextProvider'
-import { categoryContents, categoryId, searchOption, sortOrder } from '../resources/config'
+import { categoryContents, searchOption, sortOrder } from '../resources/config'
 import _ from 'lodash'
+import axios from 'axios'
 
 
 
@@ -55,79 +56,37 @@ const BoardFooterStyle = {
     marginTop: '20px',
 }
 
-const boardItems = [{
-    id: 1,
-    writer: "TrollMan",
-    date: new Date("8/4/21"),
-    views: 0,
-    title: "아",
-    content: "tlqkf",
-    categoryId: categoryId[1],
-    categoryContent: categoryContents[1],
-    commends: 11,
-    comments: [],
-},
-{
-    id: 2,
-    writer: "userman",
-    date: new Date("7/3/21"),
-    views: 3,
-    title: "개",
-    content: "?",
-    categoryId: categoryId[2],
-    categoryContent: categoryContents[2],
-    commends: -33,
-    comments: [],
-},
-{
-    id: 3,
-    writer: "ncpc",
-    date: new Date("6/3/21"),
-    views: 333,
-    title: "님들",
-    content: "모함",
-    categoryId: categoryId[3],
-    categoryContent: categoryContents[3],
-    commends: -37,
-    comments: [{
-        id: 1,
-        depth: 0,
-        writer: "qt",
-        date: "1 hours ago",
-        content: "qt아",
-    },
-    {
-        id: 2,
-        depth: 0,
-        writer: "ㅇㅇ",
-        date: "just now",
-        content: "응-가",
-    },
-    {
-        id: 3,
-        depth: 0,
-        writer: "qt",
-        date: "1 hours ago",
-        content: "응가가",
-    }
-
-],
-}
-
-]
-
 const Freeboard = () => {
+    const [boardItems, setBoardItems] = useState(null);
     const [searchWord, setSearchWord] = useState("");
     const darkTheme = UseDarkTheme();
 
+    useEffect(() => { 
+        axios({
+            method: 'GET',
+            url: 'http://localhost:3001/board/all',
+            params: {
+                page: 1
+            }
+        })
+            .then(res => {
+                setBoardItems(res.data);
+                console.log(boardItems);
+            })
+    },[])
+    
     function InputSearchWord(e) {
         return setSearchWord(e.target.value);
     }
-
+    
     const SearchBoard = (e) => {
         e.preventDefault();
         console.log("Searching Board with word " + searchWord);
     }
+
+    if (!boardItems)
+        return <Header />;
+
     return (
         <>
             <Header />
@@ -157,13 +116,18 @@ const Freeboard = () => {
                             }
                         </SelectStyle>
                     </div>
-                    <a style={{ float: 'right', color: 'inherit', textDecoration: 'none' }} href="/write">
+                    <a style={{ float: 'right', color: 'inherit', textDecoration: 'none' }} href="/board/write">
                         <WriteButton size='1.6rem' />
                     </a>
                 </div>
-                <BoardItem data={boardItems[0]}/>
-                <BoardItem data={boardItems[1]}/>
-                <BoardItem data={boardItems[2]}/>
+                
+                {
+                    _.map(boardItems, (item) => {
+                        return (<BoardItem key={item._id} data={item} />)
+                    })
+                }
+                
+                
                 <div className="app-board-footer" style={BoardFooterStyle}>
                     <SelectStyle width="80px" style={{ marginRight: '10px' }}>
                         {_.map(searchOption, (elem) => {
@@ -173,7 +137,7 @@ const Freeboard = () => {
                         })}
                     </SelectStyle>
                     <SearchTextArea onChange={InputSearchWord} darkTheme={darkTheme} placeholder="Search..." />
-                    <a style={{cursor: 'pointer'}} >
+                    <a style={{ cursor: 'pointer' }} >
                         <SearchButton size='1.4rem' style={{ verticalAlign: "middle" }} onClick={SearchBoard} />
                     </a>
                 </div>

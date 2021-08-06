@@ -55,12 +55,12 @@ function App() {
             <Route exact path='/' component={Home} />
             <Route path='/about' component={About} />
             <Route path='/contact' component={Contact} />
-            <Route exact path='/board' component={Freeboard} />
             <Route path='/signup' component={SignUp} />
             <Route path='/login' component={Login} />
             <Route path='/logout' component={Logout} />
-            <Route path='/write' component={Write} />
-            <Route path='/board/:category/:id' component={InBoard} />
+            <Route exact path='/board/write' component={Write} />
+            <Route exact path='/board' component={Freeboard} />
+            <Route exact path='/board/:category/:id' component={InBoard} />
           </div>
         </React.Fragment>
       </Switch>

@@ -49,3 +49,30 @@ export const GetTimeGap = (time) => {
         }
     }
 }
+
+export const GetCategory = (c) => {
+    if (c === "일반"){
+        return "general"
+    }
+    if (c === "공지"){
+        return "notice"
+    }
+    if (c === "질문"){
+        return "question"
+    }
+    if (c === "의견"){
+        return "feedback"
+    }
+    if (c === "general"){
+        return "일반"
+    }
+    if (c === "feedback"){
+        return "의견"
+    }
+    if (c === "question"){
+        return "질문"
+    }
+    if (c === "notice"){
+        return "공지"
+    }
+}

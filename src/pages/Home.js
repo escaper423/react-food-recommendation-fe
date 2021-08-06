@@ -8,26 +8,6 @@ const Home = () => {
     const user = UseAuthUser();
     const SetUser = UseSetAuthUser();
 
-    function TokenRefresh(){
-        const {accessToken} = user;
-        console.log(accessToken);
-        axios({
-            method: 'GET',
-            headers: {'authorization': `Bearer ${accessToken}`},
-            url: 'http://localhost:3001/refresh',
-            withCredentials: true,
-        }).then((res) => {
-            SetUser({
-                username: res.data.username,
-                accessToken: res.data.accessToken
-            });
-            console.log(res);
-        }).catch((err) => {
-            console.log(err.response);
-            SetUser(null);
-        });
-    }
-
     return (
         <>
             <Header />
@@ -40,7 +20,6 @@ const Home = () => {
             }}>
                 <h1>Home {(user != null)?user.username:null} </h1>
                 <div>
-                <button onClick={TokenRefresh}>Click me to refresh</button>
                 </div>
                 
             </div>

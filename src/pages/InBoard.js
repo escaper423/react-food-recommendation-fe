@@ -5,7 +5,7 @@ import Header from '../components/Header'
 import { UseAuthUser, UseDarkTheme } from '../resources/ContextProvider'
 import { BlockScreenWrapper,InputBox,StyledButton,TextArea } from '../resources/styles'
 import _ from 'lodash'
-import { GetTimeGap } from '../resources/utils'
+import { GetTimeGap, GetCategory } from '../resources/utils'
 
 const boardContentStyle = {
     width: '85%',
@@ -62,7 +62,7 @@ const InBoard = () => {
                     <div className="app-board-content__title"><h1>{itemInfo.title}</h1></div>
                     <div className="app-board-content__meta" style={
                         {display: 'table', textAlign: 'center', marginTop:'20px', padding:'10px 0', borderRadius:'4px'}}>
-                        <div style={{display: 'table-cell',  paddingRight: '12px', borderRight: 'solid 1px', minWidth:'40px'}}>{itemInfo.categoryContent}</div>
+                        <div style={{display: 'table-cell',  paddingRight: '12px', borderRight: 'solid 1px', minWidth:'40px'}}>{GetCategory(itemInfo.category)}</div>
                         <div style={{display: 'table-cell',  padding: '0 12px', borderRight: 'solid 1px'}}>{GetTimeGap(itemInfo.date)}</div>
                         <div style={{display: 'table-cell',  padding: '0 12px', borderRight: 'solid 1px', minWidth:'60px'}}>{itemInfo.writer}</div>
                         <div style={{display: 'table-cell',  padding: '0 12px', borderRight: 'solid 1px',minWidth:'40px'}}>조회: {itemInfo.views}</div>
