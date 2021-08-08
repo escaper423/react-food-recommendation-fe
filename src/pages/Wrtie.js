@@ -8,7 +8,7 @@ import styled from 'styled-components'
 import axios from 'axios'
 import { useHistory } from 'react-router-dom'
 import { GetCategory } from '../resources/utils'
-
+import {baseURL} from '../resources/config'
 
 const TmpStyle = {
     verticalAlign:'middle',
@@ -51,7 +51,7 @@ const Wrtie = () => {
         console.log(boardItem);
         axios({
             method: "POST",
-            url: "http://localhost:3001/board",
+            url: `${baseURL}/board`,
             data: boardItem,
         }).then(res => {
             history.push('/board')

@@ -22,8 +22,8 @@ const Comment = ({data}) => {
 
     const PostReply = (e) => {
         e.preventDefault();
-        console.log("posting reply depth:"+data.depth);
-        setIsReply(prev => !prev);
+        console.log("posting reply...");
+        setIsReply(prev => !prev);  
     }
     return (
         <>

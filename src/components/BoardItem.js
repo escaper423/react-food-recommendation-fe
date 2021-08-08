@@ -20,7 +20,7 @@ const BoardItem = ({data}) => {
             method: "PUT",
             url: `http://localhost:3001/board/${data.category}/${data._id}`,
             params: {
-                query: "vote"
+                query: "voteup"
             }
         })
     }
@@ -31,7 +31,7 @@ const BoardItem = ({data}) => {
             method: "PUT",
             url: `http://localhost:3001/board/${data.category}/${data._id}`,
             params: {
-                query: "vote"
+                query: "votedown"
             }
         })
     }

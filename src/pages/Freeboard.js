@@ -70,8 +70,10 @@ const Freeboard = () => {
             }
         })
             .then(res => {
-                setBoardItems(res.data);
-                console.log(boardItems);
+                let tmp = res.data;
+                tmp = tmp.sort((a,b) => b._id - a._id)
+                setBoardItems(tmp);
+                console.log(tmp);
             })
     },[])
     
@@ -83,9 +85,6 @@ const Freeboard = () => {
         e.preventDefault();
         console.log("Searching Board with word " + searchWord);
     }
-
-    if (!boardItems)
-        return <Header />;
 
     return (
         <>
@@ -122,6 +121,7 @@ const Freeboard = () => {
                 </div>
                 
                 {
+                    boardItems &&
                     _.map(boardItems, (item) => {
                         return (<BoardItem key={item._id} data={item} />)
                     })

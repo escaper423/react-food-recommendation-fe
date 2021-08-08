@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { useLocation, useParams } from 'react-router-dom'
 import Comment from '../components/Comment'
 import Header from '../components/Header'
@@ -6,6 +6,8 @@ import { UseAuthUser, UseDarkTheme } from '../resources/ContextProvider'
 import { BlockScreenWrapper,InputBox,StyledButton,TextArea } from '../resources/styles'
 import _ from 'lodash'
 import { GetTimeGap, GetCategory } from '../resources/utils'
+import axios from 'axios'
+import {baseURL} from '../resources/config'
 
 const boardContentStyle = {
     width: '85%',
@@ -48,10 +50,40 @@ const InBoard = () => {
     const darkTheme = UseDarkTheme();
     const [commentUser, setCommentUser] = useState(user?user.username:"");
     const [commentPass, setCommentPass] = useState("");
+    const [commentContent, setCommentContent] = useState("");
 
-    const postComment = () => {
+    useEffect(() => {
+        axios({
+            method: 'GET',
+            url:`${baseURL}/comment`,
+            params: {
+                parentId: itemInfo._id
+            }
+        })
+    },[])
+
+    const PostComment = () => {
         console.log("Post Comment Function.")
         console.log("UserId: "+commentUser+ "\nUserPw: "+commentPass);
+
+        const comment = {
+            parentId: itemInfo._id,
+            target: null,
+            writer: commentUser,
+            password: commentPass,
+            content: commentContent,
+            date: new Date().toString()
+        }
+
+        axios({
+            method: 'POST',
+            url: `${baseURL}/comment`,
+            data: comment
+        }).then(() =>{
+            console.log("Comment created.");
+        }).catch(err => {
+            console.log("Cannot create comment.\n"+err);
+        })
     }
 
     return (
@@ -85,10 +117,10 @@ const InBoard = () => {
                             <div><InputBox type="password" width="80%" darkTheme={darkTheme} onChange={(e) => {setCommentPass(e.target.value)}}/></div>
                         </div>
                         <div className="app-board-content__comments__content" style={CommentContentStyle}>
-                            <TextArea darkTheme={darkTheme} />
+                            <TextArea darkTheme={darkTheme} onChange={(e) => {setCommentContent(e.target.value)}} />
                         </div>
                         <div className="app-board-content__comments__confirm" style={CommentConfirmStyle}>
-                            <StyledButton onClick={postComment} width='100px'>등록</StyledButton>
+                            <StyledButton onClick={PostComment} width='100px'>등록</StyledButton>
                         </div>
                     </div>
                     <div style={{width: '100%', padding: '12px', borderBottom: '1px solid'}}>
