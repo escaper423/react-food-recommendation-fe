@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Header from '../components/Header'
 import BoardItem from '../components/BoardItem'
 import { BlockScreenWrapper, SelectStyle } from '../resources/styles'
@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { BsPencil, BsSearch } from 'react-icons/bs'
 import { screenDark, screenLight, textDark, textLight } from '../resources/colors'
 import { UseDarkTheme } from '../resources/ContextProvider'
-import { categoryContents, searchOption, sortOrder } from '../resources/config'
+import { baseURL, categoryContents, categoryId, searchOption, sortOrder } from '../resources/config'
 import _ from 'lodash'
 import axios from 'axios'
 
@@ -59,31 +59,83 @@ const BoardFooterStyle = {
 const Freeboard = () => {
     const [boardItems, setBoardItems] = useState(null);
     const [searchWord, setSearchWord] = useState("");
+    const [searchFilter, setSearchFilter] = useState("title");
+    const [category, setCategory] = useState("all");
+    const [priority, setPriority] = useState("recent");
     const darkTheme = UseDarkTheme();
 
-    useEffect(() => { 
+    useEffect(() => {
         axios({
             method: 'GET',
-            url: 'http://localhost:3001/board/all',
+            url: `${baseURL}/board/${category}`,
             params: {
-                page: 1
+                page: 1,
+                sort: priority
             }
         })
             .then(res => {
-                let tmp = res.data;
-                tmp = tmp.sort((a,b) => b._id - a._id)
-                setBoardItems(tmp);
-                console.log(tmp);
+                setBoardItems(res.data);
+                //console.log(tmp);
             })
-    },[])
-    
-    function InputSearchWord(e) {
-        return setSearchWord(e.target.value);
-    }
-    
+    }, [category, priority])
+
     const SearchBoard = (e) => {
-        e.preventDefault();
         console.log("Searching Board with word " + searchWord);
+        console.log('qqqq');
+        axios({
+            method: 'GET',
+            url: `${baseURL}/board/${category}`,
+            params: {
+                page: 1,
+                sort: priority,
+                filter: searchFilter,
+                query: searchWord
+            }
+        }).then(res => {
+            setBoardItems(res.data)
+        })
+    }
+    const ChangeCategory = (e) => {
+        console.log("Changing category...");
+        const val = e.target.value;
+        if (val === "공지") {
+            setCategory("notice");
+        }
+        if (val === "일반") {
+            setCategory("general");
+        }
+        if (val === "질문") {
+            setCategory("question");
+        }
+        if (val === "의견") {
+            setCategory("feedback");
+        }
+        if (val === "모두") {
+            setCategory("all");
+        }
+    }
+
+    const ChangeSortOrder = (e) => {
+        console.log("Changing sort order...");
+        if (e.target.value === "최근 글 우선") {
+            setPriority("recent")
+        }
+        if (e.target.value === "조회수") {
+            setPriority("views")
+        }
+        if (e.target.value === "추천수") {
+            setPriority("commends")
+        }
+    }
+
+    const ChangeSearchFilter = (e) => {
+        const val = e.target.value;
+        if (val === "제목"){
+            setSearchFilter("title")
+        }
+        if(val === "글쓴이"){
+            setSearchFilter("writer")
+        }
     }
 
     return (
@@ -95,21 +147,22 @@ const Freeboard = () => {
             </div>
 
             <BlockScreenWrapper>
-                <div className="app-board-header" style={BoardHeaderStyle}>
+                <div className="app-board-header" style={BoardHeaderStyle} >
                     <div className="app-board-header-dropdown">
-                        <SelectStyle width="80px" className="app-board-category-selector">
-                            {_.map(categoryContents, (elem) => {
-                                return (
-                                    <option key={elem} value={elem}>{elem}</option>
-                                )
-                            })
+                        <SelectStyle width="80px" className="app-board-category-selector" onChange={ChangeCategory}>
+                            {
+                                _.map(categoryContents, (elem) => {
+                                    return(
+                                    <option key={elem} value={elem} >{elem}</option>
+                                    )
+                                })
                             }
                         </SelectStyle>
 
-                        <SelectStyle width="120px" className="app-board-sort-selector" style={{ marginLeft: '10px' }}>
+                        <SelectStyle width="120px" className="app-board-sort-selector" style={{ marginLeft: '10px' }} onChange={ChangeSortOrder}>
                             {_.map(sortOrder, (elem) => {
                                 return (
-                                    <option key={elem} value={elem}>{elem}</option>
+                                    <option key={elem} value={elem} >{elem}</option>
                                 )
                             })
                             }
@@ -119,24 +172,24 @@ const Freeboard = () => {
                         <WriteButton size='1.6rem' />
                     </a>
                 </div>
-                
+
                 {
                     boardItems &&
                     _.map(boardItems, (item) => {
                         return (<BoardItem key={item._id} data={item} />)
                     })
                 }
-                
-                
+
+
                 <div className="app-board-footer" style={BoardFooterStyle}>
-                    <SelectStyle width="80px" style={{ marginRight: '10px' }}>
+                    <SelectStyle width="80px" style={{ marginRight: '10px' }} onChange={ChangeSearchFilter}>
                         {_.map(searchOption, (elem) => {
                             return (
                                 <option key={elem} value={elem}>{elem}</option>
                             )
                         })}
                     </SelectStyle>
-                    <SearchTextArea onChange={InputSearchWord} darkTheme={darkTheme} placeholder="Search..." />
+                    <SearchTextArea darkTheme={darkTheme} placeholder="Search..." onChange={(e)=>{setSearchWord(e.target.value)}}/>
                     <a style={{ cursor: 'pointer' }} >
                         <SearchButton size='1.4rem' style={{ verticalAlign: "middle" }} onClick={SearchBoard} />
                     </a>

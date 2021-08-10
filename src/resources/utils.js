@@ -6,18 +6,22 @@ const hour = minute * 60;
 
 export const GetTimeGap = (time) => {
     const now = new Date();
-    const timeGap = now - time;
-    console.log(timeGap);
+    const t = new Date(time);
+
+    const timeGap = now.getTime() - t.getTime(); //milliseconds
     if (timeGap < minute){
         return "just now";
     }
     else if (timeGap < hour){
-        const m = (timeGap / minute) / 1000;
-        return m + " min ago";
+        const m = parseInt(timeGap / minute);
+        if(m <= 1)
+            return "a min ago";
+        else
+            return m + " mins ago";
     }
 
     else if  (timeGap < hour * 24){
-        const h = (timeGap / hour) / 1000;
+        const h = parseInt(timeGap / hour);
         if (h <= 1)
             return "an hour ago";
         else
@@ -25,22 +29,22 @@ export const GetTimeGap = (time) => {
     }
 
     else if (timeGap < (hour * 24 * 30)){
-        const d = (timeGap / ( hour * 24)) / 1000;
+        const d = parseInt(timeGap / ( hour * 24));
         if (d <= 1)
             return "a day ago";
         else
             return d + " days ago";
     }
 
-    else if ((timeGap < (hour * 24 * 30 * 12)) / 1000){
-        const month = (timeGap / ( hour * 24 * 30)) / 1000;
+    else if ((timeGap < (hour * 24 * 30 * 12))){
+        const month = parseInt(timeGap / ( hour * 24 * 30));
         if (month <= 1)
             return "a month ago";
         else
             return month + " months ago";
     }
     else{
-        const year = (timeGap / ( hour * 24 * 30 * 12)) / 1000;
+        const year = parseInt(timeGap / ( hour * 24 * 30 * 12));
         if (year <= 1){
             return "a year ago";
         }

@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import { UseAuthUser, UseDarkTheme } from '../resources/ContextProvider'
 import { InputBox, TextArea, StyledButton } from '../resources/styles';
-
+import { GetTimeGap } from '../resources/utils';
 
 
 const CommentWrapperStyle = {
@@ -14,7 +14,7 @@ const CommentWrapperStyle = {
 const Comment = ({data}) => {
     const darkTheme = UseDarkTheme();
     const user = UseAuthUser();
-    const [isReply, setIsReply] = useState(false);
+    const [isReplying, setIsReplying] = useState(false);
     const DeleteComment = (e) => {
         e.preventDefault();
         console.log("delete comment id:"+data.id);
@@ -23,7 +23,7 @@ const Comment = ({data}) => {
     const PostReply = (e) => {
         e.preventDefault();
         console.log("posting reply...");
-        setIsReply(prev => !prev);  
+        setIsReplying(prev => !prev);  
     }
     return (
         <>
@@ -36,7 +36,7 @@ const Comment = ({data}) => {
                 
             }}>
                 <div style={{display: 'inline', marginRight: '10px', paddingRight: '10px',borderRight: '1px solid'}}>{data.writer}</div>
-                <div style={{display: 'inline'}}>{data.date}</div>
+                <div style={{display: 'inline'}}>{GetTimeGap(data.date)}</div>
                 </div>
             <div className="app-board_comment__content" style={{
                 
@@ -49,7 +49,7 @@ const Comment = ({data}) => {
                 <a style={{cursor: 'pointer'}} onClick={PostReply}>Reply</a>
             </div>
         </div>
-        { isReply &&
+        { isReplying &&
             <div className="app-board-comment__reply" style={{
                 display: 'table',
                 width: '100%',

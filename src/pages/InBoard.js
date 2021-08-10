@@ -51,24 +51,23 @@ const InBoard = () => {
     const [commentUser, setCommentUser] = useState(user?user.username:"");
     const [commentPass, setCommentPass] = useState("");
     const [commentContent, setCommentContent] = useState("");
+    const [comments, setComments] = useState("");
 
     useEffect(() => {
         axios({
             method: 'GET',
-            url:`${baseURL}/comment`,
-            params: {
-                parentId: itemInfo._id
-            }
+            url:`${baseURL}/comment/${itemInfo._id}`,
+        })
+        .then(res =>{
+            setComments(res.data);
         })
     },[])
 
     const PostComment = () => {
         console.log("Post Comment Function.")
-        console.log("UserId: "+commentUser+ "\nUserPw: "+commentPass);
 
         const comment = {
-            parentId: itemInfo._id,
-            target: null,
+            pid: itemInfo._id,
             writer: commentUser,
             password: commentPass,
             content: commentContent,
@@ -128,7 +127,7 @@ const InBoard = () => {
                     </div>
                     
                     {
-                        _.map(itemInfo.comments, (comment) => {
+                        _.map(comments, (comment) => {
                             return <Comment key={comment.id} data={comment}/>
                         })
                     }
