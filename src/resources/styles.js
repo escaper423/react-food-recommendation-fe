@@ -146,7 +146,7 @@ text-decoration: none;
 `
 
 export const BoardItemWrapper = styled.article`
-    width: 90%;
+    width: 95%;
     min-width: 350px;
     height: 81px;
     background-color: #777;

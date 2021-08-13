@@ -110,9 +110,9 @@ const InBoard = () => {
                     </div>
                     <div className="app-board-content__comments" style={CommentStyle}>
                         <div className="app-board-content__comments__user" style={CommentUserStyle}>
-                            <div>Name:</div>
+                            <div><b>Name:</b></div>
                             <div>{user?user.username:<InputBox width="80%" darkTheme={darkTheme} onChange={(e) => {setCommentUser(e.target.value)}}/>}</div>
-                            <div>Password:</div>
+                            <div><b>Password:</b></div>
                             <div><InputBox type="password" width="80%" darkTheme={darkTheme} onChange={(e) => {setCommentPass(e.target.value)}}/></div>
                         </div>
                         <div className="app-board-content__comments__content" style={CommentContentStyle}>

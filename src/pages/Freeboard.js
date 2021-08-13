@@ -6,14 +6,14 @@ import styled from 'styled-components'
 import { BsPencil, BsSearch } from 'react-icons/bs'
 import { screenDark, screenLight, textDark, textLight } from '../resources/colors'
 import { UseDarkTheme } from '../resources/ContextProvider'
-import { baseURL, categoryContents, categoryId, searchOption, sortOrder } from '../resources/config'
+import { baseURL, categoryContents, searchOption, sortOrder } from '../resources/config'
 import _ from 'lodash'
 import axios from 'axios'
-
+import ModalContainer from '../components/ModalContainer'
 
 
 const BoardHeaderStyle = {
-    width: '90%',
+    width: '98%',
     height: '30px',
     margin: 'auto',
     display: 'flex',
@@ -75,7 +75,6 @@ const Freeboard = () => {
         })
             .then(res => {
                 setBoardItems(res.data);
-                //console.log(tmp);
             })
     }, [category, priority])
 
@@ -139,13 +138,13 @@ const Freeboard = () => {
     }
 
     return (
-        <>
+        <>  
             <Header />
             <div className="app-board-title" style={{ margin: '40px 0', textAlign: 'center' }}>
                 <h1>Free Board</h1>
                 <p>free gesipan do excrete any letters</p>
             </div>
-
+            
             <BlockScreenWrapper>
                 <div className="app-board-header" style={BoardHeaderStyle} >
                     <div className="app-board-header-dropdown">
