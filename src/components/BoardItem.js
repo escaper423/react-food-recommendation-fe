@@ -51,9 +51,10 @@ const BoardItem = ({ data }) => {
         console.log("Deleting Board item...");
         setIsDeleting(true);
     }
+
     return (
         <>
-            <ModalContainer isopen={isDeleting} boardId={data._id} onClick={prev => setIsDeleting(prev = !prev)}/>
+            <ModalContainer isDeleting={isDeleting} boardId={data._id} setIsDeleting={setIsDeleting}/>
             <BoardItemWrapper>
                 <Commends>
                     <VoteStyle onClick={doUpVote}><BsCaretUpFill size='1.6rem' /></VoteStyle>

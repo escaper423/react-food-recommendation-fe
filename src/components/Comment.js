@@ -2,7 +2,8 @@ import React, {useState} from 'react'
 import { UseAuthUser, UseDarkTheme } from '../resources/ContextProvider'
 import { InputBox, TextArea, StyledButton } from '../resources/styles';
 import { GetTimeGap } from '../resources/utils';
-
+import {RiDeleteBinLine} from 'react-icons/ri';
+import {BsReply} from 'react-icons/bs';
 
 const CommentWrapperStyle = {
     width: '100%',
@@ -45,8 +46,12 @@ const Comment = ({data}) => {
                 padding: '8px',
             }}>{data.content}</div>
             <div className="app-board_comment__option">
-                <a style={{cursor: 'pointer', marginRight: '10px'}} onClick={DeleteComment}>Delete</a>
-                <a style={{cursor: 'pointer'}} onClick={PostReply}>Reply</a>
+                <a style={{cursor: 'pointer', marginRight: '10px'}} onClick={DeleteComment}>
+                    <RiDeleteBinLine size='1.2rem'/>
+                </a>
+                <a style={{cursor: 'pointer'}} onClick={PostReply}>
+                    <BsReply size='1.2rem'/>
+                </a>
             </div>
         </div>
         { isReplying &&
