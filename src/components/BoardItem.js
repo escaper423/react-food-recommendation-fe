@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { BsCaretUpFill, BsCaretDownFill } from 'react-icons/bs'
 import { Link } from 'react-router-dom'
 import { textDark, textLight } from '../resources/colors'
@@ -54,7 +54,7 @@ const BoardItem = ({ data }) => {
 
     return (
         <>
-            <ModalContainer isDeleting={isDeleting} boardId={data._id} setIsDeleting={setIsDeleting}/>
+            <ModalContainer isDeleting={isDeleting} item={data} setIsDeleting={setIsDeleting}/>
             <BoardItemWrapper>
                 <Commends>
                     <VoteStyle onClick={doUpVote}><BsCaretUpFill size='1.6rem' /></VoteStyle>

@@ -2,7 +2,7 @@ import React from 'react';
 import { UseDarkTheme, UseSetDarkTheme } from '../resources/ContextProvider';
 import NavBar from './NavBar';
 import { headerDark, headerLight, textDark, textLight } from '../resources/colors';
-import { FaCalculator, FaLightbulb } from 'react-icons/fa'
+import { FaLightbulb } from 'react-icons/fa'
 import styled from 'styled-components';
 
 const ThemeButton = styled(FaLightbulb)`

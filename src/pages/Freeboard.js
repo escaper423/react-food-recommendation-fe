@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import Header from '../components/Header'
 import BoardItem from '../components/BoardItem'
 import { BlockScreenWrapper, SelectStyle } from '../resources/styles'
@@ -9,7 +9,6 @@ import { UseDarkTheme } from '../resources/ContextProvider'
 import { baseURL, categoryContents, searchOption, sortOrder } from '../resources/config'
 import _ from 'lodash'
 import axios from 'axios'
-import ModalContainer from '../components/ModalContainer'
 
 
 const BoardHeaderStyle = {

@@ -3,6 +3,8 @@ import styled from 'styled-components'
 import ReactDOM from 'react-dom'
 import trashbin from '../resources/trashbin.png';
 import { InputBox, StyledButton } from '../resources/styles';
+import axios from 'axios'
+import {baseURL} from '../resources/config'
 const ModalContainerStyle = styled.div`
     width: 100%;
     height: 100%;
@@ -13,12 +15,49 @@ const ModalContainerStyle = styled.div`
     z-index: 1000;
 `
 
-const ModalContainer = ({ isDeleting, setIsDeleting }) => {
+const ModalContainer = ({ isDeleting, setIsDeleting, item }) => {
     const [deletePassword, setDeletePassword] = useState("");
-
     const DeleteBoardItem = () =>{
         //acutal delete board item function
-        console.log("Delete board item..."+deletePassword)
+        let itemCategory;
+        let itemID;
+        //is it post?
+        if(item._id && !item.cid && !item.rid){
+            itemCategory = "board";
+            itemID = item._id;
+        }
+
+        //is it comment?
+        else if(item.cid && !item.target){
+            itemCategory = "comment";
+            itemID = item.cid;
+        }
+
+        //is it reply?
+        else if(item.rid){
+            itemCategory = "reply";
+            itemID = item.rid;
+        }
+
+        console.log("Delete category: "+itemCategory);
+        axios({
+            method: 'DELETE',
+            url: `${baseURL}/${itemCategory}/${itemID}`,
+            params:{
+                password: deletePassword
+            }
+        }).then(res => {
+            setIsDeleting(false);
+            window.location.reload();
+        }).catch(err => {
+            console.log(err);
+            let msg = document.querySelector('.comment-delete__message');
+
+            if(err.response.data)
+                msg.innerHTML = err.response.data;
+            else
+                msg.innerHTML = err;
+        })
     }
     if (!isDeleting)
         return null
@@ -67,6 +106,7 @@ const ModalContainer = ({ isDeleting, setIsDeleting }) => {
                             Cancel
                         </StyledButton>
                     </div>
+                    <span className="comment-delete__message" style={{color: 'red'}}></span>
                 </div>
             </div>
         </>

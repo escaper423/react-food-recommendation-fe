@@ -1,12 +1,10 @@
 import React from 'react';
-import { UseAuthUser, UseSetAuthUser, UseDarkTheme } from '../resources/ContextProvider';
+import { UseAuthUser, UseDarkTheme } from '../resources/ContextProvider';
 import Header from '../components/Header';
-import axios from 'axios';
 
 const Home = () => {
     const darkTheme = UseDarkTheme();
     const user = UseAuthUser();
-    const SetUser = UseSetAuthUser();
 
     return (
         <>

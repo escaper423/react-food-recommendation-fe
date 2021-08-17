@@ -1,4 +1,3 @@
-import React from 'react'
 
 const second = 1000;
 const minute = second * 60;

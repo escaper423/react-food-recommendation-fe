@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { useLocation, useParams } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import Comment from '../components/Comment'
 import Header from '../components/Header'
 import { UseAuthUser, UseDarkTheme } from '../resources/ContextProvider'
@@ -80,6 +80,7 @@ const InBoard = () => {
             data: comment
         }).then(() =>{
             console.log("Comment created.");
+            window.location.reload();
         }).catch(err => {
             console.log("Cannot create comment.\n"+err);
         })
@@ -119,7 +120,7 @@ const InBoard = () => {
                             <TextArea darkTheme={darkTheme} onChange={(e) => {setCommentContent(e.target.value)}} />
                         </div>
                         <div className="app-board-content__comments__confirm" style={CommentConfirmStyle}>
-                            <StyledButton onClick={PostComment} width='100px'>등록</StyledButton>
+                            <StyledButton onClick={PostComment} width='100px'>Submit</StyledButton>
                         </div>
                     </div>
                     <div style={{width: '100%', padding: '12px', borderBottom: '1px solid'}}>
@@ -128,7 +129,7 @@ const InBoard = () => {
                     
                     {
                         _.map(comments, (comment) => {
-                            return <Comment key={comment.id} data={comment}/>
+                            return <Comment key={comment.cid} data={comment}/>
                         })
                     }
                     
