@@ -68,7 +68,7 @@ const InBoard = () => {
 
         const comment = {
             pid: itemInfo._id,
-            writer: commentUser,
+            writer: user?user.username:commentUser,
             password: commentPass,
             content: commentContent,
             date: new Date().toString()

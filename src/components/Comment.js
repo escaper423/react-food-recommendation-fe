@@ -9,6 +9,7 @@ import ModalContainer from './ModalContainer';
 import { baseURL } from '../resources/config';
 import Reply from './Reply';
 import _ from 'lodash';
+import {BiUpArrow, BiDownArrow} from 'react-icons/bi'
 
 const CommentWrapperStyle = {
     width: '100%',
@@ -23,6 +24,7 @@ const Comment = ({ data }) => {
     const [isReplying, setIsReplying] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
     const [replies, setReplies] = useState("");
+    const [showReplies, setShowReplies] = useState(false);
 
     const [replyUser, setReplyUser] = useState("");
     const [replyPass, setReplyPass] = useState("");
@@ -50,12 +52,18 @@ const Comment = ({ data }) => {
         console.log("posting reply...");
         setIsReplying(prev => !prev);
     }
+    
+    const ToggleShowReply = (e) =>{
+        e.preventDefault();
+        console.log("toggle show reply");
+        setShowReplies(prev => !prev);
+    }
 
     const PostReply = () => {
         const reply = {
             cid: data.cid,
             target: data.writer,
-            writer: replyUser,
+            writer: user?user.username:replyUser,
             password: replyPass,
             content: replyContent,
             date: new Date().toString()
@@ -97,9 +105,15 @@ const Comment = ({ data }) => {
                     <a style={{ cursor: 'pointer', marginRight: '10px' }} onClick={DeleteComment}>
                         <RiDeleteBinLine size='1.2rem' />
                     </a>
-                    <a style={{ cursor: 'pointer' }} onClick={ToggleReply}>
+                    <a style={{ cursor: 'pointer', marginRight: '10px' }} onClick={ToggleReply}>
                         <BsReply size='1.2rem' />
                     </a>
+                    {
+                        replies.length?
+                        <a style={{ cursor: 'pointer'}} onClick={ToggleShowReply}>
+                            {showReplies? <BiUpArrow />:<BiDownArrow /> } 
+                        </a>:null
+                    }
                 </div>
             </div>
             {isReplying &&
@@ -134,6 +148,7 @@ const Comment = ({ data }) => {
                 </div>
             }
             {
+                showReplies &&
                 _.map(replies, (reply) => {
                     return <Reply key={reply.rid} data={reply} />
                 })
