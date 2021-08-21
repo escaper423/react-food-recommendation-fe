@@ -1,13 +1,13 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import Comment from '../components/Comment'
 import Header from '../components/Header'
 import { UseAuthUser, UseDarkTheme } from '../resources/ContextProvider'
-import { BlockScreenWrapper,InputBox,StyledButton,TextArea } from '../resources/styles'
+import { BlockScreenWrapper, InputBox, StyledButton, TextArea } from '../resources/styles'
 import _ from 'lodash'
 import { GetTimeGap, GetCategory } from '../resources/utils'
 import axios from 'axios'
-import {baseURL} from '../resources/config'
+import { baseURL } from '../resources/config'
 
 const boardContentStyle = {
     width: '85%',
@@ -17,11 +17,11 @@ const boardContentStyle = {
 
 const CommentStyle = {
     display: 'flex',
-    justifyContent:'center',
+    justifyContent: 'center',
     margin: '30px auto',
     width: '100%',
     padding: '12px',
-    backgroundColor:'grey'
+    backgroundColor: 'grey'
 }
 
 const CommentUserStyle = {
@@ -32,7 +32,7 @@ const CommentUserStyle = {
 
 const CommentContentStyle = {
     alignItems: 'center',
-    width: '70%'   
+    width: '70%'
 }
 
 const CommentConfirmStyle = {
@@ -42,33 +42,47 @@ const CommentConfirmStyle = {
 }
 
 const InBoard = () => {
-    //const userInfo = useParams();
     const location = useLocation();
-    const itemInfo = location.state;
+    const itemState = location.state;
+    const itemID = itemState._id;
+    const itemCategory = itemState.category;
 
     const user = UseAuthUser();
     const darkTheme = UseDarkTheme();
-    const [commentUser, setCommentUser] = useState(user?user.username:"");
+    const [commentUser, setCommentUser] = useState(user ? user.username : "");
     const [commentPass, setCommentPass] = useState("");
     const [commentContent, setCommentContent] = useState("");
     const [comments, setComments] = useState("");
+    const [itemInfo, setItemInfo] = useState("");
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
+        //Getting an item
         axios({
             method: 'GET',
-            url:`${baseURL}/comment/${itemInfo._id}`,
+            url: `${baseURL}/board/${itemCategory}/${itemID}`
+        }).then(res => {
+            setItemInfo(res.data[0]);
         })
-        .then(res =>{
-            setComments(res.data);
+
+        //Getting Comments
+        axios({
+            method: 'GET',
+            url: `${baseURL}/comment/${itemID}`,
         })
-    },[])
+            .then(res => {
+                setComments(res.data);
+            })
+
+        setIsLoading(false);
+    }, [])
 
     const PostComment = () => {
         console.log("Post Comment Function.")
 
         const comment = {
-            pid: itemInfo._id,
-            writer: user?user.username:commentUser,
+            pid: itemID,
+            writer: user ? user.username : commentUser,
             password: commentPass,
             content: commentContent,
             date: new Date().toString()
@@ -78,27 +92,32 @@ const InBoard = () => {
             method: 'POST',
             url: `${baseURL}/comment`,
             data: comment
-        }).then(() =>{
+        }).then(() => {
             console.log("Comment created.");
             window.location.reload();
         }).catch(err => {
-            console.log("Cannot create comment.\n"+err);
+            console.log("Cannot create comment.\n" + err);
         })
     }
 
-    return (
+    if (isLoading)
+        return null
+
+    else return (
+        <>
+        <Header />
+        {!isLoading &&
         <div>
-            <Header />
             <BlockScreenWrapper>
                 <div className="app-board-content" style={boardContentStyle}>
                     <div className="app-board-content__title"><h1>{itemInfo.title}</h1></div>
                     <div className="app-board-content__meta" style={
-                        {display: 'table', textAlign: 'center', marginTop:'20px', padding:'10px 0', borderRadius:'4px'}}>
-                        <div style={{display: 'table-cell',  paddingRight: '12px', borderRight: 'solid 1px', minWidth:'40px'}}>{GetCategory(itemInfo.category)}</div>
-                        <div style={{display: 'table-cell',  padding: '0 12px', borderRight: 'solid 1px'}}>{GetTimeGap(itemInfo.date)}</div>
-                        <div style={{display: 'table-cell',  padding: '0 12px', borderRight: 'solid 1px', minWidth:'60px'}}>{itemInfo.writer}</div>
-                        <div style={{display: 'table-cell',  padding: '0 12px', borderRight: 'solid 1px',minWidth:'40px'}}>조회: {itemInfo.views}</div>
-                        <div style={{display: 'table-cell',  padding: '0 12px', borderRight: 'solid 1px',minWidth:'40px'}}>추천: {itemInfo.commends}</div>
+                        { display: 'table', textAlign: 'center', marginTop: '20px', padding: '10px 0', borderRadius: '4px' }}>
+                        <div style={{ display: 'table-cell', paddingRight: '12px', borderRight: 'solid 1px', minWidth: '40px' }}>{GetCategory(itemInfo.category)}</div>
+                        <div style={{ display: 'table-cell', padding: '0 12px', borderRight: 'solid 1px' }}>{GetTimeGap(itemInfo.date)}</div>
+                        <div style={{ display: 'table-cell', padding: '0 12px', borderRight: 'solid 1px', minWidth: '60px' }}>{itemInfo.writer}</div>
+                        <div style={{ display: 'table-cell', padding: '0 12px', borderRight: 'solid 1px', minWidth: '40px' }}>조회: {itemInfo.views}</div>
+                        <div style={{ display: 'table-cell', padding: '0 12px', borderRight: 'solid 1px', minWidth: '40px' }}>추천: {itemInfo.commends}</div>
                     </div>
                     <div className="app-board-content__body" style={{
                         marginTop: '30px',
@@ -112,32 +131,33 @@ const InBoard = () => {
                     <div className="app-board-content__comments" style={CommentStyle}>
                         <div className="app-board-content__comments__user" style={CommentUserStyle}>
                             <div><b>Name:</b></div>
-                            <div>{user?user.username:<InputBox width="80%" darkTheme={darkTheme} onChange={(e) => {setCommentUser(e.target.value)}}/>}</div>
+                            <div>{user ? user.username : <InputBox width="80%" darkTheme={darkTheme} onChange={(e) => { setCommentUser(e.target.value) }} />}</div>
                             <div><b>Password:</b></div>
-                            <div><InputBox type="password" width="80%" darkTheme={darkTheme} onChange={(e) => {setCommentPass(e.target.value)}}/></div>
+                            <div><InputBox type="password" width="80%" darkTheme={darkTheme} onChange={(e) => { setCommentPass(e.target.value) }} /></div>
                         </div>
                         <div className="app-board-content__comments__content" style={CommentContentStyle}>
-                            <TextArea darkTheme={darkTheme} onChange={(e) => {setCommentContent(e.target.value)}} />
+                            <TextArea darkTheme={darkTheme} onChange={(e) => { setCommentContent(e.target.value) }} />
                         </div>
                         <div className="app-board-content__comments__confirm" style={CommentConfirmStyle}>
                             <StyledButton onClick={PostComment} width='100px'>Submit</StyledButton>
                         </div>
                     </div>
-                    <div style={{width: '100%', padding: '12px', borderBottom: '1px solid'}}>
-                    
+                    <div style={{ width: '100%', padding: '12px', borderBottom: '1px solid' }}>
+
                     </div>
-                    
+
                     {
                         _.map(comments, (comment) => {
-                            return <Comment key={comment.cid} data={comment}/>
+                            return <Comment key={comment.cid} data={comment} />
                         })
                     }
-                    
+
                 </div>
             </BlockScreenWrapper>
 
         </div>
+        }
+        </>
     )
 }
-
 export default InBoard

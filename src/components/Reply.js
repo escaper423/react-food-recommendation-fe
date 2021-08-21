@@ -41,6 +41,7 @@ const Reply = ({ data }) => {
 
     const CreateReply = () => {
         const reply = {
+            pid: data.pid,
             cid: data.cid,
             target: data.writer,
             writer: user ? user.username : replyUser,

@@ -61,6 +61,7 @@ const Comment = ({ data }) => {
 
     const PostReply = () => {
         const reply = {
+            pid: data.pid,
             cid: data.cid,
             target: data.writer,
             writer: user?user.username:replyUser,

@@ -79,7 +79,7 @@ const BoardItem = ({ data }) => {
                         onClick={UpViews}
                         style={{ outline: 'none', textDecoration: 'none', color: darkTheme ? textDark : textLight }}
                         to={
-                            { pathname: `/board/${data.category}/${data._id}`, state: data }
+                            { pathname: `/board/${data.category}/${data._id}`, state: {_id: data._id, category: data.category} }
                         }
                         params={data}
                     >
