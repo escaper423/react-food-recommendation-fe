@@ -9,7 +9,10 @@ import ModalContainer from './ModalContainer';
 import { baseURL } from '../resources/config';
 import Reply from './Reply';
 import _ from 'lodash';
-import {BiUpArrow, BiDownArrow} from 'react-icons/bi'
+import { BiUpArrow, BiDownArrow } from 'react-icons/bi'
+import htmlParse from 'html-react-parser'
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 const CommentWrapperStyle = {
     width: '100%',
@@ -52,8 +55,8 @@ const Comment = ({ data }) => {
         console.log("posting reply...");
         setIsReplying(prev => !prev);
     }
-    
-    const ToggleShowReply = (e) =>{
+
+    const ToggleShowReply = (e) => {
         e.preventDefault();
         console.log("toggle show reply");
         setShowReplies(prev => !prev);
@@ -64,7 +67,7 @@ const Comment = ({ data }) => {
             pid: data.pid,
             cid: data.cid,
             target: data.writer,
-            writer: user?user.username:replyUser,
+            writer: user ? user.username : replyUser,
             password: replyPass,
             content: replyContent,
             date: new Date().toString()
@@ -97,11 +100,15 @@ const Comment = ({ data }) => {
                     <div style={{ display: 'inline' }}>{GetTimeGap(data.date)}</div>
                 </div>
                 <div className="app-board_comment__content" style={{
-
-                    width: '15%',
                     minWidth: '60px',
+                    maxWidth: '100%',
                     padding: '8px',
-                }}>{data.content}</div>
+                    whiteSpace:'normal',
+                    wordBreak:'break-all'
+
+                }}>
+                    {htmlParse(data.content)}
+                </div>
                 <div className="app-board_comment__option">
                     <a style={{ cursor: 'pointer', marginRight: '10px' }} onClick={DeleteComment}>
                         <RiDeleteBinLine size='1.2rem' />
@@ -110,10 +117,10 @@ const Comment = ({ data }) => {
                         <BsReply size='1.2rem' />
                     </a>
                     {
-                        replies.length?
-                        <a style={{ cursor: 'pointer'}} onClick={ToggleShowReply}>
-                            {showReplies? <BiUpArrow />:<BiDownArrow /> } 
-                        </a>:null
+                        replies.length ?
+                            <a style={{ cursor: 'pointer' }} onClick={ToggleShowReply}>
+                                {showReplies ? <BiUpArrow /> : <BiDownArrow />}
+                            </a> : null
                     }
                 </div>
             </div>
@@ -136,8 +143,34 @@ const Comment = ({ data }) => {
                         display: 'table-cell',
                         textAlign: 'center',
                         verticalAlign: 'middle',
+                        overflow: 'auto'
                     }}>
-                        <TextArea darkTheme={darkTheme} height='70px' width='90%' onChange={(e) => { setReplyContent(e.target.value) }} />
+                        <CKEditor
+                            editor={ClassicEditor}
+                            data={replyContent}
+                            onReady={editor => {
+                                // You can store the "editor" and use when it is needed.
+                                console.log('Editor is ready to use!', editor);
+                                editor.editing.view.change((writer) => {
+                                    writer.setStyle(
+                                        "height",
+                                        "80px",
+                                        editor.editing.view.document.getRoot()
+                                    )
+                                })
+                            }}
+                            onChange={(event, editor) => {
+                                const data = editor.getData();
+                                setReplyContent(data);
+                                console.log({ event, editor, data });
+                            }}
+                            onBlur={(event, editor) => {
+                                console.log('Blur.', editor);
+                            }}
+                            onFocus={(event, editor) => {
+                                console.log('Focus.', editor);
+                            }}
+                        />
                     </div>
                     <div className="app-board-comment__reply__confirm" style={{
                         display: 'table-cell',

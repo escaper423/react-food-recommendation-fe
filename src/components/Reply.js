@@ -8,6 +8,9 @@ import { FaLongArrowAltRight } from 'react-icons/fa';
 import axios from 'axios'
 import ModalContainer from './ModalContainer';
 import { baseURL } from '../resources/config';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import htmlParse from 'html-react-parser'
 
 const ReplyWrapperStyle = {
     width: '100%',
@@ -77,7 +80,7 @@ const Reply = ({ data }) => {
                     <div className="reply-content__meta" style={{
                         minWidth: '60px',
                         padding: '8px',
-                        display:'table-cell',
+                        display: 'table-cell',
 
                     }}>
                         <div style={{ display: 'inline', marginRight: '10px', paddingRight: '10px', borderRight: '1px solid' }}>
@@ -86,11 +89,14 @@ const Reply = ({ data }) => {
                         <div style={{ display: 'inline' }}>{GetTimeGap(data.date)}</div>
                     </div>
                     <div className="reply-content__body" style={{
-
-                        width: '15%',
                         minWidth: '60px',
+                        maxWidth: '100%',
                         padding: '8px',
-                    }}>{data.content}</div>
+                        whiteSpace: 'normal',
+                        wordBreak: 'break-all'
+                    }}>
+                        {htmlParse(data.content)}
+                    </div>
                     <div className="reply-content__option">
                         <a style={{ cursor: 'pointer', marginRight: '10px' }} onClick={DeleteReply}>
                             <RiDeleteBinLine size='1.2rem' />
@@ -121,7 +127,37 @@ const Reply = ({ data }) => {
                         textAlign: 'center',
                         verticalAlign: 'middle',
                     }}>
-                        <TextArea darkTheme={darkTheme} height='70px' width='90%' onChange={(e) => { setReplyUser(e.target.value) }} />
+                        <CKEditor
+                            editor={ClassicEditor}
+                            data={replyContent}
+                            onReady={editor => {
+                                // You can store the "editor" and use when it is needed.
+                                console.log('Editor is ready to use!', editor);
+                                editor.editing.view.change((writer) => {
+                                    writer.setStyle(
+                                        "height",
+                                        "80px",
+                                        editor.editing.view.document.getRoot()
+                                    )
+                                    writer.setStyle(
+                                        "width",
+                                        "100%",
+                                        editor.editing.view.document.getRoot()
+                                    )
+                                })
+                            }}
+                            onChange={(event, editor) => {
+                                const data = editor.getData();
+                                setReplyContent(data);
+                                console.log({ event, editor, data });
+                            }}
+                            onBlur={(event, editor) => {
+                                console.log('Blur.', editor);
+                            }}
+                            onFocus={(event, editor) => {
+                                console.log('Focus.', editor);
+                            }}
+                        />
                     </div>
                     <div className="reply-post-reply__confirm" style={{
                         display: 'table-cell',
