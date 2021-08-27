@@ -55,6 +55,7 @@ const BoardFooterStyle = {
     marginTop: '20px',
 }
 
+let boardItemCount;
 const Freeboard = () => {
     const [boardItems, setBoardItems] = useState(null);
     const [searchWord, setSearchWord] = useState("");
@@ -73,7 +74,8 @@ const Freeboard = () => {
             }
         })
             .then(res => {
-                setBoardItems(res.data);
+                setBoardItems(res.data.boardItems);
+                boardItemCount = res.data.count;
             })
     }, [category, priority])
 
@@ -180,6 +182,9 @@ const Freeboard = () => {
 
 
                 <div className="app-board-footer" style={BoardFooterStyle}>
+                    <div className="board-footer__pagination">
+
+                    </div>
                     <SelectStyle width="80px" style={{ marginRight: '10px' }} onChange={ChangeSearchFilter}>
                         {_.map(searchOption, (elem) => {
                             return (

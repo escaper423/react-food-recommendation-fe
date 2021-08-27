@@ -41,12 +41,14 @@ const CommentContentStyle = {
 
 const CommentConfirmStyle = {
     width: '15%',
+    paddingLeft: '10px',
     alignItems: 'center',
     display: 'flex',
 }
 
 const InBoard = () => {
-    const location = useLocation();
+    const location = useLocation(); 
+      
     const itemState = location.state;
     const itemID = itemState._id;
     const itemCategory = itemState.category;
@@ -59,6 +61,8 @@ const InBoard = () => {
     const [comments, setComments] = useState("");
     const [itemInfo, setItemInfo] = useState("");
     const [isLoading, setIsLoading] = useState(true);
+    
+    let commentCount;
 
     useEffect(() => {
         //Getting an item
@@ -76,7 +80,8 @@ const InBoard = () => {
                 url: `${baseURL}/comment/${itemID}`,
             })
                 .then(res => {
-                    setComments(res.data);
+                    setComments(res.data.comments);
+                    commentCount = res.data.count;
                 })
                 .then( () => {
                     setIsLoading(false);
@@ -134,6 +139,7 @@ const InBoard = () => {
                                 padding: '12px',
                                 width: '100%',
                                 borderTop: '1px solid',
+                                wordBreak: 'break-all'
 
                             }}>
                                 {htmlParse(itemInfo.content)}
@@ -152,17 +158,24 @@ const InBoard = () => {
                                         onReady={editor => {
                                             // You can store the "editor" and use when it is needed.
                                             console.log('Editor is ready to use!', editor);
+                                            editor.editing.view.change((writer) => {
+                                                writer.setStyle(
+                                                    "height",
+                                                    "120px",
+                                                    editor.editing.view.document.getRoot()
+                                                )
+                                            })
                                         }}
                                         onChange={(event, editor) => {
                                             const data = editor.getData();
                                             setCommentContent(data);
-                                            console.log({ event, editor, data });
+                                            //console.log({ event, editor, data });
                                         }}
                                         onBlur={(event, editor) => {
-                                            console.log('Blur.', editor);
+                                            //console.log('Blur.', editor);
                                         }}
                                         onFocus={(event, editor) => {
-                                            console.log('Focus.', editor);
+                                            //console.log('Focus.', editor);
                                         }}
                                         plugins
                                     />

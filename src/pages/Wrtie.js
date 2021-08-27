@@ -23,6 +23,12 @@ const FlexDiv = {
     width: '100%',
 }
 
+const ContentStyle = {
+    alignItems: 'middle',
+    width: '100%',
+    color: 'black'
+}
+
 const Wrtie = () => {
     const user = UseAuthUser();
     const darkTheme = UseDarkTheme();
@@ -98,19 +104,18 @@ const Wrtie = () => {
                         <div className="app-board-write__title" style={FlexDiv}>
                             <div style={TmpStyle}>제목:</div><InputBox darkTheme={darkTheme} width='100%' onChange={(e) => { setTitle(e.target.value) }} />
                         </div>
-                        <div className="app-board-write__content" style={FlexDiv}>
+                        <div className="app-board-write__content" style={ContentStyle}>
                             
                             <CKEditor
                                 editor={ClassicEditor}
                                 data={content}
-                                style={TmpStyle}
                                 onReady={editor => {
                                     // You can store the "editor" and use when it is needed.
                                     console.log('Editor is ready to use!', editor);
                                     editor.editing.view.change((writer) => {
                                         writer.setStyle(
-                                            "height width",
-                                            "300px 50px",
+                                            "height",
+                                            "400px",
                                             editor.editing.view.document.getRoot()
                                         )
                                     })

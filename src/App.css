@@ -21,6 +21,10 @@ li{
   display: inline-block;
 }
 
+.ck-editor{
+  width: 400px;
+}
+
 input:-webkit-autofill,
 input:-webkit-autofill:hover, 
 input:-webkit-autofill:focus, 

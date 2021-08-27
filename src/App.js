@@ -43,7 +43,8 @@ function App() {
   const appStyle = {
     backgroundColor: darkTheme? screenDark: screenLight,
     color: darkTheme?  textDark:textLight,
-    minHeight: '100vh'
+    minHeight: '100vh',
+    height: '100%',
   }
 
   return (

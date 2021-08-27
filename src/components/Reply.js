@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { UseAuthUser, UseDarkTheme } from '../resources/ContextProvider'
-import { InputBox, TextArea, StyledButton } from '../resources/styles';
+import { InputBox, StyledButton } from '../resources/styles';
 import { GetTimeGap } from '../resources/utils';
 import { RiDeleteBinLine } from 'react-icons/ri';
 import { BsReply } from 'react-icons/bs';
@@ -27,7 +27,7 @@ const Reply = ({ data }) => {
     const [isDeleting, setIsDeleting] = useState(false);
 
     const [replyUser, setReplyUser] = useState("");
-    const [replyPass, setReplyPass] = useState("");
+    const [replyPassword, setReplyPassword] = useState("");
     const [replyContent, setReplyContent] = useState("");
 
     const DeleteReply = (e) => {
@@ -48,7 +48,7 @@ const Reply = ({ data }) => {
             cid: data.cid,
             target: data.writer,
             writer: user ? user.username : replyUser,
-            password: replyPass,
+            password: replyPassword,
             content: replyContent,
             date: new Date().toString()
         }
@@ -120,12 +120,14 @@ const Reply = ({ data }) => {
                         padding: '4px'
                     }}>
                         <div><b>Name:</b> {user ? user.username : <InputBox darkTheme={darkTheme} width='60px' onChange={(e) => { setReplyUser(e.target.value) }} />}</div>
-                        <div><b>Password:</b> <InputBox darkTheme={darkTheme} type='password' width='60px' onChange={(e) => { setReplyUser(e.target.value) }} /></div>
+                        <div><b>Password:</b> <InputBox darkTheme={darkTheme} type='password' width='60px' onChange={(e) => { setReplyPassword(e.target.value) }} /></div>
                     </div>
                     <div className="reply-post-reply__content" style={{
                         display: 'table-cell',
                         textAlign: 'center',
                         verticalAlign: 'middle',
+                        wordBreak: 'break-all',
+                        color: 'black'
                     }}>
                         <CKEditor
                             editor={ClassicEditor}

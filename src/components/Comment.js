@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { UseAuthUser, UseDarkTheme } from '../resources/ContextProvider'
-import { InputBox, TextArea, StyledButton } from '../resources/styles';
+import { InputBox, StyledButton } from '../resources/styles';
 import { GetTimeGap } from '../resources/utils';
 import { RiDeleteBinLine } from 'react-icons/ri';
 import { BsReply } from 'react-icons/bs';
@@ -39,7 +39,7 @@ const Comment = ({ data }) => {
             url: `${baseURL}/reply/${data.cid}`,
         })
             .then(res => {
-                setReplies(res.data);
+                setReplies(res.data.replies);
                 console.log(replies);
             })
     }, [])
@@ -104,7 +104,8 @@ const Comment = ({ data }) => {
                     maxWidth: '100%',
                     padding: '8px',
                     whiteSpace:'normal',
-                    wordBreak:'break-all'
+                    wordBreak:'break-all',
+                    color: 'black'
 
                 }}>
                     {htmlParse(data.content)}
