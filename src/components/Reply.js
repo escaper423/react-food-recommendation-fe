@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { UseAuthUser, UseDarkTheme } from '../resources/ContextProvider'
 import { InputBox, StyledButton } from '../resources/styles';
 import { GetTimeGap } from '../resources/utils';
@@ -8,9 +8,9 @@ import { FaLongArrowAltRight } from 'react-icons/fa';
 import axios from 'axios'
 import ModalContainer from './ModalContainer';
 import { baseURL } from '../resources/config';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import htmlParse from 'html-react-parser'
+import { ContentEditor } from '../resources/styles';
+import editorjsParser from '../resources/editorjsParser';
 
 const ReplyWrapperStyle = {
     width: '100%',
@@ -18,7 +18,6 @@ const ReplyWrapperStyle = {
     padding: '6px 12px',
     display: 'table',
 }
-
 
 const Reply = ({ data }) => {
     const darkTheme = UseDarkTheme();
@@ -29,6 +28,12 @@ const Reply = ({ data }) => {
     const [replyUser, setReplyUser] = useState("");
     const [replyPassword, setReplyPassword] = useState("");
     const [replyContent, setReplyContent] = useState("");
+
+    const editorRef = useRef(null);
+    async function handleSave() {
+        const savedData = await editorRef.current.save();
+        setReplyContent(savedData)
+    };
 
     const DeleteReply = (e) => {
         e.preventDefault();
@@ -95,7 +100,7 @@ const Reply = ({ data }) => {
                         whiteSpace: 'normal',
                         wordBreak: 'break-all'
                     }}>
-                        {htmlParse(data.content)}
+                        {htmlParse(editorjsParser(data.content))}
                     </div>
                     <div className="reply-content__option">
                         <a style={{ cursor: 'pointer', marginRight: '10px' }} onClick={DeleteReply}>
@@ -124,42 +129,10 @@ const Reply = ({ data }) => {
                     </div>
                     <div className="reply-post-reply__content" style={{
                         display: 'table-cell',
-                        textAlign: 'center',
                         verticalAlign: 'middle',
                         wordBreak: 'break-all',
-                        color: 'black'
                     }}>
-                        <CKEditor
-                            editor={ClassicEditor}
-                            data={replyContent}
-                            onReady={editor => {
-                                // You can store the "editor" and use when it is needed.
-                                console.log('Editor is ready to use!', editor);
-                                editor.editing.view.change((writer) => {
-                                    writer.setStyle(
-                                        "height",
-                                        "80px",
-                                        editor.editing.view.document.getRoot()
-                                    )
-                                    writer.setStyle(
-                                        "width",
-                                        "100%",
-                                        editor.editing.view.document.getRoot()
-                                    )
-                                })
-                            }}
-                            onChange={(event, editor) => {
-                                const data = editor.getData();
-                                setReplyContent(data);
-                                console.log({ event, editor, data });
-                            }}
-                            onBlur={(event, editor) => {
-                                console.log('Blur.', editor);
-                            }}
-                            onFocus={(event, editor) => {
-                                console.log('Focus.', editor);
-                            }}
-                        />
+                        <ContentEditor saveHandler={handleSave} editorRef={editorRef} data={replyContent} />
                     </div>
                     <div className="reply-post-reply__confirm" style={{
                         display: 'table-cell',

@@ -28,6 +28,7 @@ function Header() {
         width: '100%',
         backgroundColor: darkTheme ? headerDark : headerLight,
         color: darkTheme ? headerLight : headerDark,
+        zIndex: '500'
     }
 
     const navStyle = {

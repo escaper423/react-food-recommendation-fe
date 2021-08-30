@@ -4,21 +4,12 @@
 }
 
 html{
+  min-height: 100vh;
   height: 100%;
   width: 100%;
 }
 .app-body-search{
   margin: 10px;
-}
-
-ul{
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-li{
-  display: inline-block;
 }
 
 .ck-editor{

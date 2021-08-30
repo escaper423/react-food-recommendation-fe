@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { UseAuthUser, UseDarkTheme } from '../resources/ContextProvider'
 import { InputBox, StyledButton } from '../resources/styles';
 import { GetTimeGap } from '../resources/utils';
@@ -10,9 +10,10 @@ import { baseURL } from '../resources/config';
 import Reply from './Reply';
 import _ from 'lodash';
 import { BiUpArrow, BiDownArrow } from 'react-icons/bi'
+
 import htmlParse from 'html-react-parser'
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import editorjsParser from '../resources/editorjsParser';
+import { ContentEditor } from '../resources/styles';
 
 const CommentWrapperStyle = {
     width: '100%',
@@ -32,6 +33,12 @@ const Comment = ({ data }) => {
     const [replyUser, setReplyUser] = useState("");
     const [replyPass, setReplyPass] = useState("");
     const [replyContent, setReplyContent] = useState("");
+
+    const editorRef = useRef(null);
+    async function handleSave() {
+        const savedData = await editorRef.current.save();
+        setReplyContent(savedData)
+    };
 
     useEffect(() => {
         axios({
@@ -105,10 +112,9 @@ const Comment = ({ data }) => {
                     padding: '8px',
                     whiteSpace:'normal',
                     wordBreak:'break-all',
-                    color: 'black'
 
                 }}>
-                    {htmlParse(data.content)}
+                    {htmlParse(editorjsParser(data.content))}
                 </div>
                 <div className="app-board_comment__option">
                     <a style={{ cursor: 'pointer', marginRight: '10px' }} onClick={DeleteComment}>
@@ -142,36 +148,10 @@ const Comment = ({ data }) => {
                     </div>
                     <div className="app-board-comment__reply__content" style={{
                         display: 'table-cell',
-                        textAlign: 'center',
                         verticalAlign: 'middle',
                         overflow: 'auto'
                     }}>
-                        <CKEditor
-                            editor={ClassicEditor}
-                            data={replyContent}
-                            onReady={editor => {
-                                // You can store the "editor" and use when it is needed.
-                                console.log('Editor is ready to use!', editor);
-                                editor.editing.view.change((writer) => {
-                                    writer.setStyle(
-                                        "height",
-                                        "80px",
-                                        editor.editing.view.document.getRoot()
-                                    )
-                                })
-                            }}
-                            onChange={(event, editor) => {
-                                const data = editor.getData();
-                                setReplyContent(data);
-                                console.log({ event, editor, data });
-                            }}
-                            onBlur={(event, editor) => {
-                                console.log('Blur.', editor);
-                            }}
-                            onFocus={(event, editor) => {
-                                console.log('Focus.', editor);
-                            }}
-                        />
+                        <ContentEditor saveHandler={handleSave} editorRef={editorRef} data={replyContent} />
                     </div>
                     <div className="app-board-comment__reply__confirm" style={{
                         display: 'table-cell',

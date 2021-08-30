@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import Header from '../components/Header'
 import { categoryContents } from '../resources/config'
 import { UseAuthUser, UseDarkTheme } from '../resources/ContextProvider'
@@ -7,10 +7,10 @@ import _ from 'lodash'
 import axios from 'axios'
 import { useHistory } from 'react-router-dom'
 import { GetCategory } from '../resources/utils'
-import { baseURL } from '../resources/config'
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-
+import { baseURL,EDITOR_JS_TOOLS } from '../resources/config'
+import EditorJs from 'react-editor-js';
+import { textDark, textLight } from '../resources/colors'
+import { ContentEditor } from '../resources/styles'
 const TmpStyle = {
     verticalAlign: 'middle',
     display: 'table-cell',
@@ -23,13 +23,7 @@ const FlexDiv = {
     width: '100%',
 }
 
-const ContentStyle = {
-    alignItems: 'middle',
-    width: '100%',
-    color: 'black'
-}
-
-const Wrtie = () => {
+const Write = () => {
     const user = UseAuthUser();
     const darkTheme = UseDarkTheme();
     const history = useHistory();
@@ -40,6 +34,17 @@ const Wrtie = () => {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
 
+    const editorRef = useRef(null);
+    async function handleSave() {
+        const savedData = await editorRef.current.save();
+        setContent(savedData)
+    };
+
+    const ContentStyle = {
+        alignItems: 'middle',
+        width: '100%',
+        color: darkTheme?textDark:textLight,
+    }
 
     const PostBoard = (e) => {
         e.preventDefault();
@@ -69,19 +74,20 @@ const Wrtie = () => {
         <>
             <Header />
             <BlockScreenWrapper>
-                <div className="app-board-write-head" style={{
+                <div className="board-write-head" style={{
+                    height: '100%',
                     margin: '40px 0',
                     textAlign: 'center',
                 }}>
                     <h1>글 쓰기</h1>
                     <p>아무 글이나 써주세요.</p>
                 </div>
-                <div className="app-board-write-body" style={{
+                <div className="board-write-body" style={{
                     width: '70%',
                     margin: 'auto',
                 }}>
                     <form onSubmit={PostBoard}>
-                        <div className="app-board-write__category" style={FlexDiv}>
+                        <div className="board-write__category" style={FlexDiv}>
                             <div style={TmpStyle}>종류:</div>
                             <SelectStyle width="60px" onChange={(e) => { setCategory(e.target.value) }}>
                                 {_.map(categoryContents.filter(item => item !== "모두"), (elem) => {
@@ -92,61 +98,39 @@ const Wrtie = () => {
                                 }
                             </SelectStyle>
                         </div>
-                        <div className="app-board-write__title" style={FlexDiv}>
+                        <div className="board-write__title" style={FlexDiv}>
                             <div style={TmpStyle}>작성자:</div>
                             {(user) ? <span style={{ fontSize: '18px', display: 'table-cell', verticalAlign: 'middle' }}>{user.username}</span>
                                 :
                                 <InputBox darkTheme={darkTheme} width='200px' onChange={(e) => { setUserName(e.target.value) }} />}
                         </div>
-                        <div className="app-board-write__password" style={FlexDiv}>
+                        <div className="board-write__password" style={FlexDiv}>
                             <div style={TmpStyle}>비밀번호:</div><InputBox type="password" darkTheme={darkTheme} width='200px' onChange={(e) => { setPassword(e.target.value) }} />
                         </div>
-                        <div className="app-board-write__title" style={FlexDiv}>
+                        <div className="board-write__title" style={FlexDiv}>
                             <div style={TmpStyle}>제목:</div><InputBox darkTheme={darkTheme} width='100%' onChange={(e) => { setTitle(e.target.value) }} />
                         </div>
-                        <div className="app-board-write__content" style={ContentStyle}>
-                            
-                            <CKEditor
-                                editor={ClassicEditor}
-                                data={content}
-                                onReady={editor => {
-                                    // You can store the "editor" and use when it is needed.
-                                    console.log('Editor is ready to use!', editor);
-                                    editor.editing.view.change((writer) => {
-                                        writer.setStyle(
-                                            "height",
-                                            "400px",
-                                            editor.editing.view.document.getRoot()
-                                        )
-                                    })
-                                }}
-                                onChange={(event, editor) => {
-                                    const data = editor.getData();
-                                    setContent(data);
-                                    console.log({ event, editor, data });
-                                }}
-                                onBlur={(event, editor) => {
-                                    console.log('Blur.', editor);
-                                }}
-                                onFocus={(event, editor) => {
-                                    console.log('Focus.', editor);
-                                }}
-                            />
-                            
+                        <div className="board-write__content" style={ContentStyle}>
+                            <ContentEditor saveHandler={handleSave} editorRef={editorRef} data={content} />
                         </div>
-                        <div className="app-board-write__confirm" style={{
-                            float: 'right',
-                            marginTop: '18px',
-                            marginRight: '20px',
-                        }}>
-                            <ConfirmButton val="글 쓰기" />
-                        </div>
-                    </form>
+                        <div className="board-write__confirm" style={{
+                                position: 'fixed',
+                                width: '100%',
+                                height: '60px',
+                                float: 'left',
+                                left: 'calc(80%)',
+                                bottom: '40px',
+                                marginTop: '18px',
+                                marginRight: '20px',
 
+                                }}>
+                                    <ConfirmButton val="글 쓰기" />
+                                </div>
+                    </form>
                 </div>
             </BlockScreenWrapper>
         </>
     )
 }
 
-export default Wrtie
+export default Write

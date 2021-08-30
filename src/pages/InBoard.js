@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
 import Comment from '../components/Comment'
 import Header from '../components/Header'
@@ -8,9 +8,10 @@ import _ from 'lodash'
 import { GetTimeGap, GetCategory } from '../resources/utils'
 import axios from 'axios'
 import { baseURL } from '../resources/config'
-import htmlParse from 'html-react-parser'
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import editorjsParser from '../resources/editorjsParser'
+import HTMLParser from 'html-react-parser'
+import { ContentEditor } from '../resources/styles'
+
 
 const boardContentStyle = {
     width: '85%',
@@ -46,9 +47,11 @@ const CommentConfirmStyle = {
     display: 'flex',
 }
 
+let commentCount;
+
 const InBoard = () => {
     const location = useLocation(); 
-      
+    
     const itemState = location.state;
     const itemID = itemState._id;
     const itemCategory = itemState.category;
@@ -61,8 +64,12 @@ const InBoard = () => {
     const [comments, setComments] = useState("");
     const [itemInfo, setItemInfo] = useState("");
     const [isLoading, setIsLoading] = useState(true);
-    
-    let commentCount;
+
+    const editorRef = useRef(null);
+    async function handleSave() {
+        const savedData = await editorRef.current.save();
+        setCommentContent(savedData)
+    };
 
     useEffect(() => {
         //Getting an item
@@ -85,11 +92,10 @@ const InBoard = () => {
                 })
                 .then( () => {
                     setIsLoading(false);
+                    
                 }) 
             })
         }
-
-        
         , [])
 
     const PostComment = () => {
@@ -142,7 +148,7 @@ const InBoard = () => {
                                 wordBreak: 'break-all'
 
                             }}>
-                                {htmlParse(itemInfo.content)}
+                                {HTMLParser(editorjsParser(itemInfo.content))}
                             </div>
                             <div className="app-board-content__comments" style={CommentStyle}>
                                 <div className="app-board-content__comments__user" style={CommentUserStyle}>
@@ -152,40 +158,14 @@ const InBoard = () => {
                                     <div><InputBox type="password" width="80%" darkTheme={darkTheme} onChange={(e) => { setCommentPass(e.target.value) }} /></div>
                                 </div>
                                 <div className="app-board-content__comments__content" style={CommentContentStyle}>
-                                    <CKEditor
-                                        editor={ClassicEditor}
-                                        data={commentContent}
-                                        onReady={editor => {
-                                            // You can store the "editor" and use when it is needed.
-                                            console.log('Editor is ready to use!', editor);
-                                            editor.editing.view.change((writer) => {
-                                                writer.setStyle(
-                                                    "height",
-                                                    "120px",
-                                                    editor.editing.view.document.getRoot()
-                                                )
-                                            })
-                                        }}
-                                        onChange={(event, editor) => {
-                                            const data = editor.getData();
-                                            setCommentContent(data);
-                                            //console.log({ event, editor, data });
-                                        }}
-                                        onBlur={(event, editor) => {
-                                            //console.log('Blur.', editor);
-                                        }}
-                                        onFocus={(event, editor) => {
-                                            //console.log('Focus.', editor);
-                                        }}
-                                        plugins
-                                    />
+                                    <ContentEditor saveHandler={handleSave} editorRef={editorRef} data={commentContent} />
                                 </div>
                                 <div className="app-board-content__comments__confirm" style={CommentConfirmStyle}>
                                     <StyledButton onClick={PostComment} width='100px'>Submit</StyledButton>
                                 </div>
                             </div>
                             <div style={{ width: '100%', padding: '12px', borderBottom: '1px solid' }}>
-
+                                
                             </div>
 
                             {

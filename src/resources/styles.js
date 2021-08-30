@@ -1,6 +1,9 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { UseDarkTheme } from "./ContextProvider";
+import React from 'react';
+import { baseURL,EDITOR_JS_TOOLS } from '../resources/config'
+import EditorJs from 'react-editor-js';
 
 export const inputWrapperStyle = {
     display: 'flex',
@@ -240,4 +243,8 @@ export const ForgetPasswordText = ({ darkTheme, val }) => {
     return (
         <ForgetPasswordTextStyle to="/forgetpw" darkTheme={darkTheme}>{val}</ForgetPasswordTextStyle>
     )
+}
+
+export const ContentEditor = ({saveHandler, editorRef, data}) => {
+    return <EditorJs onChange={saveHandler} instanceRef={instance => editorRef.current = instance} data={data} tools={EDITOR_JS_TOOLS} placeholder="내용을 작성해 주세요."/>
 }

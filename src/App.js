@@ -8,7 +8,7 @@ import Contact from './pages/Contact';
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
 import Logout from './pages/Logout';
-import Write from './pages/Wrtie';
+import Write from './pages/Write';
 import Cookies from 'js-cookie';
 import InBoard from './pages/InBoard';
 import axios from 'axios';
