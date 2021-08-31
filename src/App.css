@@ -11,11 +11,12 @@ html{
 .app-body-search{
   margin: 10px;
 }
-
-.ck-editor{
-  width: 400px;
+.codex-editor__redactor{
+  width: 95%;
 }
-
+.ce-toolbar__settings-btn{
+  margin-right: 8px;
+}
 input:-webkit-autofill,
 input:-webkit-autofill:hover, 
 input:-webkit-autofill:focus, 

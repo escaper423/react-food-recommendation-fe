@@ -9,7 +9,7 @@ import axios from 'axios'
 import ModalContainer from './ModalContainer';
 import { baseURL } from '../resources/config';
 import htmlParse from 'html-react-parser'
-import { ContentEditor } from '../resources/styles';
+import { CommentEditor } from '../resources/styles';
 import editorjsParser from '../resources/editorjsParser';
 
 const ReplyWrapperStyle = {
@@ -30,7 +30,7 @@ const Reply = ({ data }) => {
     const [replyContent, setReplyContent] = useState("");
 
     const editorRef = useRef(null);
-    async function handleSave() {
+    async function HandleSave() {
         const savedData = await editorRef.current.save();
         setReplyContent(savedData)
     };
@@ -103,16 +103,33 @@ const Reply = ({ data }) => {
                         {htmlParse(editorjsParser(data.content))}
                     </div>
                     <div className="reply-content__option">
-                        <a style={{ cursor: 'pointer', marginRight: '10px' }} onClick={DeleteReply}>
+                        <a style={{ cursor: 'pointer', marginRight: '10px' }} onClick={DeleteReply} >
                             <RiDeleteBinLine size='1.2rem' />
                         </a>
-                        <a style={{ cursor: 'pointer' }} onClick={ToggleReply}>
+                        <a style={{ cursor: 'pointer' }} onClick={ToggleReply} >
                             <BsReply size='1.2rem' />
                         </a>
                     </div>
                 </div>
             </div>
             {isReplying &&
+                <CommentEditor
+                user={user}
+                darkTheme={darkTheme}
+                editorRef={editorRef}
+                setUsername={setReplyUser}
+                setPassword={setReplyPassword}
+                commentData={replyContent}
+                saveHandler={HandleSave}
+                postHandler={CreateReply} />
+            }
+        </>
+    )
+}
+
+export default Reply
+
+/*
                 <div className="reply-post-reply" style={{
                     display: 'table',
                     width: '100%',
@@ -129,6 +146,7 @@ const Reply = ({ data }) => {
                     </div>
                     <div className="reply-post-reply__content" style={{
                         display: 'table-cell',
+                        padding: '12px',
                         verticalAlign: 'middle',
                         wordBreak: 'break-all',
                     }}>
@@ -142,9 +160,5 @@ const Reply = ({ data }) => {
                         <StyledButton width='60px' onClick={CreateReply}>Submit</StyledButton>
                     </div>
                 </div>
-            }
-        </>
-    )
-}
 
-export default Reply
+*/

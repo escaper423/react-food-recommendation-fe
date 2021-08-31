@@ -7,10 +7,10 @@ import _ from 'lodash'
 import axios from 'axios'
 import { useHistory } from 'react-router-dom'
 import { GetCategory } from '../resources/utils'
-import { baseURL,EDITOR_JS_TOOLS } from '../resources/config'
-import EditorJs from 'react-editor-js';
+import { baseURL } from '../resources/config'
 import { textDark, textLight } from '../resources/colors'
 import { ContentEditor } from '../resources/styles'
+
 const TmpStyle = {
     verticalAlign: 'middle',
     display: 'table-cell',
@@ -92,7 +92,7 @@ const Write = () => {
                             <SelectStyle width="60px" onChange={(e) => { setCategory(e.target.value) }}>
                                 {_.map(categoryContents.filter(item => item !== "모두"), (elem) => {
                                     return (
-                                        <option value={elem}>{elem}</option>
+                                        <option key={elem} value={elem}>{elem}</option>
                                     )
                                 })
                                 }

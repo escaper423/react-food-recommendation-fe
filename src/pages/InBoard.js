@@ -10,11 +10,11 @@ import axios from 'axios'
 import { baseURL } from '../resources/config'
 import editorjsParser from '../resources/editorjsParser'
 import HTMLParser from 'html-react-parser'
-import { ContentEditor } from '../resources/styles'
+import { CommentEditor } from '../resources/styles'
 
 
 const boardContentStyle = {
-    width: '85%',
+    width: '99%',
     minHeight: '50%',
     margin: '40px auto',
 }
@@ -23,21 +23,24 @@ const CommentStyle = {
     display: 'flex',
     justifyContent: 'center',
     margin: '30px auto',
-    width: '100%',
+    borderRadius: '8px',
+    width: '99%',
     padding: '12px',
-    backgroundColor: 'grey'
+    backgroundColor: '#666',
+    boxShadow: '0 0 10px white',
 }
 
 const CommentUserStyle = {
     marginRight: '10px',
     width: '15%',
-    minWidth: '90px'
+    minWidth: '90px',
 }
 
 const CommentContentStyle = {
     alignItems: 'center',
     width: '95%',
-    overflow: 'auto',
+    height: '200px',
+    overflowX: 'hidden',
 }
 
 const CommentConfirmStyle = {
@@ -50,8 +53,8 @@ const CommentConfirmStyle = {
 let commentCount;
 
 const InBoard = () => {
-    const location = useLocation(); 
-    
+    const location = useLocation();
+
     const itemState = location.state;
     const itemID = itemState._id;
     const itemCategory = itemState.category;
@@ -66,7 +69,7 @@ const InBoard = () => {
     const [isLoading, setIsLoading] = useState(true);
 
     const editorRef = useRef(null);
-    async function handleSave() {
+    async function HandleSave() {
         const savedData = await editorRef.current.save();
         setCommentContent(savedData)
     };
@@ -90,12 +93,11 @@ const InBoard = () => {
                     setComments(res.data.comments);
                     commentCount = res.data.count;
                 })
-                .then( () => {
+                .then(() => {
                     setIsLoading(false);
-                    
-                }) 
-            })
-        }
+                })
+        })
+    }
         , [])
 
     const PostComment = () => {
@@ -130,9 +132,9 @@ const InBoard = () => {
             {!isLoading &&
                 <div>
                     <BlockScreenWrapper>
-                        <div className="app-board-content" style={boardContentStyle}>
-                            <div className="app-board-content__title"><h1>{itemInfo.title}</h1></div>
-                            <div className="app-board-content__meta" style={
+                        <div className="board-content" style={boardContentStyle}>
+                            <div className="board-content__title"><h1>{itemInfo.title}</h1></div>
+                            <div className="board-content__meta" style={
                                 { display: 'table', textAlign: 'center', marginTop: '20px', padding: '10px 0', borderRadius: '4px' }}>
                                 <div style={{ display: 'table-cell', paddingRight: '12px', borderRight: 'solid 1px', minWidth: '40px' }}>{GetCategory(itemInfo.category)}</div>
                                 <div style={{ display: 'table-cell', padding: '0 12px', borderRight: 'solid 1px' }}>{GetTimeGap(itemInfo.date)}</div>
@@ -140,7 +142,7 @@ const InBoard = () => {
                                 <div style={{ display: 'table-cell', padding: '0 12px', borderRight: 'solid 1px', minWidth: '40px' }}>조회: {itemInfo.views}</div>
                                 <div style={{ display: 'table-cell', padding: '0 12px', borderRight: 'solid 1px', minWidth: '40px' }}>추천: {itemInfo.commends}</div>
                             </div>
-                            <div className="app-board-content__body" style={{
+                            <div className="board-content__body" style={{
                                 marginTop: '30px',
                                 padding: '12px',
                                 width: '100%',
@@ -150,22 +152,17 @@ const InBoard = () => {
                             }}>
                                 {HTMLParser(editorjsParser(itemInfo.content))}
                             </div>
-                            <div className="app-board-content__comments" style={CommentStyle}>
-                                <div className="app-board-content__comments__user" style={CommentUserStyle}>
-                                    <div><b>Name:</b></div>
-                                    <div>{user ? user.username : <InputBox width="80%" darkTheme={darkTheme} onChange={(e) => { setCommentUser(e.target.value) }} />}</div>
-                                    <div><b>Password:</b></div>
-                                    <div><InputBox type="password" width="80%" darkTheme={darkTheme} onChange={(e) => { setCommentPass(e.target.value) }} /></div>
-                                </div>
-                                <div className="app-board-content__comments__content" style={CommentContentStyle}>
-                                    <ContentEditor saveHandler={handleSave} editorRef={editorRef} data={commentContent} />
-                                </div>
-                                <div className="app-board-content__comments__confirm" style={CommentConfirmStyle}>
-                                    <StyledButton onClick={PostComment} width='100px'>Submit</StyledButton>
-                                </div>
-                            </div>
+
                             <div style={{ width: '100%', padding: '12px', borderBottom: '1px solid' }}>
-                                
+                            <CommentEditor 
+                            user={user} 
+                            darkTheme={darkTheme}
+                            editorRef={editorRef}
+                            setUsername={setCommentUser}
+                            setPassword={setCommentPass} 
+                            commentData={commentContent}
+                            saveHandler={HandleSave} 
+                            postHandler={PostComment} />
                             </div>
 
                             {
@@ -183,3 +180,26 @@ const InBoard = () => {
     )
 }
 export default InBoard
+
+/*
+                            <div className="board-content__comments" style={CommentStyle}>
+                                <div className="board-content__comments__user" style={CommentUserStyle}>
+                                    <div className="board-content__comments__user__name" style={{
+                                        marginBottom: '30px',
+                                    }}>
+                                    <div><b>Name:</b></div>
+                                    <div>{user ? user.username : <InputBox width="80%" darkTheme={darkTheme} onChange={(e) => { setCommentUser(e.target.value) }} />}</div>
+                                    </div>
+                                    <div className="board-content__comments__user__pass" >
+                                    <div><b>Password:</b></div>
+                                    <div><InputBox type="password" width="80%" darkTheme={darkTheme} onChange={(e) => { setCommentPass(e.target.value) }} /></div>
+                                    </div>
+                                </div>
+                                <div className="board-content__comments__content" style={CommentContentStyle}>
+                                    <ContentEditor saveHandler={handleSave} editorRef={editorRef} data={commentContent} />
+                                </div>
+                                <div className="board-content__comments__confirm" style={CommentConfirmStyle}>
+                                    <StyledButton onClick={PostComment} width='100px'>Submit</StyledButton>
+                                </div>
+                            </div>
+                            */

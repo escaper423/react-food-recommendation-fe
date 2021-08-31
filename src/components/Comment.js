@@ -13,7 +13,7 @@ import { BiUpArrow, BiDownArrow } from 'react-icons/bi'
 
 import htmlParse from 'html-react-parser'
 import editorjsParser from '../resources/editorjsParser';
-import { ContentEditor } from '../resources/styles';
+import { CommentEditor } from '../resources/styles';
 
 const CommentWrapperStyle = {
     width: '100%',
@@ -35,7 +35,7 @@ const Comment = ({ data }) => {
     const [replyContent, setReplyContent] = useState("");
 
     const editorRef = useRef(null);
-    async function handleSave() {
+    async function HandleSave() {
         const savedData = await editorRef.current.save();
         setReplyContent(savedData)
     };
@@ -110,8 +110,8 @@ const Comment = ({ data }) => {
                     minWidth: '60px',
                     maxWidth: '100%',
                     padding: '8px',
-                    whiteSpace:'normal',
-                    wordBreak:'break-all',
+                    whiteSpace: 'normal',
+                    wordBreak: 'break-all',
 
                 }}>
                     {htmlParse(editorjsParser(data.content))}
@@ -132,35 +132,16 @@ const Comment = ({ data }) => {
                 </div>
             </div>
             {isReplying &&
-                <div className="app-board-comment__reply" style={{
-                    display: 'table',
-                    width: '100%',
-                    margin: 'auto',
-                    padding: '12px'
-                }}>
-                    <div className="app-board-comment__reply__user" style={{
-                        display: 'table-cell',
-                        width: '60px',
-                        padding: '4px'
-                    }}>
-                        <div><b>Name:</b> {user ? user.username : <InputBox darkTheme={darkTheme} width='60px' onChange={(e) => { setReplyUser(e.target.value) }} />}</div>
-                        <div><b>Password:</b> <InputBox darkTheme={darkTheme} type='password' width='60px' onChange={(e) => { setReplyPass(e.target.value) }} /></div>
-                    </div>
-                    <div className="app-board-comment__reply__content" style={{
-                        display: 'table-cell',
-                        verticalAlign: 'middle',
-                        overflow: 'auto'
-                    }}>
-                        <ContentEditor saveHandler={handleSave} editorRef={editorRef} data={replyContent} />
-                    </div>
-                    <div className="app-board-comment__reply__confirm" style={{
-                        display: 'table-cell',
-                        verticalAlign: 'middle',
-                        width: '20%'
-                    }}>
-                        <StyledButton width='60px' onClick={PostReply}>Submit</StyledButton>
-                    </div>
-                </div>
+                <CommentEditor
+                    user={user}
+                    darkTheme={darkTheme}
+                    editorRef={editorRef}
+                    setUsername={setReplyUser}
+                    setPassword={setReplyPass}
+                    commentData={replyContent}
+                    saveHandler={HandleSave}
+                    postHandler={PostReply} />
+
             }
             {
                 showReplies &&
@@ -173,3 +154,38 @@ const Comment = ({ data }) => {
 }
 
 export default Comment
+
+/*
+    < div className = "app-board-comment__reply" style = {{
+    display: 'table',
+        width: '100%',
+            height: '200px',
+                margin: 'auto',
+                    padding: '12px'
+}}>
+                    <div className="app-board-comment__reply__user" style={{
+                        display: 'table-cell',
+                        width: '60px',
+                        padding: '4px'
+                    }}>
+                        <div><b>Name:</b> {user ? user.username : <InputBox darkTheme={darkTheme} width='60px' onChange={(e) => { setReplyUser(e.target.value) }} />}</div>
+                        <div><b>Password:</b> <InputBox darkTheme={darkTheme} type='password' width='60px' onChange={(e) => { setReplyPass(e.target.value) }} /></div>
+                    </div>
+                    <div className="app-board-comment__reply__content" style={{
+                        display: 'table-cell',
+                        verticalAlign: 'middle',
+                        padding: '12px',
+                        height: '200px',
+                        overflowX: 'hidden',
+                    }}>
+                        <ContentEditor saveHandler={handleSave} editorRef={editorRef} data={replyContent} />
+                    </div>
+                    <div className="app-board-comment__reply__confirm" style={{
+                        display: 'table-cell',
+                        verticalAlign: 'middle',
+                        width: '20%'
+                    }}>
+                        <StyledButton width='60px' onClick={PostReply}>Submit</StyledButton>
+                    </div>
+                </div >
+*/

@@ -81,7 +81,6 @@ const Freeboard = () => {
 
     const SearchBoard = (e) => {
         console.log("Searching Board with word " + searchWord);
-        console.log('qqqq');
         axios({
             method: 'GET',
             url: `${baseURL}/board/${category}`,
@@ -92,7 +91,8 @@ const Freeboard = () => {
                 query: searchWord
             }
         }).then(res => {
-            setBoardItems(res.data)
+            setBoardItems(res.data.boardItems)
+            boardItemCount = res.data.count;
         })
     }
     const ChangeCategory = (e) => {
@@ -141,15 +141,15 @@ const Freeboard = () => {
     return (
         <>  
             <Header />
-            <div className="app-board-title" style={{ margin: '40px 0', textAlign: 'center' }}>
+            <div className="board-title" style={{ margin: '40px 0', textAlign: 'center' }}>
                 <h1>Free Board</h1>
                 <p>free gesipan do excrete any letters</p>
             </div>
             
             <BlockScreenWrapper>
-                <div className="app-board-header" style={BoardHeaderStyle} >
-                    <div className="app-board-header-dropdown">
-                        <SelectStyle width="80px" className="app-board-category-selector" onChange={ChangeCategory}>
+                <div className="board-header" style={BoardHeaderStyle} >
+                    <div className="board-header-dropdown">
+                        <SelectStyle width="80px" className="board-category-selector" onChange={ChangeCategory}>
                             {
                                 _.map(categoryContents, (elem) => {
                                     return(
@@ -159,7 +159,7 @@ const Freeboard = () => {
                             }
                         </SelectStyle>
 
-                        <SelectStyle width="120px" className="app-board-sort-selector" style={{ marginLeft: '10px' }} onChange={ChangeSortOrder}>
+                        <SelectStyle width="120px" className="board-sort-selector" style={{ marginLeft: '10px' }} onChange={ChangeSortOrder}>
                             {_.map(sortOrder, (elem) => {
                                 return (
                                     <option key={elem} value={elem} >{elem}</option>
@@ -181,7 +181,7 @@ const Freeboard = () => {
                 }
 
 
-                <div className="app-board-footer" style={BoardFooterStyle}>
+                <div className="board-footer" style={BoardFooterStyle}>
                     <div className="board-footer__pagination">
 
                     </div>

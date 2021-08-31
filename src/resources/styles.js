@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { UseDarkTheme } from "./ContextProvider";
 import React from 'react';
-import { baseURL,EDITOR_JS_TOOLS } from '../resources/config'
+import { EDITOR_JS_TOOLS } from '../resources/config'
 import EditorJs from 'react-editor-js';
 
 export const inputWrapperStyle = {
@@ -62,11 +62,11 @@ const InputBoxStyle = styled.input`
     `
 
 const TextAreaStyle = styled.textarea`
-    width: ${props => props.width? props.width:'95%'};
-    height: ${props => props.height?props.height:'90%'};
+    width: ${props => props.width ? props.width : '95%'};
+    height: ${props => props.height ? props.height : '90%'};
     font-size: 15px;
     border-radius: 4px;
-    box-shadow: ${props => props.darkTheme? '0 0 4px white':'0 0 7px black'};
+    box-shadow: ${props => props.darkTheme ? '0 0 4px white' : '0 0 7px black'};
     background-color: transparent;
     outline: none;
     resize: none;
@@ -101,7 +101,6 @@ const ForgetPasswordTextStyle = styled(Link)`
     `
 
 const CommendsStyle = styled.div`
-    background-color: #777;
     text-align: center;
     display: table-cell;
     width: 26px;
@@ -111,14 +110,12 @@ const CommendsStyle = styled.div`
 `
 
 const BoardInfoStyle = styled.div`
-    background-color: #777;
     cursor: pointer;
     display: table-cell;
     padding: 2px;
 `
 
 const ThumbnailStyle = styled.div`
-    background-color: #555;
     display: table-cell;
     width: 115px;
     vertical-align: middle;
@@ -130,8 +127,8 @@ export const StyledButton = styled.button`
 display: flex;
 justify-content: center;
 align-items: center;
-width: ${props => props.width?props.width:'60px'};
-height: ${props => props.height?props.height:'50px'};
+width: ${props => props.width ? props.width : '60px'};
+height: ${props => props.height ? props.height : '50px'};
 border-radius: 4px;
 background: #256ce1;
 padding: 10px 12px;
@@ -153,11 +150,17 @@ export const BoardItemWrapper = styled.article`
     width: 95%;
     min-width: 350px;
     height: 81px;
-    background-color: #777;
+    
+    background-color: #aaa;
+    border-radius: 6px;
     display: table;
     z-index: 1;
     padding: 8px;
     margin: 8px auto;
+
+    &:hover{
+        background-color: #888;
+    }
 `
 
 export const VoteStyle = styled.a`
@@ -245,6 +248,68 @@ export const ForgetPasswordText = ({ darkTheme, val }) => {
     )
 }
 
-export const ContentEditor = ({saveHandler, editorRef, data}) => {
-    return <EditorJs onChange={saveHandler} instanceRef={instance => editorRef.current = instance} data={data} tools={EDITOR_JS_TOOLS} placeholder="내용을 작성해 주세요."/>
+export const ContentEditor = ({ saveHandler, editorRef, data }) => {
+    return <EditorJs onChange={saveHandler} instanceRef={instance => editorRef.current = instance} data={data} tools={EDITOR_JS_TOOLS} placeholder="내용을 작성해 주세요." />
+}
+
+
+const CommentStyle = {
+    display: 'flex',
+    justifyContent: 'center',
+    margin: '30px auto',
+    borderRadius: '8px',
+    width: '99%',
+    padding: '12px',
+    backgroundColor: '#666',
+    boxShadow: '0 0 10px white',
+}
+
+const CommentUserStyle = {
+    marginRight: '10px',
+    width: '15%',
+    minWidth: '90px',
+}
+
+const CommentContentStyle = {
+    alignItems: 'center',
+    width: '95%',
+    height: '200px',
+    overflowX: 'hidden',
+}
+
+const CommentConfirmStyle = {
+    width: '15%',
+    paddingLeft: '10px',
+    alignItems: 'center',
+    display: 'flex',
+}
+
+export const CommentEditor = ({
+    darkTheme, setUsername, setPassword, 
+    editorRef, saveHandler, commentData, 
+    postHandler, user}) => {
+    return (
+    <>
+    <div className="board-content__comments" style={CommentStyle}>
+        <div className="board-content__comments__user" style={CommentUserStyle}>
+            <div className="board-content__comments__user__name" style={{
+                marginBottom: '30px',
+            }}>
+                <div><b>Name:</b></div>
+                <div>{user ? user.username : <InputBox width="80%" darkTheme={darkTheme} onChange={(e) => { setUsername(e.target.value) }} />}</div>
+            </div>
+            <div className="board-content__comments__user__pass" >
+                <div><b>Password:</b></div>
+                <div><InputBox type="password" width="80%" darkTheme={darkTheme} onChange={(e) => { setPassword(e.target.value) }} /></div>
+            </div>
+        </div>
+        <div className="board-content__comments__content" style={CommentContentStyle}>
+            <ContentEditor saveHandler={saveHandler} editorRef={editorRef} data={commentData} />
+        </div>
+        <div className="board-content__comments__confirm" style={CommentConfirmStyle}>
+            <StyledButton onClick={postHandler} width='100px'>Submit</StyledButton>
+        </div>
+    </div>
+    </>
+    )
 }
