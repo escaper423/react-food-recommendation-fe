@@ -102,13 +102,13 @@ const Write = () => {
                             <div style={TmpStyle}>작성자:</div>
                             {(user) ? <span style={{ fontSize: '18px', display: 'table-cell', verticalAlign: 'middle' }}>{user.username}</span>
                                 :
-                                <InputBox darkTheme={darkTheme} width='200px' onChange={(e) => { setUserName(e.target.value) }} />}
+                                <InputBox darkTheme={darkTheme} width='300px' onChange={(e) => { setUserName(e.target.value) }} />}
                         </div>
                         <div className="board-write__password" style={FlexDiv}>
-                            <div style={TmpStyle}>비밀번호:</div><InputBox type="password" darkTheme={darkTheme} width='200px' onChange={(e) => { setPassword(e.target.value) }} />
+                            <div style={TmpStyle}>비밀번호:</div><InputBox type="password" darkTheme={darkTheme} width='300px' onChange={(e) => { setPassword(e.target.value) }} />
                         </div>
                         <div className="board-write__title" style={FlexDiv}>
-                            <div style={TmpStyle}>제목:</div><InputBox darkTheme={darkTheme} width='100%' onChange={(e) => { setTitle(e.target.value) }} />
+                            <div style={TmpStyle}>제목:</div><InputBox darkTheme={darkTheme} width='300px' onChange={(e) => { setTitle(e.target.value) }} />
                         </div>
                         <div className="board-write__content" style={ContentStyle}>
                             <ContentEditor saveHandler={handleSave} editorRef={editorRef} data={content} />

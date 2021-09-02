@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { UseAuthUser, UseDarkTheme } from '../resources/ContextProvider'
-import { InputBox, StyledButton } from '../resources/styles';
 import { GetTimeGap } from '../resources/utils';
 import { RiDeleteBinLine } from 'react-icons/ri';
 import { BsReply } from 'react-icons/bs';

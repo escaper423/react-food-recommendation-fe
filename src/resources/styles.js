@@ -252,13 +252,62 @@ export const ContentEditor = ({ saveHandler, editorRef, data }) => {
     return <EditorJs onChange={saveHandler} instanceRef={instance => editorRef.current = instance} data={data} tools={EDITOR_JS_TOOLS} placeholder="내용을 작성해 주세요." />
 }
 
+export const PageNumButtonStyle = styled.button`
+    width: 24px;
+    height: 24px;
+    font-size: .8em;
+    border-radius: 16px;
+    text-align: center;
+    border: none;
+    background: #387ff2;
+    color: white;
+    margin: 0 4px;
+    &:hover{
+        background: #31f20f;
+    }
+    &:active{
+        background: #ffe600;
+        transform: translate(1px,1px);
+    }
+`
+
+export const PageNumActiveStyle = styled.button`
+    width: 24px;
+    height: 24px;
+    font-size: .8em;
+    text-align: center;
+    border-radius: 16px;
+    border: none;
+    background: #de3a3a;
+    color: white;
+    margin: 0 4px;
+`
+
+export const PageSkipButtonStyle = styled.button`
+    width: 60px;
+    height: 32px;
+    font-size: 1em;
+    border-radius: 6px;
+    text-align: center;
+    border: none;
+    background: #387ff2;
+    color: white;
+    margin: 0 20px;
+    &:hover{
+        background: #31f20f;
+    }
+    &:active{
+        background: #ffe600;
+        transform: translate(1px,1px);
+    }
+`
 
 const CommentStyle = {
     display: 'flex',
     justifyContent: 'center',
     margin: '30px auto',
     borderRadius: '8px',
-    width: '99%',
+    width: '90%',
     padding: '12px',
     backgroundColor: '#666',
     boxShadow: '0 0 10px white',
@@ -272,7 +321,7 @@ const CommentUserStyle = {
 
 const CommentContentStyle = {
     alignItems: 'center',
-    width: '95%',
+    width: '90%',
     height: '200px',
     overflowX: 'hidden',
 }
@@ -285,31 +334,31 @@ const CommentConfirmStyle = {
 }
 
 export const CommentEditor = ({
-    darkTheme, setUsername, setPassword, 
-    editorRef, saveHandler, commentData, 
-    postHandler, user}) => {
+    darkTheme, setUsername, setPassword,
+    editorRef, saveHandler, commentData,
+    postHandler, user }) => {
     return (
-    <>
-    <div className="board-content__comments" style={CommentStyle}>
-        <div className="board-content__comments__user" style={CommentUserStyle}>
-            <div className="board-content__comments__user__name" style={{
-                marginBottom: '30px',
-            }}>
-                <div><b>Name:</b></div>
-                <div>{user ? user.username : <InputBox width="80%" darkTheme={darkTheme} onChange={(e) => { setUsername(e.target.value) }} />}</div>
+        <>
+            <div className="board-content__comments" style={CommentStyle}>
+                <div className="board-content__comments__user" style={CommentUserStyle}>
+                    <div className="board-content__comments__user__name" style={{
+                        marginBottom: '30px',
+                    }}>
+                        <div><b>Name:</b></div>
+                        <div>{user ? user.username : <InputBox width="80%" darkTheme={darkTheme} onChange={(e) => { setUsername(e.target.value) }} />}</div>
+                    </div>
+                    <div className="board-content__comments__user__pass" >
+                        <div><b>Password:</b></div>
+                        <div><InputBox type="password" width="80%" darkTheme={darkTheme} onChange={(e) => { setPassword(e.target.value) }} /></div>
+                    </div>
+                </div>
+                <div className="board-content__comments__content" style={CommentContentStyle}>
+                    <ContentEditor saveHandler={saveHandler} editorRef={editorRef} data={commentData} />
+                </div>
+                <div className="board-content__comments__confirm" style={CommentConfirmStyle}>
+                    <StyledButton onClick={postHandler} width='100px'>Submit</StyledButton>
+                </div>
             </div>
-            <div className="board-content__comments__user__pass" >
-                <div><b>Password:</b></div>
-                <div><InputBox type="password" width="80%" darkTheme={darkTheme} onChange={(e) => { setPassword(e.target.value) }} /></div>
-            </div>
-        </div>
-        <div className="board-content__comments__content" style={CommentContentStyle}>
-            <ContentEditor saveHandler={saveHandler} editorRef={editorRef} data={commentData} />
-        </div>
-        <div className="board-content__comments__confirm" style={CommentConfirmStyle}>
-            <StyledButton onClick={postHandler} width='100px'>Submit</StyledButton>
-        </div>
-    </div>
-    </>
+        </>
     )
 }

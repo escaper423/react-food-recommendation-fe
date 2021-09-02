@@ -33,9 +33,9 @@ const editorjsParser = (data) => {
             case "list":
                 startTag = item.data.style === "unordered"?'<ul>':'<ol>'
                 endTag = startTag === '<ul>'?'</ul>':'</ol>'
-                content = _.map(item.data.items, (listItem) => {
-                    return (`<li>${listItem}</li>`)
-                }) 
+                for(let i = 0; i < item.data.items.length; i++){
+                    content += `<li>${item.data.items[i]}</li>`;
+                }
                 break;
             default:
                 break;

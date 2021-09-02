@@ -19,37 +19,6 @@ const boardContentStyle = {
     margin: '40px auto',
 }
 
-const CommentStyle = {
-    display: 'flex',
-    justifyContent: 'center',
-    margin: '30px auto',
-    borderRadius: '8px',
-    width: '99%',
-    padding: '12px',
-    backgroundColor: '#666',
-    boxShadow: '0 0 10px white',
-}
-
-const CommentUserStyle = {
-    marginRight: '10px',
-    width: '15%',
-    minWidth: '90px',
-}
-
-const CommentContentStyle = {
-    alignItems: 'center',
-    width: '95%',
-    height: '200px',
-    overflowX: 'hidden',
-}
-
-const CommentConfirmStyle = {
-    width: '15%',
-    paddingLeft: '10px',
-    alignItems: 'center',
-    display: 'flex',
-}
-
 let commentCount;
 
 const InBoard = () => {
