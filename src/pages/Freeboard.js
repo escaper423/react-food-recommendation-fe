@@ -57,6 +57,8 @@ const BoardFooterStyle = {
 let boardItemCount;
 let endPage;
 let endRange;
+let boardPageRange;
+
 
 const Freeboard = () => {
     const [boardItems, setBoardItems] = useState(null);
@@ -65,15 +67,11 @@ const Freeboard = () => {
     const [category, setCategory] = useState("all");
     const [priority, setPriority] = useState("recent");
     const [boardPage, setBoardPage] = useState(1);
-    const [boardPageRange, setBoardPageRange] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
-    const [pageArray, setPageArray] = useState([]);
-
+    const [pageArray, setPageArray] = useState([])
     const darkTheme = UseDarkTheme();
 
-    const limitPerPage = 1;
-    
-
+    const limitPerPage = 10;
 
     useEffect(() => {
         axios({
@@ -87,40 +85,42 @@ const Freeboard = () => {
             }
         })
             .then(res => {
+                console.log("P1")
                 setBoardItems(res.data.boardItems);
                 boardItemCount = res.data.count;
-                //setBoardPageRange(parseInt(boardPage % 10) === 0 ? parseInt(boardPage / 10) - 1 : parseInt(boardPage / 10))
+                boardPageRange = boardPage % 10 == 0? parseInt((boardPage / 10) - 1) : parseInt(boardPage / 10)
+                console.log("Page: "+boardPage+"\nPageRange: "+boardPageRange);
                 endPage = parseInt(boardItemCount % limitPerPage) === 0 ? parseInt(boardItemCount / limitPerPage) : parseInt(boardItemCount / limitPerPage) + 1;
                 endRange = parseInt(endPage % 10) === 0 ? parseInt(endPage / 10) - 1 : parseInt(endPage / 10);
 
-                let tmp = []
-                for(let i = (boardPageRange * 10) + 1; i < (boardPageRange + 1) * 10 + 1; i++){
+                
+                let startIdx = (boardPageRange * 10) + 1;
+                let tmp = [];
+                for(let i = startIdx; i < startIdx + 10; i++){
                     if (i <= endPage){
                         tmp.push(i);
                     }
+                    else{
+                        break;
+                    }
                 }
                 setPageArray(tmp);
-
-                console.log("BoardItemCount: " + boardItemCount);
-                console.log("PageNum: " + boardPage);
-                console.log("PageRange: " + boardPageRange);
-                console.log("endPage: " + endPage);
-                console.log("endRange: " + endRange);
             }).then( () => {
                 setIsLoading(false);
             })
     }, [category, priority, boardPage])
 
     const ShowPrevPage = () => {
-        setBoardPageRange(prev => Math.max(0, prev - 1));
+        console.log("P2")
         setBoardPage(Math.max(1, ((boardPageRange - 1) * 10) + 10))
-        
+        console.log("P3")
         
     }
 
     const ShowNextPage = () => {
-        setBoardPageRange(prev => Math.min(endRange, prev + 1));
+        console.log("P2")
         setBoardPage(Math.min(endPage, (Math.max(1,((boardPageRange + 1) * 10 + 1)))))
+        console.log("P3")
     }
 
     const SearchBoard = (e) => {
@@ -235,14 +235,13 @@ const Freeboard = () => {
                         }
                         {
                             _.map(pageArray, (elem) => {
-                                let cur = boardPageRange + elem;
+                                let cur = elem;
                                 if (cur == boardPage) {
-                                    console.log(cur);
-                                    return <PageNumActiveStyle>{cur}</PageNumActiveStyle>
+                                    console.log(cur)
+                                    return <PageNumActiveStyle key={cur}>{cur}</PageNumActiveStyle>
                                 }
                                 else if (cur <= endPage) {
-                                    console.log(cur);
-                                    return <PageNumButtonStyle onClick={(e) => { setBoardPage(e.target.innerHTML) }}>{cur}</PageNumButtonStyle>
+                                    return <PageNumButtonStyle key={cur} onClick={(e) => { setBoardPage(e.target.innerHTML) }}>{cur}</PageNumButtonStyle>
                                 }
                             })
                         }
