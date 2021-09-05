@@ -2,16 +2,19 @@ import React, { useState } from 'react'
 import { BsCaretUpFill, BsCaretDownFill } from 'react-icons/bs'
 import { Link } from 'react-router-dom'
 import { textDark, textLight } from '../resources/colors'
-import { UseDarkTheme } from '../resources/ContextProvider'
+import { UseDarkTheme, UseAuthUser } from '../resources/ContextProvider'
 import { VoteStyle, BoardItemWrapper, Commends, BoardInfo, Thumbnail } from '../resources/styles'
 import { GetTimeGap, GetCategory } from '../resources/utils'
 import { GrFormView } from 'react-icons/gr'
 import axios from 'axios'
 import ModalContainer from './ModalContainer'
+import {HiOutlinePencilAlt} from 'react-icons/hi';
+import {FaTimes} from 'react-icons/fa';
 
 const BoardItem = ({ data }) => {
 
     const darkTheme = UseDarkTheme();
+    const user = UseAuthUser();
     const [commends, setCommends] = useState(data.commends);
     const [isDeleting, setIsDeleting] = useState(false);
 
@@ -52,9 +55,22 @@ const BoardItem = ({ data }) => {
         setIsDeleting(true);
     }
 
+    const Modify = () => {
+        console.log("Modify");
+    }
+    
+    const IsWriter = (user, writer) => {
+        if (!user)
+            return false;
+        if (user.username === writer)
+            return true;
+        else
+            return false;
+    }
+    
     return (
         <>
-            <ModalContainer isDeleting={isDeleting} item={data} setIsDeleting={setIsDeleting}/>
+            <ModalContainer isDeleting={isDeleting} item={data} setIsDeleting={setIsDeleting} />
             <BoardItemWrapper>
                 <Commends>
                     <VoteStyle onClick={doUpVote}><BsCaretUpFill size='1.6rem' /></VoteStyle>
@@ -66,20 +82,39 @@ const BoardItem = ({ data }) => {
 
                 </Thumbnail>
                 <BoardInfo>
-                    <span className="app-board-delete" style={{
-                        display: 'inline-block',
-                        position: 'absloute',
-                        fontSize: '1.8rem',
+                    <div className="board-option" style={{
+                        position: 'relative',
+                        display: 'flex',
+                        gap: '5px',
+                        justifyContent: 'space-evenly',
+                        fontSize: '1.2rem',
                         float: 'right',
-                        marginTop: '-10px',
-                        right: '10px',
-
-                    }} onClick={DeleteBoardItem}>&times;</span>
+                        marginTop: '-5px',
+                    }}>
+                    <span className="board-option__modify" onClick={Modify}>{IsWriter(user,data.writer)?
+                    <Link
+                    onClick={UpViews}
+                    style={{ outline: 'none', textDecoration: 'none', color: darkTheme ? textDark : textLight }}
+                    to={
+                        { pathname: '/board/write', state: { 
+                            _id: data._id, 
+                            category: data.category, 
+                            password: data.password, 
+                            title: data.title,
+                            content: data.content, 
+                            editOption: "modify" } }
+                    }
+                    params={data}
+                >
+                    <HiOutlinePencilAlt /> </Link>:null}
+                    </span>
+                    <span className="board-option__delete" onClick={DeleteBoardItem}><FaTimes /></span>
+                    </div>
                     <Link
                         onClick={UpViews}
                         style={{ outline: 'none', textDecoration: 'none', color: darkTheme ? textDark : textLight }}
                         to={
-                            { pathname: `/board/${data.category}/${data._id}`, state: {_id: data._id, category: data.category} }
+                            { pathname: `/board/${data.category}/${data._id}`, state: { _id: data._id, category: data.category } }
                         }
                         params={data}
                     >

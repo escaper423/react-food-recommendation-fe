@@ -5,10 +5,11 @@ import { BlockScreenWrapper, PageNumActiveStyle, PageNumButtonStyle, PageSkipBut
 import styled from 'styled-components'
 import { BsPencil, BsSearch } from 'react-icons/bs'
 import { screenDark, screenLight, textDark, textLight } from '../resources/colors'
-import { UseDarkTheme } from '../resources/ContextProvider'
+import { UseAuthUser, UseDarkTheme } from '../resources/ContextProvider'
 import { baseURL, categoryContents, searchOption, sortOrder } from '../resources/config'
 import _ from 'lodash'
 import axios from 'axios'
+import { Link } from 'react-router-dom'
 
 
 const BoardHeaderStyle = {
@@ -61,6 +62,7 @@ let boardPageRange;
 
 
 const Freeboard = () => {
+    const [user, setUser] = useState(UseAuthUser());
     const [boardItems, setBoardItems] = useState(null);
     const [searchWord, setSearchWord] = useState("");
     const [searchFilter, setSearchFilter] = useState("title");
@@ -78,7 +80,7 @@ const Freeboard = () => {
             method: 'GET',
             url: `${baseURL}/board/${category}`,
             params: {
-                page: boardPage,
+                page: 1,
                 sort: priority,
                 filter: searchFilter,
                 query: searchWord
@@ -87,39 +89,44 @@ const Freeboard = () => {
             .then(res => {
                 console.log("P1")
                 setBoardItems(res.data.boardItems);
-                boardItemCount = res.data.count;
-                boardPageRange = boardPage % 10 == 0? parseInt((boardPage / 10) - 1) : parseInt(boardPage / 10)
-                console.log("Page: "+boardPage+"\nPageRange: "+boardPageRange);
-                endPage = parseInt(boardItemCount % limitPerPage) === 0 ? parseInt(boardItemCount / limitPerPage) : parseInt(boardItemCount / limitPerPage) + 1;
-                endRange = parseInt(endPage % 10) === 0 ? parseInt(endPage / 10) - 1 : parseInt(endPage / 10);
-
-                
-                let startIdx = (boardPageRange * 10) + 1;
-                let tmp = [];
-                for(let i = startIdx; i < startIdx + 10; i++){
-                    if (i <= endPage){
-                        tmp.push(i);
-                    }
-                    else{
-                        break;
-                    }
-                }
-                setPageArray(tmp);
-            }).then( () => {
+                Pagination(res.data.count);
+            }).then(() => {
                 setIsLoading(false);
             })
     }, [category, priority, boardPage])
 
+
+    const Pagination = (count) => {
+        boardItemCount = count;
+        boardPageRange = boardPage % 10 == 0 ? parseInt((boardPage / 10) - 1) : parseInt(boardPage / 10)
+        console.log("Page: " + boardPage + "\nPageRange: " + boardPageRange);
+        endPage = parseInt(boardItemCount % limitPerPage) === 0 ? parseInt(boardItemCount / limitPerPage) : parseInt(boardItemCount / limitPerPage) + 1;
+        endRange = parseInt(endPage % 10) === 0 ? parseInt(endPage / 10) - 1 : parseInt(endPage / 10);
+
+
+        let startIdx = (boardPageRange * 10) + 1;
+        let tmp = [];
+        for (let i = startIdx; i < startIdx + 10; i++) {
+            if (i <= endPage) {
+                tmp.push(i);
+            }
+            else {
+                break;
+            }
+        }
+        setPageArray(tmp);
+    }
+    
     const ShowPrevPage = () => {
         console.log("P2")
         setBoardPage(Math.max(1, ((boardPageRange - 1) * 10) + 10))
         console.log("P3")
-        
+
     }
 
     const ShowNextPage = () => {
         console.log("P2")
-        setBoardPage(Math.min(endPage, (Math.max(1,((boardPageRange + 1) * 10 + 1)))))
+        setBoardPage(Math.min(endPage, (Math.max(1, ((boardPageRange + 1) * 10 + 1)))))
         console.log("P3")
     }
 
@@ -186,85 +193,88 @@ const Freeboard = () => {
         return null
     else
         return (
-        <>
-            <Header />
-            <div className="board-title" style={{ margin: '40px 0', textAlign: 'center' }}>
-                <h1>Free Board</h1>
-                <p>free gesipan do excrete any letters</p>
-            </div>
+            <>
+                <Header />
+                <div className="board-title" style={{ margin: '40px 0', textAlign: 'center' }}>
+                    <h1>Free Board</h1>
+                    <p>free gesipan do excrete any letters</p>
+                </div>
 
-            <BlockScreenWrapper>
-                <div className="board-header" style={BoardHeaderStyle} >
-                    <div className="board-header-dropdown">
-                        <SelectStyle width="80px" className="board-category-selector" onChange={ChangeCategory}>
-                            {
-                                _.map(categoryContents, (elem) => {
+                <BlockScreenWrapper>
+                    <div className="board-header" style={BoardHeaderStyle} >
+                        <div className="board-header-dropdown">
+                            <SelectStyle width="80px" className="board-category-selector" onChange={ChangeCategory}>
+                                {
+                                    _.map(categoryContents, (elem) => {
+                                        return (
+                                            <option key={elem} value={elem} >{elem}</option>
+                                        )
+                                    })
+                                }
+                            </SelectStyle>
+
+                            <SelectStyle width="120px" className="board-sort-selector" style={{ marginLeft: '10px' }} onChange={ChangeSortOrder}>
+                                {_.map(sortOrder, (elem) => {
                                     return (
                                         <option key={elem} value={elem} >{elem}</option>
                                     )
                                 })
-                            }
-                        </SelectStyle>
+                                }
+                            </SelectStyle>
+                        </div>
+                        <Link style={{ float: 'right', color: 'inherit', textDecoration: 'none' }} to={
+                            {pathname: "/board/write", state: {
+                                editOption: "write"} }
+                                }>
+                            <WriteButton size='1.6rem' />
+                        </Link>
+                    </div>
 
-                        <SelectStyle width="120px" className="board-sort-selector" style={{ marginLeft: '10px' }} onChange={ChangeSortOrder}>
-                            {_.map(sortOrder, (elem) => {
+                    {
+                        boardItems &&
+                        _.map(boardItems, (item) => {
+                            return (<BoardItem key={item._id} data={item} />)
+                        })
+                    }
+
+
+                    <div className="board-footer" style={BoardFooterStyle}>
+                        <div className="board-footer__pagination" style={{ marginBottom: '20px' }}>
+                            {
+                                <PageSkipButtonStyle onClick={ShowPrevPage}>Prev</PageSkipButtonStyle>
+                            }
+                            {
+                                _.map(pageArray, (elem) => {
+                                    let cur = elem;
+                                    if (cur == boardPage) {
+                                        console.log(cur)
+                                        return <PageNumActiveStyle key={cur}>{cur}</PageNumActiveStyle>
+                                    }
+                                    else if (cur <= endPage) {
+                                        return <PageNumButtonStyle key={cur} onClick={(e) => { setBoardPage(e.target.innerHTML) }}>{cur}</PageNumButtonStyle>
+                                    }
+                                })
+                            }
+                            {
+                                <PageSkipButtonStyle onClick={ShowNextPage}>Next</PageSkipButtonStyle>
+                            }
+                        </div>
+                        <SelectStyle width="80px" style={{ marginRight: '10px' }} onChange={ChangeSearchFilter}>
+                            {_.map(searchOption, (elem) => {
                                 return (
-                                    <option key={elem} value={elem} >{elem}</option>
+                                    <option key={elem} value={elem}>{elem}</option>
                                 )
-                            })
-                            }
+                            })}
                         </SelectStyle>
+                        <SearchTextArea darkTheme={darkTheme} placeholder="Search..." onChange={(e) => { setSearchWord(e.target.value) }} />
+                        <a style={{ cursor: 'pointer' }} >
+                            <SearchButton size='1.4rem' style={{ verticalAlign: "middle" }} onClick={SearchBoard} />
+                        </a>
                     </div>
-                    <a style={{ float: 'right', color: 'inherit', textDecoration: 'none' }} href="/board/write">
-                        <WriteButton size='1.6rem' />
-                    </a>
-                </div>
+                </BlockScreenWrapper>
 
-                {
-                    boardItems &&
-                    _.map(boardItems, (item) => {
-                        return (<BoardItem key={item._id} data={item} />)
-                    })
-                }
-
-
-                <div className="board-footer" style={BoardFooterStyle}>
-                    <div className="board-footer__pagination" style={{ marginBottom: '20px' }}>
-                        {
-                            <PageSkipButtonStyle onClick={ShowPrevPage}>Prev</PageSkipButtonStyle>
-                        }
-                        {
-                            _.map(pageArray, (elem) => {
-                                let cur = elem;
-                                if (cur == boardPage) {
-                                    console.log(cur)
-                                    return <PageNumActiveStyle key={cur}>{cur}</PageNumActiveStyle>
-                                }
-                                else if (cur <= endPage) {
-                                    return <PageNumButtonStyle key={cur} onClick={(e) => { setBoardPage(e.target.innerHTML) }}>{cur}</PageNumButtonStyle>
-                                }
-                            })
-                        }
-                        {
-                            <PageSkipButtonStyle onClick={ShowNextPage}>Next</PageSkipButtonStyle>
-                        }
-                    </div>
-                    <SelectStyle width="80px" style={{ marginRight: '10px' }} onChange={ChangeSearchFilter}>
-                        {_.map(searchOption, (elem) => {
-                            return (
-                                <option key={elem} value={elem}>{elem}</option>
-                            )
-                        })}
-                    </SelectStyle>
-                    <SearchTextArea darkTheme={darkTheme} placeholder="Search..." onChange={(e) => { setSearchWord(e.target.value) }} />
-                    <a style={{ cursor: 'pointer' }} >
-                        <SearchButton size='1.4rem' style={{ verticalAlign: "middle" }} onClick={SearchBoard} />
-                    </a>
-                </div>
-            </BlockScreenWrapper>
-
-        </>
-    )
+            </>
+        )
 }
 
 export default Freeboard

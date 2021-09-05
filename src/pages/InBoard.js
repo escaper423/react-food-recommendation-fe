@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom'
 import Comment from '../components/Comment'
 import Header from '../components/Header'
 import { UseAuthUser, UseDarkTheme } from '../resources/ContextProvider'
-import { BlockScreenWrapper, InputBox, StyledButton } from '../resources/styles'
+import { BlockScreenWrapper } from '../resources/styles'
 import _ from 'lodash'
 import { GetTimeGap, GetCategory } from '../resources/utils'
 import axios from 'axios'
@@ -25,6 +25,7 @@ const InBoard = () => {
     const location = useLocation();
 
     const itemState = location.state;
+
     const itemID = itemState._id;
     const itemCategory = itemState.category;
 

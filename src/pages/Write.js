@@ -1,11 +1,11 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import Header from '../components/Header'
 import { categoryContents } from '../resources/config'
 import { UseAuthUser, UseDarkTheme } from '../resources/ContextProvider'
 import { BlockScreenWrapper, ConfirmButton, InputBox, SelectStyle } from '../resources/styles'
 import _ from 'lodash'
 import axios from 'axios'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import { GetCategory } from '../resources/utils'
 import { baseURL } from '../resources/config'
 import { textDark, textLight } from '../resources/colors'
@@ -28,13 +28,29 @@ const Write = () => {
     const darkTheme = UseDarkTheme();
     const history = useHistory();
 
+    const location = useLocation();
+    const boardData = location.state;
+
     const [category, setCategory] = useState("일반");
     const [username, setUserName] = useState("");
     const [password, setPassword] = useState("");
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
-
+    const [isLoading, setIsLoading] = useState(true);
     const editorRef = useRef(null);
+
+
+    useEffect(()  => {
+        if (boardData.editOption === "modify"){
+            setCategory(boardData.category);
+            setPassword(boardData.password);
+            setTitle(boardData.title);
+            setContent(boardData.content);
+        }
+
+        setIsLoading(false);
+    }, [])
+
     async function handleSave() {
         const savedData = await editorRef.current.save();
         setContent(savedData)
@@ -61,15 +77,23 @@ const Write = () => {
 
         console.log(boardItem);
         axios({
-            method: "POST",
-            url: `${baseURL}/board`,
+            method: (boardData.editOption === "write")?"POST":"PUT",
+            url: (boardData.editOption === "write")?`${baseURL}/board`
+            :
+            `${baseURL}/board/${boardData.category}/${boardData._id}`,
             data: boardItem,
+            params: {
+                query: (boardData.editOption === "modify")?"modify":null
+            }
         }).then(res => {
             history.push('/board')
         }).catch(err => {
 
         })
     }
+    if (isLoading)
+        return null;
+    else
     return (
         <>
             <Header />
@@ -124,7 +148,7 @@ const Write = () => {
                                 marginRight: '20px',
 
                                 }}>
-                                    <ConfirmButton val="글 쓰기" />
+                                    <ConfirmButton val={(boardData.editOption) === "write"?"글 쓰기":"글 수정" }/>
                                 </div>
                     </form>
                 </div>
