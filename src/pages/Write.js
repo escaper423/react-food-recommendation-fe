@@ -41,6 +41,7 @@ const Write = () => {
 
 
     useEffect(()  => {
+        console.log(boardData.editOption);
         if (boardData.editOption === "modify"){
             setCategory(boardData.category);
             setPassword(boardData.password);

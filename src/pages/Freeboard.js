@@ -93,7 +93,27 @@ const Freeboard = () => {
             }).then(() => {
                 setIsLoading(false);
             })
-    }, [category, priority, boardPage])
+    }, [category, priority])
+
+    useEffect(() => {
+        axios({
+            method: 'GET',
+            url: `${baseURL}/board/${category}`,
+            params: {
+                page: boardPage,
+                sort: priority,
+                filter: searchFilter,
+                query: searchWord
+            }
+        })
+            .then(res => {
+                console.log("P1")
+                setBoardItems(res.data.boardItems);
+                Pagination(res.data.count);
+            }).then(() => {
+                setIsLoading(false);
+            })
+    }, [boardPage])
 
 
     const Pagination = (count) => {
@@ -132,6 +152,7 @@ const Freeboard = () => {
 
     const SearchBoard = (e) => {
         console.log("Searching Board with word " + searchWord);
+        setIsLoading(true);
         axios({
             method: 'GET',
             url: `${baseURL}/board/${category}`,
@@ -143,9 +164,13 @@ const Freeboard = () => {
             }
         }).then(res => {
             setBoardItems(res.data.boardItems)
-            boardItemCount = res.data.count;
+            Pagination(res.data.count);
+        }).then(() =>{
+            setSearchWord("");
+            setIsLoading(false);
         })
     }
+
     const ChangeCategory = (e) => {
         console.log("Changing category...");
         const val = e.target.value;
@@ -179,18 +204,15 @@ const Freeboard = () => {
         }
     }
 
-    const ChangeSearchFilter = (e) => {
-        const val = e.target.value;
-        if (val === "제목") {
-            setSearchFilter("title")
-        }
-        if (val === "글쓴이") {
-            setSearchFilter("writer")
-        }
+    const ShowSearchFilter = (filter) => {
+        if (filter === "title")
+            return "제목"
+        if (filter === "writer")
+            return "작성자"
     }
 
     if (isLoading)
-        return null
+        return <Header />
     else
         return (
             <>
@@ -259,10 +281,13 @@ const Freeboard = () => {
                                 <PageSkipButtonStyle onClick={ShowNextPage}>Next</PageSkipButtonStyle>
                             }
                         </div>
-                        <SelectStyle width="80px" style={{ marginRight: '10px' }} onChange={ChangeSearchFilter}>
+                        <SelectStyle width="80px" style={{ marginRight: '10px' }} onChange={(e) => {setSearchFilter(e.target.value)}}>
                             {_.map(searchOption, (elem) => {
                                 return (
-                                    <option key={elem} value={elem}>{elem}</option>
+                                    (elem === searchFilter)?
+                                        <option key={elem} value={elem} selected>{ShowSearchFilter(elem)}</option>
+                                        : 
+                                        <option key={elem} value={elem}>{ShowSearchFilter(elem)}</option>
                                 )
                             })}
                         </SelectStyle>

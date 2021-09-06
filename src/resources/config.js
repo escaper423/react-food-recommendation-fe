@@ -27,7 +27,7 @@ export const sortOrder = [
 ]
 
 export const searchOption = [
-    "제목","글쓴이"
+    "title","writer"
 ]
 
 export const baseURL = "http://localhost:3001"
