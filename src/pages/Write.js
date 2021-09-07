@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import Header from '../components/Header'
-import { categoryContents } from '../resources/config'
+import { categoryId } from '../resources/config'
 import { UseAuthUser, UseDarkTheme } from '../resources/ContextProvider'
 import { BlockScreenWrapper, ConfirmButton, InputBox, SelectStyle } from '../resources/styles'
 import _ from 'lodash'
@@ -23,6 +23,7 @@ const FlexDiv = {
     width: '100%',
 }
 
+
 const Write = () => {
     const user = UseAuthUser();
     const darkTheme = UseDarkTheme();
@@ -30,8 +31,8 @@ const Write = () => {
 
     const location = useLocation();
     const boardData = location.state;
-
-    const [category, setCategory] = useState("일반");
+    
+    const [category, setCategory] = useState("general");
     const [username, setUserName] = useState("");
     const [password, setPassword] = useState("");
     const [title, setTitle] = useState("");
@@ -40,15 +41,13 @@ const Write = () => {
     const editorRef = useRef(null);
 
 
-    useEffect(()  => {
-        console.log(boardData.editOption);
-        if (boardData.editOption === "modify"){
+    useEffect(() => {
+        if (boardData.editOption === "modify") {
+            console.log(boardData);
             setCategory(boardData.category);
-            setPassword(boardData.password);
             setTitle(boardData.title);
             setContent(boardData.content);
         }
-
         setIsLoading(false);
     }, [])
 
@@ -60,31 +59,31 @@ const Write = () => {
     const ContentStyle = {
         alignItems: 'middle',
         width: '100%',
-        color: darkTheme?textDark:textLight,
+        color: darkTheme ? textDark : textLight,
     }
 
     const PostBoard = (e) => {
         e.preventDefault();
         const boardItem = {
             writer: (user) ? user.username : username,
-            password: password,
             date: new Date().toString(),
+            password: password,
             title: title,
             content: content,
             views: 0,
             commends: 0,
-            category: GetCategory(category)
+            category: category
         }
 
         console.log(boardItem);
         axios({
-            method: (boardData.editOption === "write")?"POST":"PUT",
-            url: (boardData.editOption === "write")?`${baseURL}/board`
-            :
-            `${baseURL}/board/${boardData.category}/${boardData._id}`,
+            method: (boardData.editOption === "write") ? "POST" : "PUT",
+            url: (boardData.editOption === "write") ? `${baseURL}/board`
+                :
+                `${baseURL}/board/${boardData.category}/${boardData._id}`,
             data: boardItem,
             params: {
-                query: (boardData.editOption === "modify")?"modify":null
+                query: (boardData.editOption === "modify") ? "modify" : null
             }
         }).then(res => {
             history.push('/board')
@@ -95,50 +94,55 @@ const Write = () => {
     if (isLoading)
         return null;
     else
-    return (
-        <>
-            <Header />
-            <BlockScreenWrapper>
-                <div className="board-write-head" style={{
-                    height: '100%',
-                    margin: '40px 0',
-                    textAlign: 'center',
-                }}>
-                    <h1>글 쓰기</h1>
-                    <p>아무 글이나 써주세요.</p>
-                </div>
-                <div className="board-write-body" style={{
-                    width: '70%',
-                    margin: 'auto',
-                }}>
-                    <form onSubmit={PostBoard}>
-                        <div className="board-write__category" style={FlexDiv}>
-                            <div style={TmpStyle}>종류:</div>
-                            <SelectStyle width="60px" onChange={(e) => { setCategory(e.target.value) }}>
-                                {_.map(categoryContents.filter(item => item !== "모두"), (elem) => {
-                                    return (
-                                        <option key={elem} value={elem}>{elem}</option>
-                                    )
-                                })
-                                }
-                            </SelectStyle>
-                        </div>
-                        <div className="board-write__title" style={FlexDiv}>
-                            <div style={TmpStyle}>작성자:</div>
-                            {(user) ? <span style={{ fontSize: '18px', display: 'table-cell', verticalAlign: 'middle' }}>{user.username}</span>
-                                :
-                                <InputBox darkTheme={darkTheme} width='300px' onChange={(e) => { setUserName(e.target.value) }} />}
-                        </div>
-                        <div className="board-write__password" style={FlexDiv}>
-                            <div style={TmpStyle}>비밀번호:</div><InputBox type="password" darkTheme={darkTheme} width='300px' onChange={(e) => { setPassword(e.target.value) }} />
-                        </div>
-                        <div className="board-write__title" style={FlexDiv}>
-                            <div style={TmpStyle}>제목:</div><InputBox darkTheme={darkTheme} width='300px' onChange={(e) => { setTitle(e.target.value) }} />
-                        </div>
-                        <div className="board-write__content" style={ContentStyle}>
-                            <ContentEditor saveHandler={handleSave} editorRef={editorRef} data={content} />
-                        </div>
-                        <div className="board-write__confirm" style={{
+        return (
+            <>
+                <Header />
+                <BlockScreenWrapper>
+                    <div className="board-write-head" style={{
+                        height: '100%',
+                        margin: '40px 0',
+                        textAlign: 'center',
+                    }}>
+                        <h1>글 쓰기</h1>
+                        <p>아무 글이나 써주세요.</p>
+                    </div>
+                    <div className="board-write-body" style={{
+                        width: '70%',
+                        margin: 'auto',
+                    }}>
+                        <form onSubmit={PostBoard}>
+                            <div className="board-write__category" style={FlexDiv}>
+                                <div style={TmpStyle}>종류:</div>
+                                <SelectStyle width="60px" onChange={(e) => { setCategory(e.target.value) }}>
+                                    {_.map(categoryId.filter(item => item !== "all"), (elem) => {
+                                        if (GetCategory(elem) === category)
+                                            return (
+                                                <option key={elem} value={elem} selected>{GetCategory(elem)}</option>
+                                            )
+                                        else
+                                            return (
+                                                <option key={elem} value={elem}>{GetCategory(elem)}</option>
+                                            )
+                                    })
+                                    }
+                                </SelectStyle>
+                            </div>
+                            <div className="board-write__title" style={FlexDiv}>
+                                <div style={TmpStyle}>작성자:</div>
+                                {(user) ? <span style={{ fontSize: '18px', display: 'table-cell', verticalAlign: 'middle' }}>{user.username}</span>
+                                    :
+                                    <InputBox darkTheme={darkTheme} width='300px' val={username} onChange={(e) => { setUserName(e.target.value) }} />}
+                            </div>
+                            <div className="board-write__password" style={FlexDiv}>
+                                <div style={TmpStyle}>비밀번호:</div><InputBox type="password" darkTheme={darkTheme} width='300px' onChange={(e) => { setPassword(e.target.value) }} />
+                            </div>
+                            <div className="board-write__title" style={FlexDiv}>
+                                <div style={TmpStyle}>제목:</div><InputBox darkTheme={darkTheme} width='300px' val={title} onChange={(e) => { setTitle(e.target.value) }} />
+                            </div>
+                            <div className="board-write__content" style={ContentStyle}>
+                                <ContentEditor saveHandler={handleSave} editorRef={editorRef} data={content} />
+                            </div>
+                            <div className="board-write__confirm" style={{
                                 position: 'fixed',
                                 width: '100%',
                                 height: '60px',
@@ -148,14 +152,14 @@ const Write = () => {
                                 marginTop: '18px',
                                 marginRight: '20px',
 
-                                }}>
-                                    <ConfirmButton val={(boardData.editOption) === "write"?"글 쓰기":"글 수정" }/>
-                                </div>
-                    </form>
-                </div>
-            </BlockScreenWrapper>
-        </>
-    )
+                            }}>
+                                <ConfirmButton val={(boardData.editOption) === "write" ? "글 쓰기" : "글 수정"} />
+                            </div>
+                        </form>
+                    </div>
+                </BlockScreenWrapper>
+            </>
+        )
 }
 
 export default Write

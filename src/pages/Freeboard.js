@@ -76,6 +76,7 @@ const Freeboard = () => {
     const limitPerPage = 10;
 
     useEffect(() => {
+        setBoardPage(1);
         axios({
             method: 'GET',
             url: `${baseURL}/board/${category}`,
@@ -87,7 +88,6 @@ const Freeboard = () => {
             }
         })
             .then(res => {
-                console.log("P1")
                 setBoardItems(res.data.boardItems);
                 Pagination(res.data.count);
             }).then(() => {
@@ -95,25 +95,26 @@ const Freeboard = () => {
             })
     }, [category, priority])
 
-    useEffect(() => {
+    const ChangePage = (e) => {
+        setBoardPage(e.target.innerHTML)
         axios({
             method: 'GET',
             url: `${baseURL}/board/${category}`,
             params: {
-                page: boardPage,
+                page: e.target.innerHTML,
                 sort: priority,
                 filter: searchFilter,
                 query: searchWord
             }
         })
             .then(res => {
-                console.log("P1")
                 setBoardItems(res.data.boardItems);
                 Pagination(res.data.count);
             }).then(() => {
                 setIsLoading(false);
             })
-    }, [boardPage])
+    }
+
 
 
     const Pagination = (count) => {
@@ -138,16 +139,12 @@ const Freeboard = () => {
     }
     
     const ShowPrevPage = () => {
-        console.log("P2")
         setBoardPage(Math.max(1, ((boardPageRange - 1) * 10) + 10))
-        console.log("P3")
 
     }
 
     const ShowNextPage = () => {
-        console.log("P2")
         setBoardPage(Math.min(endPage, (Math.max(1, ((boardPageRange + 1) * 10 + 1)))))
-        console.log("P3")
     }
 
     const SearchBoard = (e) => {
@@ -273,7 +270,7 @@ const Freeboard = () => {
                                         return <PageNumActiveStyle key={cur}>{cur}</PageNumActiveStyle>
                                     }
                                     else if (cur <= endPage) {
-                                        return <PageNumButtonStyle key={cur} onClick={(e) => { setBoardPage(e.target.innerHTML) }}>{cur}</PageNumButtonStyle>
+                                        return <PageNumButtonStyle key={cur} onClick={(e) => {ChangePage(e)}}>{cur}</PageNumButtonStyle>
                                     }
                                 })
                             }
