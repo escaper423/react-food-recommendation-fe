@@ -266,7 +266,6 @@ const Freeboard = () => {
                                 _.map(pageArray, (elem) => {
                                     let cur = elem;
                                     if (cur == boardPage) {
-                                        console.log(cur)
                                         return <PageNumActiveStyle key={cur}>{cur}</PageNumActiveStyle>
                                     }
                                     else if (cur <= endPage) {

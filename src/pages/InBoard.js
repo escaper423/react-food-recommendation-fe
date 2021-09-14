@@ -31,9 +31,11 @@ const InBoard = () => {
 
     const user = UseAuthUser();
     const darkTheme = UseDarkTheme();
+    
     const [commentUser, setCommentUser] = useState(user ? user.username : "");
     const [commentPass, setCommentPass] = useState("");
     const [commentContent, setCommentContent] = useState("");
+
     const [comments, setComments] = useState("");
     const [itemInfo, setItemInfo] = useState("");
     const [isLoading, setIsLoading] = useState(true);
