@@ -11,14 +11,28 @@ import { baseURL } from '../resources/config'
 import editorjsParser from '../resources/editorjsParser'
 import HTMLParser from 'html-react-parser'
 import { CommentEditor } from '../resources/styles'
-
+import styled from 'styled-components'
 
 const boardContentStyle = {
     width: '99%',
     minHeight: '50%',
-    margin: '40px auto',
+    margin: '10px auto',
 }
 
+const MoreCommentButton = styled.button`
+    padding: 12px;
+    width: 100%;
+    height: 50px;
+    transition: .1s;
+    border: 0;
+    background: transparent;
+    margin: auto;
+    color: inherit;
+    font-size: 1em;
+    &:hover{
+        background-color: #ccc;
+    }
+`
 let commentCount;
 
 const InBoard = () => {
@@ -56,7 +70,7 @@ const InBoard = () => {
         }).then(() => {
             console.log(itemInfo.content)
         }).then(() => {
-            //Getting Comments
+        //Getting Comments
             axios({
                 method: 'GET',
                 url: `${baseURL}/comment/${itemID}`,
@@ -107,16 +121,16 @@ const InBoard = () => {
                         <div className="board-content" style={boardContentStyle}>
                             <div className="board-content__title"><h1>{itemInfo.title}</h1></div>
                             <div className="board-content__meta" style={
-                                { display: 'table', textAlign: 'center', marginTop: '20px', padding: '10px 0', borderRadius: '4px' }}>
-                                <div style={{ display: 'table-cell', paddingRight: '12px', borderRight: 'solid 1px', minWidth: '40px' }}>{GetCategory(itemInfo.category)}</div>
-                                <div style={{ display: 'table-cell', padding: '0 12px', borderRight: 'solid 1px' }}>{GetTimeGap(itemInfo.date)}</div>
-                                <div style={{ display: 'table-cell', padding: '0 12px', borderRight: 'solid 1px', minWidth: '60px' }}>{itemInfo.writer}</div>
-                                <div style={{ display: 'table-cell', padding: '0 12px', borderRight: 'solid 1px', minWidth: '40px' }}>조회: {itemInfo.views}</div>
-                                <div style={{ display: 'table-cell', padding: '0 12px', borderRight: 'solid 1px', minWidth: '40px' }}>추천: {itemInfo.commends}</div>
+                                { display: 'table', textAlign: 'center', marginTop: '20px', borderRadius: '4px' }}>
+                                <div style={{ display: 'table-cell',  paddingRight: '10px', borderRight: 'solid 1px', minWidth: '40px' }}>{GetCategory(itemInfo.category)}</div>
+                                <div style={{ display: 'table-cell',  padding: '0 10px', borderRight: 'solid 1px' }}>{GetTimeGap(itemInfo.date)}</div>
+                                <div style={{ display: 'table-cell',  padding: '0 10px',borderRight: 'solid 1px', minWidth: '60px' }}>{itemInfo.writer}</div>
+                                <div style={{ display: 'table-cell',  padding: '0 10px',borderRight: 'solid 1px', minWidth: '40px' }}>조회: {itemInfo.views}</div>
+                                <div style={{ display: 'table-cell',  padding: '0 10px',borderRight: 'solid 1px', minWidth: '40px' }}>추천: {itemInfo.commends}</div>
                             </div>
                             <div className="board-content__body" style={{
                                 marginTop: '30px',
-                                padding: '12px',
+                                paddingTop: '18px',
                                 width: '100%',
                                 borderTop: '1px solid',
                                 wordBreak: 'break-all'
@@ -125,7 +139,7 @@ const InBoard = () => {
                                 {HTMLParser(editorjsParser(itemInfo.content))}
                             </div>
 
-                            <div style={{ width: '100%', padding: '12px', borderBottom: '1px solid' }}>
+                            <div style={{ width: '100%', borderBottom: '1px solid' }}>
                             <CommentEditor 
                             user={user} 
                             darkTheme={darkTheme}
@@ -142,8 +156,10 @@ const InBoard = () => {
                                     return <Comment key={comment.cid} data={comment} />
                                 })
                             }
+                            <MoreCommentButton>See other comments...</MoreCommentButton>
 
                         </div>
+                        
                     </BlockScreenWrapper>
 
                 </div>

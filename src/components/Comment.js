@@ -17,7 +17,6 @@ import { CommentEditor } from '../resources/styles';
 const CommentWrapperStyle = {
     width: '100%',
     borderBottom: '1px solid',
-    padding: '6px 12px',
 }
 
 
@@ -94,8 +93,8 @@ const Comment = ({ data }) => {
     return (
         <>
             <ModalContainer isDeleting={isDeleting} setIsDeleting={setIsDeleting} item={data} />
-            <div className="app-board-comment" style={CommentWrapperStyle}>
-                <div className="app-board_comment__meta" style={{
+            <div className="board-comment" style={CommentWrapperStyle}>
+                <div className="board_comment__meta" style={{
 
                     width: '100%',
                     minWidth: '60px',
@@ -105,7 +104,7 @@ const Comment = ({ data }) => {
                     <div style={{ display: 'inline', marginRight: '10px', paddingRight: '10px', borderRight: '1px solid' }}>{data.writer}</div>
                     <div style={{ display: 'inline' }}>{GetTimeGap(data.date)}</div>
                 </div>
-                <div className="app-board_comment__content" style={{
+                <div className="board_comment__content" style={{
                     minWidth: '60px',
                     maxWidth: '100%',
                     padding: '8px',
@@ -115,7 +114,7 @@ const Comment = ({ data }) => {
                 }}>
                     {htmlParse(editorjsParser(data.content))}
                 </div>
-                <div className="app-board_comment__option">
+                <div className="board_comment__option">
                     <a style={{ cursor: 'pointer', marginRight: '10px' }} onClick={DeleteComment}>
                         <RiDeleteBinLine size='1.2rem' />
                     </a>
