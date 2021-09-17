@@ -29,6 +29,7 @@ const MoreCommentButton = styled.button`
     margin: auto;
     color: inherit;
     font-size: 1em;
+    cursor: pointer;
     &:hover{
         background-color: #ccc;
     }
