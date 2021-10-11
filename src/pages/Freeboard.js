@@ -289,12 +289,9 @@ const Freeboard = () => {
                                 <PageSkipButtonStyle onClick={ChangePage}>Next</PageSkipButtonStyle>
                             }
                         </div>
-                        <SelectStyle width="80px" style={{ marginRight: '10px' }} onChange={(e) => { setSearchFilter(e.target.value) }}>
+                        <SelectStyle width="80px" defaultValue={searchFilter} style={{ marginRight: '10px' }} onChange={(e) => { setSearchFilter(e.target.value) }}>
                             {_.map(searchOption, (elem) => {
                                 return (
-                                    (elem === searchFilter) ?
-                                        <option key={elem} value={elem} selected>{ShowSearchFilter(elem)}</option>
-                                        :
                                         <option key={elem} value={elem}>{ShowSearchFilter(elem)}</option>
                                 )
                             })}

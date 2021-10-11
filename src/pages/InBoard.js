@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 import Comment from '../components/Comment'
 import Header from '../components/Header'
 import { UseAuthUser, UseDarkTheme } from '../resources/ContextProvider'
@@ -34,34 +34,52 @@ const MoreCommentButton = styled.button`
         background-color: #ccc;
     }
 `
-let commentCount;
+
 
 const InBoard = () => {
-    const location = useLocation();
+    const itemParam = useParams()
 
-    const itemState = location.state;
-
-    const itemID = itemState._id;
-    const itemCategory = itemState.category;
+    const itemID = itemParam.id;
+    const itemCategory = itemParam.category;
 
     const user = UseAuthUser();
     const darkTheme = UseDarkTheme();
-    
+
     const [commentUser, setCommentUser] = useState(user ? user.username : "");
     const [commentPass, setCommentPass] = useState("");
     const [commentContent, setCommentContent] = useState("");
+    
+    //const [contentView, setContentView] = useState(null)
 
     const [comments, setComments] = useState("");
     const [itemInfo, setItemInfo] = useState("");
     const [isLoading, setIsLoading] = useState(true);
 
     const editorRef = useRef(null);
+    const commentPage = useRef(1);
+    const commentCount = useRef(0);
+    const commentsPerPage = 3;
+
     async function HandleSave() {
         const savedData = await editorRef.current.save();
         setCommentContent(savedData)
     };
+    
+    useEffect(() => {
+        console.log("ItemInfo: "+itemInfo.content)
+        if (itemInfo){
+            itemInfo.content = HTMLParser(editorjsParser(itemInfo.content))
+        }
+    }, [itemInfo])
+
 
     useEffect(() => {
+        console.log(comments)
+    }, [comments])
+    useEffect(() => {
+        console.log("ID: "+itemID)
+        console.log("Category: "+itemCategory)
+        commentPage.current = 1;
         //Getting an item
         axios({
             method: 'GET',
@@ -69,24 +87,41 @@ const InBoard = () => {
         }).then(res => {
             setItemInfo(res.data[0]);
         }).then(() => {
-            console.log(itemInfo.content)
-        }).then(() => {
-        //Getting Comments
+            //Getting Comments
             axios({
                 method: 'GET',
                 url: `${baseURL}/comment/${itemID}`,
+                params: {
+                    limit: commentsPerPage,
+                    page: commentPage.current
+                },
             })
                 .then(res => {
                     setComments(res.data.comments);
-                    commentCount = res.data.count;
+                    commentCount.current = res.data.count;
                 })
                 .then(() => {
+                    console.log("commentPage: ", commentPage.current);
+                    console.log("commentCount: ", commentCount.current);
                     setIsLoading(false);
                 })
         })
-    }
-        , [])
+    }, [])
 
+    const AddComment = () => {
+        console.log("Iteminfo: "+itemInfo)
+        commentPage.current += 1;
+        axios({
+            method: 'GET',
+            url: `${baseURL}/comment/${itemID}`,
+            params: {
+                limit: commentsPerPage,
+                page: commentPage.current
+            },
+        }).then((res) => {
+            setComments(prev => [...prev, res.data.comments].flat());
+        })
+    }
     const PostComment = () => {
         console.log("Post Comment Function.")
 
@@ -123,11 +158,11 @@ const InBoard = () => {
                             <div className="board-content__title"><h1>{itemInfo.title}</h1></div>
                             <div className="board-content__meta" style={
                                 { display: 'table', textAlign: 'center', marginTop: '20px', borderRadius: '4px' }}>
-                                <div style={{ display: 'table-cell',  paddingRight: '10px', borderRight: 'solid 1px', minWidth: '40px' }}>{GetCategory(itemInfo.category)}</div>
-                                <div style={{ display: 'table-cell',  padding: '0 10px', borderRight: 'solid 1px' }}>{GetTimeGap(itemInfo.date)}</div>
-                                <div style={{ display: 'table-cell',  padding: '0 10px',borderRight: 'solid 1px', minWidth: '60px' }}>{itemInfo.writer}</div>
-                                <div style={{ display: 'table-cell',  padding: '0 10px',borderRight: 'solid 1px', minWidth: '40px' }}>조회: {itemInfo.views}</div>
-                                <div style={{ display: 'table-cell',  padding: '0 10px',borderRight: 'solid 1px', minWidth: '40px' }}>추천: {itemInfo.commends}</div>
+                                <div style={{ display: 'table-cell', paddingRight: '10px', borderRight: 'solid 1px', minWidth: '40px' }}>{GetCategory(itemInfo.category)}</div>
+                                <div style={{ display: 'table-cell', padding: '0 10px', borderRight: 'solid 1px' }}>{GetTimeGap(itemInfo.date)}</div>
+                                <div style={{ display: 'table-cell', padding: '0 10px', borderRight: 'solid 1px', minWidth: '60px' }}>{itemInfo.writer}</div>
+                                <div style={{ display: 'table-cell', padding: '0 10px', borderRight: 'solid 1px', minWidth: '40px' }}>조회: {itemInfo.views}</div>
+                                <div style={{ display: 'table-cell', padding: '0 10px', borderRight: 'solid 1px', minWidth: '40px' }}>추천: {itemInfo.commends}</div>
                             </div>
                             <div className="board-content__body" style={{
                                 marginTop: '30px',
@@ -137,19 +172,19 @@ const InBoard = () => {
                                 wordBreak: 'break-all'
 
                             }}>
-                                {HTMLParser(editorjsParser(itemInfo.content))}
+                                {itemInfo.content}
                             </div>
 
                             <div style={{ width: '100%', borderBottom: '1px solid' }}>
-                            <CommentEditor 
-                            user={user} 
-                            darkTheme={darkTheme}
-                            editorRef={editorRef}
-                            setUsername={setCommentUser}
-                            setPassword={setCommentPass} 
-                            commentData={commentContent}
-                            saveHandler={HandleSave} 
-                            postHandler={PostComment} />
+                                <CommentEditor
+                                    user={user}
+                                    darkTheme={darkTheme}
+                                    editorRef={editorRef}
+                                    setUsername={setCommentUser}
+                                    setPassword={setCommentPass}
+                                    commentData={commentContent}
+                                    saveHandler={HandleSave}
+                                    postHandler={PostComment} />
                             </div>
 
                             {
@@ -157,10 +192,15 @@ const InBoard = () => {
                                     return <Comment key={comment.cid} data={comment} />
                                 })
                             }
-                            <MoreCommentButton>See other comments...</MoreCommentButton>
+                            
+                            {
+                                (commentCount.current > (commentPage.current * commentsPerPage)) &&
+                                <MoreCommentButton onClick={AddComment}>See other comments...</MoreCommentButton>
+                            }
+
 
                         </div>
-                        
+
                     </BlockScreenWrapper>
 
                 </div>

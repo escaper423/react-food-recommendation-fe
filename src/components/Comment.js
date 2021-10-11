@@ -45,7 +45,6 @@ const Comment = ({ data }) => {
         })
             .then(res => {
                 setReplies(res.data.replies);
-                console.log(replies);
             })
     }, [])
 

@@ -34,7 +34,7 @@ const BlockScreenWrapperStyle = styled.section`
     display: block;
     margin: auto;
     transform: trasnlateX(-50%) translateY(-50%);
-    @media only screen and (max-width: 768px){
+    @media only screen and (max-width: 900px){
         width: 99%;
     }
 `

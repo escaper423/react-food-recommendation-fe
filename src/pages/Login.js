@@ -31,7 +31,6 @@ const Login = () => {
     const history = useHistory();
 
     const setAuthUser = UseSetAuthUser();
-
     useEffect(() => {
         localStorage.setItem('rememberState', rememberName);
     },[rememberName]);
@@ -85,7 +84,7 @@ const Login = () => {
     const toggleRemember = () => {
         SetRememberName(prev => !prev)
     }
-
+    
     return (
         <form onSubmit={LoginUser}> 
             <FlexScreenWrapper darkTheme={darkTheme}>
