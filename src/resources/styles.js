@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, {keyframes} from "styled-components";
 import { Link } from "react-router-dom";
 import { UseDarkTheme } from "./ContextProvider";
 import React from 'react';
@@ -151,26 +151,27 @@ export const BoardItemWrapper = styled.article`
     min-width: 350px;
     height: 81px;
     
-    background-color: #aaa;
+    background-color: #bbb;
     border-radius: 6px;
     display: table;
     z-index: 1;
     padding: 8px;
     margin: 8px auto;
-
+    transition: .1s;
     &:hover{
-        background-color: #888;
+        background-color: #999;
     }
 `
 
 export const VoteStyle = styled.a`
-        color: #ccc;
+        cursor: pointer;
+        color: #eee;
         display: inline-block;
         &:hover{
             color: yellow;
         }
         &:active{
-            color: #3e3;
+            color: #999;
         }
 `
 
@@ -302,17 +303,6 @@ export const PageSkipButtonStyle = styled.button`
     }
 `
 
-const CommentStyle = {
-    display: 'flex',
-    justifyContent: 'center',
-    margin: '30px auto',
-    borderRadius: '8px',
-    width: '90%',
-    padding: '12px',
-    backgroundColor: '#666',
-    boxShadow: '0 0 10px white',
-}
-
 const CommentUserStyle = {
     marginRight: '10px',
     width: '15%',
@@ -333,13 +323,48 @@ const CommentConfirmStyle = {
     display: 'flex',
 }
 
+const LoadingAnim = keyframes`
+    0%{
+      transform: rotate(0deg);
+    }
+    50%{
+      transform: rotate(180deg);
+    }
+    100%{
+      transform: rotate(360deg);
+    }
+`
+
+export const LoadingStyle = styled.div`
+    border: 4px solid transparent;
+    width: 24px;
+    height: 24px;
+    margin: 12px auto;
+    
+    border-radius: 50%;
+    border-top: 3px solid #666;
+    animation: ${LoadingAnim} 1s linear infinite;
+`
+
 export const CommentEditor = ({
     darkTheme, setUsername, setPassword,
     editorRef, saveHandler, commentData,
     postHandler, user }) => {
+
+    const CommentStyle = {
+        display: 'flex',
+        justifyContent: 'center',
+        margin: '30px auto',
+        borderRadius: '3px',
+        width: '90%',
+        padding: '12px',
+        backgroundColor: '#666',
+        boxShadow: `${darkTheme ? '0 0 10px white' : '0 0 10px black'}`,
+    }
+
     return (
         <>
-            <div className="board-content__comments" style={CommentStyle}>
+            <div className="board-content__comments" style={CommentStyle} darkTheme={darkTheme}>
                 <div className="board-content__comments__user" style={CommentUserStyle}>
                     <div className="board-content__comments__user__name" style={{
                         marginBottom: '30px',

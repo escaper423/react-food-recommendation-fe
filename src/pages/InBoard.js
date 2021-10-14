@@ -3,7 +3,7 @@ import { useLocation, useParams } from 'react-router-dom'
 import Comment from '../components/Comment'
 import Header from '../components/Header'
 import { UseAuthUser, UseDarkTheme } from '../resources/ContextProvider'
-import { BlockScreenWrapper } from '../resources/styles'
+import { BlockScreenWrapper, LoadingStyle } from '../resources/styles'
 import _ from 'lodash'
 import { GetTimeGap, GetCategory } from '../resources/utils'
 import axios from 'axios'
@@ -20,9 +20,8 @@ const boardContentStyle = {
 }
 
 const MoreCommentButton = styled.button`
-    padding: 12px;
     width: 100%;
-    height: 50px;
+    height: 48px;
     transition: .1s;
     border: 0;
     background: transparent;
@@ -54,6 +53,7 @@ const InBoard = () => {
     const [comments, setComments] = useState("");
     const [itemInfo, setItemInfo] = useState("");
     const [isLoading, setIsLoading] = useState(true);
+    const [isCommentLoading, setIsCommentLoading] = useState(false);
 
     const editorRef = useRef(null);
     const commentPage = useRef(1);
@@ -110,6 +110,7 @@ const InBoard = () => {
 
     const AddComment = () => {
         console.log("Iteminfo: "+itemInfo)
+        setIsCommentLoading(true)
         commentPage.current += 1;
         axios({
             method: 'GET',
@@ -120,6 +121,7 @@ const InBoard = () => {
             },
         }).then((res) => {
             setComments(prev => [...prev, res.data.comments].flat());
+            setIsCommentLoading(false)
         })
     }
     const PostComment = () => {
@@ -197,6 +199,10 @@ const InBoard = () => {
                                 (commentCount.current > (commentPage.current * commentsPerPage)) &&
                                 <MoreCommentButton onClick={AddComment}>See other comments...</MoreCommentButton>
                             }
+                            {
+                                isCommentLoading &&
+                                <LoadingStyle />
+                            }
 
 
                         </div>
@@ -209,26 +215,3 @@ const InBoard = () => {
     )
 }
 export default InBoard
-
-/*
-                            <div className="board-content__comments" style={CommentStyle}>
-                                <div className="board-content__comments__user" style={CommentUserStyle}>
-                                    <div className="board-content__comments__user__name" style={{
-                                        marginBottom: '30px',
-                                    }}>
-                                    <div><b>Name:</b></div>
-                                    <div>{user ? user.username : <InputBox width="80%" darkTheme={darkTheme} onChange={(e) => { setCommentUser(e.target.value) }} />}</div>
-                                    </div>
-                                    <div className="board-content__comments__user__pass" >
-                                    <div><b>Password:</b></div>
-                                    <div><InputBox type="password" width="80%" darkTheme={darkTheme} onChange={(e) => { setCommentPass(e.target.value) }} /></div>
-                                    </div>
-                                </div>
-                                <div className="board-content__comments__content" style={CommentContentStyle}>
-                                    <ContentEditor saveHandler={handleSave} editorRef={editorRef} data={commentContent} />
-                                </div>
-                                <div className="board-content__comments__confirm" style={CommentConfirmStyle}>
-                                    <StyledButton onClick={PostComment} width='100px'>Submit</StyledButton>
-                                </div>
-                            </div>
-                            */
