@@ -27,7 +27,7 @@ const editorjsParser = (data) => {
                     content = item.data.text;
                     break;
                 case "image":
-                    startTag = `<img src=${item.data.file.url} ${item.data.stretched ? 'width="100%"' : ""}>`
+                    startTag = `<img src=${item.data.url} ${item.data.stretched ? 'width="100%"' : ""}>`
                     endTag = '</img>'
                     caption = item.data.caption;
                     break;

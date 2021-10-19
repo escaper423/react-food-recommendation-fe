@@ -1,4 +1,4 @@
-import styled, {keyframes} from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { Link } from "react-router-dom";
 import { UseDarkTheme } from "./ContextProvider";
 import React from 'react';
@@ -340,7 +340,6 @@ export const LoadingStyle = styled.div`
     width: 24px;
     height: 24px;
     margin: 12px auto;
-    
     border-radius: 50%;
     border-top: 3px solid #666;
     animation: ${LoadingAnim} 1s linear infinite;
@@ -361,7 +360,7 @@ export const CommentEditor = ({
         backgroundColor: '#666',
         boxShadow: `${darkTheme ? '0 0 10px white' : '0 0 10px black'}`,
     }
-
+    
     return (
         <>
             <div className="board-content__comments" style={CommentStyle} darkTheme={darkTheme}>
