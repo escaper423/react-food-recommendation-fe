@@ -64,6 +64,7 @@ const Write = () => {
 
     const PostBoard = (e) => {
         e.preventDefault();
+
         const boardItem = {
             writer: (user) ? user.username : username,
             date: new Date().toString(),

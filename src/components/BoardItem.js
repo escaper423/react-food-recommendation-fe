@@ -18,6 +18,17 @@ const BoardItem = ({ data }) => {
     const [commends, setCommends] = useState(data.commends);
     const [isDeleting, setIsDeleting] = useState(false);
 
+    const GetThumbnail = () => {
+        if (data.content.blocks){
+            for(let elem of data.content.blocks){
+                if (elem.type === "image"){
+                    return elem.data.url;
+                }
+            }
+        }
+        return null;
+    }
+
     const doUpVote = () => {
         setCommends(commends + 1);
         axios({
@@ -79,7 +90,7 @@ const BoardItem = ({ data }) => {
                 </Commends>
 
                 <Thumbnail>
-
+                    <img src={GetThumbnail()} width="100%" height="100%"></img>
                 </Thumbnail>
                 <BoardInfo>
                     <div className="board-option" style={{
