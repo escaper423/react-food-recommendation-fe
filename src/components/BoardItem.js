@@ -10,6 +10,7 @@ import axios from 'axios'
 import ModalContainer from './ModalContainer'
 import {HiOutlinePencilAlt} from 'react-icons/hi';
 import {FaTimes} from 'react-icons/fa';
+import {LazyLoadImage} from 'react-lazy-load-image-component';
 
 const BoardItem = ({ data }) => {
 
@@ -90,7 +91,7 @@ const BoardItem = ({ data }) => {
                 </Commends>
 
                 <Thumbnail>
-                    <img src={GetThumbnail()} width="100%" height="100%"></img>
+                    <LazyLoadImage width="100%" height="100%" src={GetThumbnail()}/>
                 </Thumbnail>
                 <BoardInfo>
                     <div className="board-option" style={{

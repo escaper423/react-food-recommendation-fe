@@ -12,6 +12,7 @@ import editorjsParser from '../resources/editorjsParser'
 import HTMLParser from 'html-react-parser'
 import { CommentEditor } from '../resources/styles'
 import styled from 'styled-components'
+import { LazyLoadImage } from 'react-lazy-load-image-component'
 
 const boardContentStyle = {
     width: '99%',

@@ -70,7 +70,9 @@ const SignUp = () => {
                     data: {
                         username: username,
                         email: email,
-                        password: password
+                        password: password,
+                        registerdate: Date().toString(),
+                        role: "user",
                     }
                 }).then(res => {
                     console.log(res.data);
