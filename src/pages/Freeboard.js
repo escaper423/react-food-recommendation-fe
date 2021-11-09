@@ -10,6 +10,7 @@ import { baseURL, categoryContents, searchOption, sortOrder } from '../resources
 import _ from 'lodash'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
+import Footer from '../components/Footer'
 
 
 const BoardHeaderStyle = {
@@ -302,7 +303,7 @@ const Freeboard = () => {
                         </a>
                     </div>
                 </BlockScreenWrapper>
-
+                <Footer />
             </>
         )
 }

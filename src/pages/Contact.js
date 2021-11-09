@@ -1,4 +1,5 @@
 import React from 'react';
+import Footer from '../components/Footer';
 import Header from '../components/Header';
 
 const Contact = () => {
@@ -8,6 +9,7 @@ const Contact = () => {
             <div>
                 <h1>Contact</h1>
             </div>
+            <Footer />
         </>
     )
 }

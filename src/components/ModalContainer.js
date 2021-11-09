@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import styled from 'styled-components'
 import ReactDOM from 'react-dom'
-import trashbin from '../resources/trashbin.png';
+import trashbin from '../resources/icons/trashbin.png';
 import { InputBox, StyledButton } from '../resources/styles';
 import axios from 'axios'
 import {baseURL} from '../resources/config'

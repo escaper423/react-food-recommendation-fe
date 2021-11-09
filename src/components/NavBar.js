@@ -4,6 +4,7 @@ import { NavLink as Link, useHistory } from 'react-router-dom';
 import { FaBars } from 'react-icons/fa';
 import { headerDark, headerLight, linkActiveDark, linkActiveLight, linkDark, linkLight } from '../resources/colors';
 import { UseAuthUser, UseDarkTheme} from '../resources/ContextProvider';
+import homeicon from '../resources/icons/mainchicken.png';
 
 const popupAnim = keyframes`
     from{
@@ -177,10 +178,10 @@ export default function NavBar() {
         <React.Fragment>
             <Nav>
                 <NavLink exact to="/">
-                    <h1>Home</h1>
+                    <img src={homeicon}></img>
                 </NavLink>
                 <Bar onClick={barToggle} darkTheme={darkTheme}></Bar>
-                <NavMenu className="app-header-nav-menu">
+                <NavMenu className="header-nav-menu">
                     <NavLink darkTheme={darkTheme} to="/about" >About</NavLink>
                     <NavLink darkTheme={darkTheme} to="/contact" >Contact</NavLink>
                     <NavLink darkTheme={darkTheme} to="/board" >Freeboard</NavLink>

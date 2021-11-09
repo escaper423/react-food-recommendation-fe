@@ -1,6 +1,7 @@
 import React from 'react';
 import { UseAuthUser, UseDarkTheme } from '../resources/ContextProvider';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 const Home = () => {
     const darkTheme = UseDarkTheme();
@@ -13,14 +14,16 @@ const Home = () => {
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-                height: '90vh',
+                height: '70vh',
                 backgroundColor: darkTheme ? '#333333' : '#eeeeee'
             }}>
-                <h1>Home {(user != null)?user.username:null} </h1>
                 <div>
+                <h1>Home {(user != null)?user.username:null} </h1>
                 </div>
                 
             </div>
+            <Footer />
+            
         </>
         );
 }
