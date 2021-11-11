@@ -3,7 +3,7 @@ import styled, { keyframes } from 'styled-components';
 import { NavLink as Link, useHistory } from 'react-router-dom';
 import { FaBars } from 'react-icons/fa';
 import { headerDark, headerLight, linkActiveDark, linkActiveLight, linkDark, linkLight } from '../resources/colors';
-import { UseAuthUser, UseDarkTheme} from '../resources/ContextProvider';
+import { UseAuthUser, UseDarkTheme } from '../resources/ContextProvider';
 import homeicon from '../resources/icons/mainchicken.png';
 
 const popupAnim = keyframes`
@@ -27,29 +27,28 @@ list-style-type: none;
 
 const NavLink = styled(Link)`
 box-sizing: border-box;
+width: 80px;
 color: ${props => props.darkTheme ? linkDark : linkLight};
-display: flex;
-float: left;
+display: inline-block;
+line-height: 50px;
 margin: 0 12px;
-align-items: center;
 height: 100%;
 text-decoration: none;
+text-align: center;
 border-bottom: 3px solid transparent;
 
 &:hover,
 &.active{
     color: ${props => props.darkTheme ? linkActiveDark : linkActiveLight};
-    border-bottom: ${props => props.darkTheme ? '3px solid white' : '3px solid black'};
 }
-& > h1{
-    color: green;
+
+$.active{
+
 }
 `
 const NavMenu = styled.nav`
-display: inline-block;
 position: absolute;
 height: 100%;
-float: right;
 right: 24px;
 
 @media screen and (max-width: 768px){
@@ -136,17 +135,33 @@ const BarLink = styled(Link)`
     }
 `
 
+const AnimatedBar = styled.div`
+    display: ${props => props.cursorIndex < 0 || props.cursorIndex > 2?'none':'inline-block'};
+    position: absolute;
+    bottom: 0;
+    left: calc(${props => props.cursorIndex} * 104px + 12px);
+    width: 80px;
+    height: 3px;
+    background-color: ${props=>props.darkTheme?linkActiveDark:linkActiveLight};
+    transition: .2s;
+    
+`
 
 export default function NavBar() {
     const darkTheme = UseDarkTheme();
     const [barDropDownOpen, setBarDropDownOpen] = useState(false);
+    const [cursorIndex, setCursorIndex] = useState(localStorage.getItem("navIndex"));
     const barToggle = () => setBarDropDownOpen(!barDropDownOpen);
     const history = useHistory();
     const user = UseAuthUser();
 
+    const menuAnimBar = document.createElement('div');
+    menuAnimBar.className = "header-nav__selectanim";
+
+
     function userPanel() {
         return (
-            (!user)? 
+            (!user) ?
                 <>
                     <NavBtnLink to="/signup" >Sign Up</NavBtnLink>
                     <NavBtnLink to="/login" >Login</NavBtnLink>
@@ -158,22 +173,32 @@ export default function NavBar() {
 
     function userBarPanel() {
         return (
-            (!user)? 
-            <>
-                <NavBtnLink to="/signup">Sign Up</NavBtnLink>
-                <NavBtnLink to="/login">Login</NavBtnLink>
-            </>
-            :
-            <NavBtnLink to="/logout">Log Out</NavBtnLink>
+            (!user) ?
+                <>
+                    <NavBtnLink to="/signup">Sign Up</NavBtnLink>
+                    <NavBtnLink to="/login">Login</NavBtnLink>
+                </>
+                :
+                <NavBtnLink to="/logout">Log Out</NavBtnLink>
         )
     }
 
+    function HandleCursor(idx){
+        setCursorIndex(idx);
+        localStorage.setItem("navIndex",idx);
+    }
     useEffect(() => {
         return history.listen(() => {
             setBarDropDownOpen(false)
         })
     }, [history]);
-
+    
+    /*
+    useEffect(() => {
+        console.log(menuAbout);
+        
+    }, [cursorIndex])
+*/
     return (
         <React.Fragment>
             <Nav>
@@ -182,21 +207,22 @@ export default function NavBar() {
                 </NavLink>
                 <Bar onClick={barToggle} darkTheme={darkTheme}></Bar>
                 <NavMenu className="header-nav-menu">
-                    <NavLink darkTheme={darkTheme} to="/about" >About</NavLink>
-                    <NavLink darkTheme={darkTheme} to="/contact" >Contact</NavLink>
-                    <NavLink darkTheme={darkTheme} to="/board" >Freeboard</NavLink>
+                    <NavLink className="header-nav-about" darkTheme={darkTheme} to="/about" onMouseOver={() => { HandleCursor(0) }} >About</NavLink>
+                    <NavLink className="header-nav-contact" darkTheme={darkTheme} to="/contact" onMouseOver={() => { HandleCursor(1) }}>Contact</NavLink>
+                    <NavLink className="header-nav-freeboard" darkTheme={darkTheme} to="/board" onMouseOver={() => { HandleCursor(2) }}>Freeboard</NavLink>
                     {userPanel()}
+                    <AnimatedBar darkTheme={darkTheme} cursorIndex={cursorIndex} />
                 </NavMenu>
-            
-            {barDropDownOpen &&
-                <BarMenu darkTheme={darkTheme}>
-                    <BarLink darkTheme={darkTheme} to="/about">About</BarLink>
-                    <BarLink darkTheme={darkTheme} to="/contact">Contact</BarLink>
-                    <BarLink darkTheme={darkTheme} to="/board">Freeboard</BarLink>
-                    
-                    {userBarPanel()}
-                </BarMenu>
-            }
+
+                {barDropDownOpen &&
+                    <BarMenu darkTheme={darkTheme}>
+                        <BarLink darkTheme={darkTheme} to="/about">About</BarLink>
+                        <BarLink darkTheme={darkTheme} to="/contact">Contact</BarLink>
+                        <BarLink darkTheme={darkTheme} to="/board">Freeboard</BarLink>
+
+                        {userBarPanel()}
+                    </BarMenu>
+                }
             </Nav>
         </React.Fragment>
     )

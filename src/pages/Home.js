@@ -6,7 +6,8 @@ import Footer from '../components/Footer';
 const Home = () => {
     const darkTheme = UseDarkTheme();
     const user = UseAuthUser();
-
+    
+    localStorage.setItem("navIndex", -1);
     return (
         <>
             <Header />
@@ -17,6 +18,7 @@ const Home = () => {
                 height: '70vh',
                 backgroundColor: darkTheme ? '#333333' : '#eeeeee'
             }}>
+                    
                 <div>
                 <h1>Home {(user != null)?user.username:null} </h1>
                 </div>
