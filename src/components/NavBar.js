@@ -183,9 +183,12 @@ export default function NavBar() {
         )
     }
 
-    function HandleCursor(idx){
+    function MoveCursor(idx){
         setCursorIndex(idx);
-        localStorage.setItem("navIndex",idx);
+    }
+
+    function UndoCursor(){
+        setCursorIndex(localStorage.getItem("navIndex"));
     }
     useEffect(() => {
         return history.listen(() => {
@@ -207,9 +210,9 @@ export default function NavBar() {
                 </NavLink>
                 <Bar onClick={barToggle} darkTheme={darkTheme}></Bar>
                 <NavMenu className="header-nav-menu">
-                    <NavLink className="header-nav-about" darkTheme={darkTheme} to="/about" onMouseOver={() => { HandleCursor(0) }} >About</NavLink>
-                    <NavLink className="header-nav-contact" darkTheme={darkTheme} to="/contact" onMouseOver={() => { HandleCursor(1) }}>Contact</NavLink>
-                    <NavLink className="header-nav-freeboard" darkTheme={darkTheme} to="/board" onMouseOver={() => { HandleCursor(2) }}>Freeboard</NavLink>
+                    <NavLink className="header-nav-about" darkTheme={darkTheme} to="/about" onMouseOver={() => { MoveCursor(0) }} onMouseLeave={() => {UndoCursor()}}>About</NavLink>
+                    <NavLink className="header-nav-contact" darkTheme={darkTheme} to="/contact" onMouseOver={() => { MoveCursor(1) }} onMouseLeave={() => {UndoCursor()}}>Contact</NavLink>
+                    <NavLink className="header-nav-freeboard" darkTheme={darkTheme} to="/board" onMouseOver={() => { MoveCursor(2) }} onMouseLeave={() => {UndoCursor()}}>Freeboard</NavLink>
                     {userPanel()}
                     <AnimatedBar darkTheme={darkTheme} cursorIndex={cursorIndex} />
                 </NavMenu>
