@@ -3,7 +3,7 @@ import Footer from '../components/Footer';
 import Header from '../components/Header';
 
 const Contact = () => {
-    localStorage.setItem("navIndex", 1);
+    localStorage.setItem("navIndex", 0);
     return (
         <>
             <Header />

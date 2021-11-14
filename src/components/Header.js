@@ -52,7 +52,7 @@ function Header() {
             </section>
             <section className="header-modes" style={modesStyle}>
                 <div style={{position: 'relative', float:'right' , right: '25px',padding:'5px', color: darkTheme?textDark:textLight,textAlign:'center' }}>
-                <ThemeButton size='1.2rem' onClick={ToggleTheme} Set/>
+                <ThemeButton size='1.2rem' onClick={ToggleTheme} style={{cursor: 'pointer'}}Set/>
                 <p style={{fontSize:'0.7rem'}}>{(darkTheme)?"Light":"Dark"}</p>
                 </div>
             </section>

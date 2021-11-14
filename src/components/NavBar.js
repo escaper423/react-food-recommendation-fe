@@ -136,7 +136,7 @@ const BarLink = styled(Link)`
 `
 
 const AnimatedBar = styled.div`
-    display: ${props => props.cursorIndex < 0 || props.cursorIndex > 2?'none':'inline-block'};
+    display: ${props => props.cursorIndex < 0 || props.cursorIndex > 1?'none':'inline-block'};
     position: absolute;
     bottom: 0;
     left: calc(${props => props.cursorIndex} * 104px + 12px);
@@ -210,16 +210,14 @@ export default function NavBar() {
                 </NavLink>
                 <Bar onClick={barToggle} darkTheme={darkTheme}></Bar>
                 <NavMenu className="header-nav-menu">
-                    <NavLink className="header-nav-about" darkTheme={darkTheme} to="/about" onMouseOver={() => { MoveCursor(0) }} onMouseLeave={() => {UndoCursor()}}>About</NavLink>
-                    <NavLink className="header-nav-contact" darkTheme={darkTheme} to="/contact" onMouseOver={() => { MoveCursor(1) }} onMouseLeave={() => {UndoCursor()}}>Contact</NavLink>
-                    <NavLink className="header-nav-freeboard" darkTheme={darkTheme} to="/board" onMouseOver={() => { MoveCursor(2) }} onMouseLeave={() => {UndoCursor()}}>Freeboard</NavLink>
+                    <NavLink className="header-nav-contact" darkTheme={darkTheme} to="/contact" onMouseOver={() => { MoveCursor(0) }} onMouseLeave={() => {UndoCursor()}}>Contact</NavLink>
+                    <NavLink className="header-nav-freeboard" darkTheme={darkTheme} to="/board" onMouseOver={() => { MoveCursor(1) }} onMouseLeave={() => {UndoCursor()}}>Freeboard</NavLink>
                     {userPanel()}
                     <AnimatedBar darkTheme={darkTheme} cursorIndex={cursorIndex} />
                 </NavMenu>
 
                 {barDropDownOpen &&
                     <BarMenu darkTheme={darkTheme}>
-                        <BarLink darkTheme={darkTheme} to="/about">About</BarLink>
                         <BarLink darkTheme={darkTheme} to="/contact">Contact</BarLink>
                         <BarLink darkTheme={darkTheme} to="/board">Freeboard</BarLink>
 

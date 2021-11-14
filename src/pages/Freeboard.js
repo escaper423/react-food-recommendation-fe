@@ -63,7 +63,7 @@ let boardPageRange;
 
 
 const Freeboard = () => {
-    localStorage.setItem("navIndex", 2);
+    localStorage.setItem("navIndex", 1);
 
     const [boardItems, setBoardItems] = useState(null);
     const [searchWord, setSearchWord] = useState("");

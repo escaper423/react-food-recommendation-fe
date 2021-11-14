@@ -3,7 +3,6 @@ import React, { useEffect, useRef } from 'react';
 import { UseDarkTheme, UseSetAuthUser, UseSetDarkTheme } from './resources/ContextProvider';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Home from './pages/Home';
-import About from './pages/About';
 import Contact from './pages/Contact';
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
@@ -54,7 +53,6 @@ function App() {
         <React.Fragment>
           <div className="app" style={appStyle}>
             <Route exact path='/' component={Home} />
-            <Route path='/about' component={About} />
             <Route path='/contact' component={Contact} />
             <Route path='/signup' component={SignUp} />
             <Route path='/login' component={Login} />
