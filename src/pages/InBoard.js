@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { useLocation, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import Comment from '../components/Comment'
 import Header from '../components/Header'
 import { UseAuthUser, UseDarkTheme } from '../resources/ContextProvider'
@@ -12,7 +12,6 @@ import editorjsParser from '../resources/editorjsParser'
 import HTMLParser from 'html-react-parser'
 import { CommentEditor } from '../resources/styles'
 import styled from 'styled-components'
-import { LazyLoadImage } from 'react-lazy-load-image-component'
 
 const boardContentStyle = {
     width: '99%',
