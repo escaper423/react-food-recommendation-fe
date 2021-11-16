@@ -16,27 +16,49 @@ const SearchTab = styled.input.attrs({ type: 'text' })`
     border-right: 0;
     background: transparent;
     margin: 0 8px;
+    @media screen and (max-width: 600px){
+        width: 80%;
+    }
 `
 
 const SearchButtonArea = styled.div`
-    display:flex;
-    width: 50px;
-    height: 50px;
+    display: inline;
+    position: absolute;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     border: 0;
     background-color: ${props => props.darkTheme?buttonDark:buttonLight};
-    margin: 12px auto;
+    margin: auto 14px;
     justify-content: center;
+    
     &:hover{
         background-color: ${props => props.darkTheme?buttonActiveDark:buttonActiveLight};
-        font-size: 1.4em;
-        
+        transform: scale(1.2,1.2);
+    }
+
+    @media screen and (max-width: 600px){
+        margin: 20px auto;
+        display: block;
+        left: 50%;
+        transform: translateX(-50%);
+        &:hover{
+            transform: scale(1.2,1.2) translateX(-40%);
+        }
     }
     transition: .1s;
 `
 
 const SearchButton = styled(BsSearch)`
     margin: auto;
+    margin-top: 25%;
+`
+
+const SearchBody = styled.div`
+    display: inline;
+    @media screen and (max-width: 600px){
+        display: block;
+    }
 `
 const Home = () => {
     const darkTheme = UseDarkTheme();
@@ -51,21 +73,21 @@ const Home = () => {
             <Header />
             <div style={{
                 display: 'flex',
+                flexDirection: 'column',
                 alignItems: 'center',
                 textAlign: 'center',
                 justifyContent: 'center',
                 height: '70vh',
-                width: '100%',
                 backgroundColor: darkTheme ? '#333333' : '#eeeeee'
             }}>
-                    <div>
                         <h1>오늘머먹지</h1>
-                        <p>이전에 어떤 음식들을 먹었나요?</p>
-                    <SearchTab darkTheme={darkTheme} placeholder="두끼 전"/><SearchTab darkTheme={darkTheme} placeholder="한끼 전"/>  
+                        <p>zumo!!</p>
+                    <SearchBody>
+                    <SearchTab darkTheme={darkTheme} placeholder="두끼 전"/><SearchTab darkTheme={darkTheme} placeholder="한끼 전"/>
                     <SearchButtonArea darkTheme={darkTheme}>
                     <SearchButton size="1.2em"/>
                     </SearchButtonArea>
-                    </div>
+                    </SearchBody>
                 
             </div>
             <Footer />
