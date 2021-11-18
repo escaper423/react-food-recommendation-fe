@@ -5,21 +5,8 @@ import Footer from '../components/Footer';
 import styled from 'styled-components';
 import { buttonActiveDark, buttonActiveLight, buttonDark, buttonLight, textDark, textLight } from '../resources/colors';
 import { BsSearch } from 'react-icons/bs'
+import SearchBar from '../components/SearchBar';
 
-const SearchTab = styled.input.attrs({ type: 'text' })`
-    width: 192px;
-    height: 24px;
-    padding: 2px;
-    border: 1px solid ${props => props.darkTheme?textDark:textLight};
-    border-top: 0;
-    border-left: 0;
-    border-right: 0;
-    background: transparent;
-    margin: 0 8px;
-    @media screen and (max-width: 600px){
-        width: 80%;
-    }
-`
 
 const SearchButtonArea = styled.div`
     display: inline;
@@ -83,7 +70,7 @@ const Home = () => {
                         <h1>오늘머먹지</h1>
                         <p>zumo!!</p>
                     <SearchBody>
-                    <SearchTab darkTheme={darkTheme} placeholder="두끼 전"/><SearchTab darkTheme={darkTheme} placeholder="한끼 전"/>
+                    <SearchBar darkTheme={darkTheme} placeholder="두끼 전"/><SearchBar darkTheme={darkTheme} placeholder="한끼 전"/>
                     <SearchButtonArea darkTheme={darkTheme}>
                     <SearchButton size="1.2em"/>
                     </SearchButtonArea>
