@@ -1,32 +1,50 @@
 import React, { useState } from 'react'
 import TestData from '../resources/data/testdata.json'
 import styled from 'styled-components'
-import {textDark, textLight} from '../resources/colors'
+import { textDark, textLight } from '../resources/colors'
+
+const barWidth = "256px";
+const barMargin = "5px 8px";
 
 const SearchBarStyle = styled.input.attrs({ type: 'text' })`
-    width: 192px;
+    width: ${barWidth};
     height: 24px;
-    padding: 2px;
     color: ${props => props.darkTheme ? textDark : textLight};
     border: 1px solid ${props => props.darkTheme ? textDark : textLight};
     border-top: 0;
     border-left: 0;
     border-right: 0;
+    margin: ${barMargin};
     background: transparent;
-    margin: 0 8px;
     @media screen and (max-width: 600px){
         width: 80%;
     }
 `
 const SearchItem = styled.p`
     cursor: pointer;
+    padding: 3px 0;
 `
 
 const SearchItemWrapper = styled.div`
     position: absolute;
-    width: 192px;
-    max-height: 200px;
-    overflow: hidden;
+    left: 0;
+    margin-top: 5px;
+    width: ${barWidth};
+    margin: ${barMargin};
+    max-height: 40px;
+    overflow-y: scroll;
+    border-radius: 2px;
+    background-color: white;
+    color: black;
+    text-align:center;
+    &::-webkit-scrollbar{
+        width: 4px;
+        height: 6px;
+        background-color: grey;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: #333;
+    }
 
 `
 const SearchBar = ({ placeholder, darkTheme, data }) => {
@@ -46,10 +64,11 @@ const SearchBar = ({ placeholder, darkTheme, data }) => {
                     return (elem.name.toLowerCase().includes(newWord.toLowerCase()));
                 })
             )
-        }  
-        setIsSearching(true)
-
-        
+            setIsSearching(true)
+        }
+        else{
+            setIsSearching(false)
+        }
     }
 
     const HandleSelection = (e) => {
@@ -58,18 +77,19 @@ const SearchBar = ({ placeholder, darkTheme, data }) => {
     }
 
     return (
-        <>
-        <SearchBarStyle darkTheme={darkTheme} placeholder={placeholder} onChange={HandleFilter} value={inputText}/>
-        <SearchItemWrapper>
-        {
-            isSearching && 
-            filteredData.map((elem) => {
-                return (<SearchItem key={elem.id} onClick={HandleSelection}>{elem.name}</SearchItem>);
-            })
-            
-        }
-        </SearchItemWrapper>
-        </>
+        <div style={{ display: 'inline', position: 'relative' }}>
+            <SearchBarStyle darkTheme={darkTheme} placeholder={placeholder} onChange={HandleFilter} value={inputText} />
+            {
+                isSearching &&
+                <SearchItemWrapper>
+                    {
+                        filteredData.map((elem) => {
+                            return (<SearchItem key={elem.id} onClick={HandleSelection}>{elem.name}</SearchItem>);
+                        })
+                    }
+                </SearchItemWrapper>
+            }
+        </div>
     )
 }
 
