@@ -34,7 +34,6 @@ const MoreCommentButton = styled.button`
     }
 `
 
-
 const InBoard = () => {
     const itemParam = useParams()
 
@@ -171,7 +170,8 @@ const InBoard = () => {
                                 paddingTop: '18px',
                                 width: '100%',
                                 borderTop: '1px solid',
-                                wordBreak: 'break-all'
+                                wordBreak: 'break-all',
+                                lineHeight: '30px'
 
                             }}>
                                 {itemInfo.content}

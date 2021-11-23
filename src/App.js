@@ -1,7 +1,7 @@
 import './App.css';
 import React, { useEffect, useRef } from 'react';
 import { UseDarkTheme, UseSetAuthUser, UseSetDarkTheme } from './resources/ContextProvider';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
 import Contact from './pages/Contact';
 import SignUp from './pages/SignUp';
@@ -15,10 +15,10 @@ import Freeboard from './pages/Freeboard';
 import { screenDark, screenLight, textDark, textLight } from './resources/colors';
 
 function App() {
+  const darkTheme = UseDarkTheme();
   const SetDarkTheme = UseSetDarkTheme();
   const SetUser = UseSetAuthUser();
-  const darkTheme = UseDarkTheme();
-
+  
   let mode = useRef(localStorage.getItem('darktheme'));
 
   useEffect(() => {
@@ -47,23 +47,22 @@ function App() {
   }
 
   return (
-
     <Router>
-      <Switch>
-        <React.Fragment>
-          <div className="app" style={appStyle}>
-            <Route exact path='/' component={Home} />
-            <Route path='/contact' component={Contact} />
-            <Route path='/signup' component={SignUp} />
-            <Route path='/login' component={Login} />
-            <Route path='/logout' component={Logout} />
-            <Route exact path='/board/write' component={Write} />
-            <Route exact path='/board' component={Freeboard} />
-            <Route exact path='/board/:category/:id' component={InBoard} />
-          </div>
-        </React.Fragment>
-      </Switch>
+    <div className="app" style={appStyle}>
+      <Routes>
+            <Route path='/' exact element={<Home />} />
+            <Route path='/contact' element={<Contact />} />
+            <Route path='/signup' element={<SignUp />} />
+            <Route path='/login' element={<Login />} />
+            <Route path='/logout' element={<Logout />} />
+            <Route path='/board/write' exact element={<Write />}/>
+            <Route path='/board' exact element={<Freeboard />} />
+            <Route path='/board/:category/:id' exact element={<InBoard />} />
+        
+      </Routes>
+    </div>
     </Router>
+    
 
   );
 }

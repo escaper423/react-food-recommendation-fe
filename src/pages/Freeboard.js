@@ -5,7 +5,7 @@ import { BlockScreenWrapper, PageNumActiveStyle, PageNumButtonStyle, PageSkipBut
 import styled from 'styled-components'
 import { BsPencil, BsSearch } from 'react-icons/bs'
 import { screenDark, screenLight, textDark, textLight } from '../resources/colors'
-import {  UseDarkTheme } from '../resources/ContextProvider'
+import { UseDarkTheme } from '../resources/ContextProvider'
 import { baseURL, categoryContents, searchOption, sortOrder } from '../resources/config'
 import _ from 'lodash'
 import axios from 'axios'
@@ -58,7 +58,7 @@ const BoardFooterStyle = {
 
 let boardItemCount;
 let endPage;
-let endRange;
+//let endRange;
 let boardPageRange;
 
 
@@ -75,7 +75,7 @@ const Freeboard = () => {
     const [pageArray, setPageArray] = useState([])
     const darkTheme = UseDarkTheme();
 
-    const limitPerPage = 8;
+    const limitPerPage = 1;
 
     useEffect(() => {
         setBoardPage(1);
@@ -99,6 +99,7 @@ const Freeboard = () => {
     }, [category, priority])
 
     useEffect(() => {
+        setIsLoading(true)
         axios({
             method: 'GET',
             url: `${baseURL}/board/${category}`,
@@ -117,22 +118,22 @@ const Freeboard = () => {
                 setIsLoading(false);
             })
     }, [boardPage])
-    
+
     const ChangePage = (e) => {
         const clickedValue = e.target.innerHTML;
         //Show previous page
-        if (clickedValue === "Prev"){
+        if (clickedValue === "Prev") {
             setBoardPage(Math.max(1, ((boardPageRange - 1) * 10) + 10))
         }
-        
+
         //Show next page
-        else if (clickedValue === "Next"){
+        else if (clickedValue === "Next") {
             setBoardPage(Math.min(endPage, (Math.max(1, ((boardPageRange + 1) * 10 + 1)))))
         }
-            
+
         //Show selected page
         else {
-            setBoardPage(e.target.innerHTML)
+            setBoardPage(clickedValue)
         }
     }
 
@@ -140,10 +141,10 @@ const Freeboard = () => {
 
     const Pagination = (count) => {
         boardItemCount = count;
-        boardPageRange = boardPage % 10 == 0 ? parseInt((boardPage / 10) - 1) : parseInt(boardPage / 10)
+        boardPageRange = boardPage % 10 === 0 ? parseInt((boardPage / 10) - 1) : parseInt(boardPage / 10)
         console.log("Page: " + boardPage + "\nPageRange: " + boardPageRange);
         endPage = parseInt(boardItemCount % limitPerPage) === 0 ? parseInt(boardItemCount / limitPerPage) : parseInt(boardItemCount / limitPerPage) + 1;
-        endRange = parseInt(endPage % 10) === 0 ? parseInt(endPage / 10) - 1 : parseInt(endPage / 10);
+        //endRange = parseInt(endPage % 10) === 0 ? parseInt(endPage / 10) - 1 : parseInt(endPage / 10);
 
 
         let startIdx = (boardPageRange * 10) + 1;
@@ -253,13 +254,9 @@ const Freeboard = () => {
                                 }
                             </SelectStyle>
                         </div>
-                        <Link style={{ float: 'right', color: 'inherit', textDecoration: 'none' }} to={
-                            {
-                                pathname: "/board/write", state: {
-                                    editOption: "write"
-                                }
-                            }
-                        }>
+                        <Link style={{ float: 'right', color: 'inherit', textDecoration: 'none' }}
+                            to={"/board/write"} state={{ editOption: "write" }}
+                        >
                             <WriteButton size='1.6rem' />
                         </Link>
                     </div>
@@ -272,30 +269,32 @@ const Freeboard = () => {
                     }
 
 
-                    <div className="board-footer" style={BoardFooterStyle}>
+                    <div className="board-footer" style={BoardFooterStyle}>{
+                        (boardItemCount)?
                         <div className="board-footer__pagination" style={{ marginBottom: '20px' }}>
                             {
                                 <PageSkipButtonStyle onClick={ChangePage}>Prev</PageSkipButtonStyle>
                             }
                             {
                                 _.map(pageArray, (elem) => {
-                                    let cur = elem;
-                                    if (cur == boardPage) {
-                                        return <PageNumActiveStyle key={cur}>{cur}</PageNumActiveStyle>
+
+                                    if (elem === parseInt(boardPage)) {
+                                        return <PageNumActiveStyle key={elem}>{elem}</PageNumActiveStyle>
                                     }
-                                    else if (cur <= endPage) {
-                                        return <PageNumButtonStyle key={cur} onClick={(e) => { ChangePage(e) }}>{cur}</PageNumButtonStyle>
+                                    else {
+                                        return <PageNumButtonStyle key={elem} onClick={(e) => { ChangePage(e) }}>{elem}</PageNumButtonStyle>
                                     }
                                 })
                             }
                             {
                                 <PageSkipButtonStyle onClick={ChangePage}>Next</PageSkipButtonStyle>
                             }
-                        </div>
+                        </div>:<p> 게시된 글이 없습니다.</p>
+                    }
                         <SelectStyle width="80px" defaultValue={searchFilter} style={{ marginRight: '10px' }} onChange={(e) => { setSearchFilter(e.target.value) }}>
                             {_.map(searchOption, (elem) => {
                                 return (
-                                        <option key={elem} value={elem}>{ShowSearchFilter(elem)}</option>
+                                    <option key={elem} value={elem}>{ShowSearchFilter(elem)}</option>
                                 )
                             })}
                         </SelectStyle>

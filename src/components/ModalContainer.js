@@ -83,7 +83,7 @@ const ModalContainer = ({ isDeleting, setIsDeleting, item }) => {
                     width: '150px',
                     margin: 'auto'
                 }}>
-                    <img src={trashbin} style={{
+                    <img src={trashbin} alt="" style={{
                         height: '60%',
                         width: '100%',
                     }}></img>

@@ -1,5 +1,4 @@
 import _ from 'lodash'
-import { LazyLoadImage } from 'react-lazy-load-image-component'
 
 const editorjsParser = (data) => {
     let resultHTML = "";
@@ -30,7 +29,7 @@ const editorjsParser = (data) => {
                 case "image":
                     startTag = `<img src=${item.data.url} ${item.data.stretched ? 'width="100%"' : ""} loading="lazy"/>`
                     endTag = ''
-                    caption = item.data.caption;
+                    caption = '';
                     break;
                 case "list":
                     startTag = item.data.style === "unordered" ? '<ul>' : '<ol>'

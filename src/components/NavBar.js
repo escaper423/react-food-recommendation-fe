@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
-import { NavLink as Link, useHistory } from 'react-router-dom';
+import { NavLink as Link, useNavigate } from 'react-router-dom';
 import { FaBars } from 'react-icons/fa';
 import { headerDark, headerLight, linkActiveDark, linkActiveLight, linkDark, linkLight } from '../resources/colors';
 import { UseAuthUser, UseDarkTheme } from '../resources/ContextProvider';
@@ -152,7 +152,7 @@ export default function NavBar() {
     const [barDropDownOpen, setBarDropDownOpen] = useState(false);
     const [cursorIndex, setCursorIndex] = useState(localStorage.getItem("navIndex"));
     const barToggle = () => setBarDropDownOpen(!barDropDownOpen);
-    const history = useHistory();
+    const navigate = useNavigate();
     const user = UseAuthUser();
 
     const menuAnimBar = document.createElement('div');
@@ -191,10 +191,10 @@ export default function NavBar() {
         setCursorIndex(localStorage.getItem("navIndex"));
     }
     useEffect(() => {
-        return history.listen(() => {
+        return navigate(() => {
             setBarDropDownOpen(false)
         })
-    }, [history]);
+    }, [navigate]);
     
     /*
     useEffect(() => {

@@ -107,16 +107,7 @@ const BoardItem = ({ data }) => {
                     <Link
                     onClick={UpViews}
                     style={{ outline: 'none', textDecoration: 'none', color: darkTheme ? textDark : textLight }}
-                    to={
-                        { pathname: '/board/write', state: { 
-                            _id: data._id, 
-                            category: data.category, 
-                            password: data.password, 
-                            title: data.title,
-                            content: data.content, 
-                            editOption: "modify" } }
-                    }
-                    params={data}
+                    to={'/board/write'} state={{...data,editOption: "modify"}}
                 >
                     <HiOutlinePencilAlt /> </Link>:null}
                     </span>
@@ -125,9 +116,7 @@ const BoardItem = ({ data }) => {
                     <Link
                         onClick={UpViews}
                         style={{ outline: 'none', textDecoration: 'none', color: darkTheme ? textDark : textLight }}
-                        to={
-                            { pathname: `/board/${data.category}/${data._id}`, state: { _id: data._id, category: data.category } }
-                        }
+                        to={`/board/${data.category}/${data._id}`}
                         params={data}
                     >
 

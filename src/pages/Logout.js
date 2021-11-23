@@ -1,11 +1,13 @@
-import {useHistory} from 'react-router-dom';
+import { useEffect } from 'react';
+import {useNavigate} from 'react-router-dom';
 import { UseSetAuthUser } from '../resources/ContextProvider';
 import axios from 'axios';
 
 const Logout = () => {
     const RemoveAuth = UseSetAuthUser();
-    const history = useHistory();
+    const navigate = useNavigate();
 
+    useEffect(() => {
     axios({
         method: 'POST',
         url: 'http://localhost:3001/logout',
@@ -13,8 +15,8 @@ const Logout = () => {
         credentials: 'include'
     }).then(()=>{
         RemoveAuth(null);
-        history.push('/');
-    });
+        navigate('/');
+    })}, [])
 
     return null;
 }

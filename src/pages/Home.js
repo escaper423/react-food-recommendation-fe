@@ -3,7 +3,7 @@ import { UseAuthUser, UseDarkTheme } from '../resources/ContextProvider';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import styled from 'styled-components';
-import { buttonActiveDark, buttonActiveLight, buttonDark, buttonLight, textDark, textLight } from '../resources/colors';
+import { buttonActiveDark, buttonActiveLight, buttonDark, buttonLight } from '../resources/colors';
 import { BsSearch } from 'react-icons/bs'
 import SearchBar from '../components/SearchBar';
 

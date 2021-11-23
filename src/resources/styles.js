@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { UseDarkTheme } from "./ContextProvider";
 import React from 'react';
 import { EDITOR_JS_TOOLS } from '../resources/config'
-import EditorJs from 'react-editor-js';
+import EditorJS from 'react-editor-js';
 
 export const inputWrapperStyle = {
     display: 'flex',
@@ -118,6 +118,7 @@ const BoardInfoStyle = styled.div`
 const ThumbnailStyle = styled.div`
     display: table-cell;
     width: 115px;
+    height: 80px;
     vertical-align: middle;
     padding: 2px;
     margin-left: 18px;
@@ -250,7 +251,12 @@ export const ForgetPasswordText = ({ darkTheme, val }) => {
 }
 
 export const ContentEditor = ({ saveHandler, editorRef, data }) => {
-    return <EditorJs onChange={saveHandler} instanceRef={instance => editorRef.current = instance} data={data} tools={EDITOR_JS_TOOLS} placeholder="내용을 작성해 주세요." />
+    return <EditorJS 
+    onChange={saveHandler} 
+    instanceRef={instance => editorRef.current = instance}
+    data={data}
+    tools={EDITOR_JS_TOOLS}
+    placeholder="내용을 작성해 주세요." />
 }
 
 export const PageNumButtonStyle = styled.button`
@@ -263,6 +269,7 @@ export const PageNumButtonStyle = styled.button`
     background: #387ff2;
     color: white;
     margin: 0 4px;
+    cursor: pointer;
     &:hover{
         background: #31f20f;
     }
@@ -294,6 +301,7 @@ export const PageSkipButtonStyle = styled.button`
     background: #387ff2;
     color: white;
     margin: 0 20px;
+    cursor: pointer;
     &:hover{
         background: #31f20f;
     }

@@ -3,7 +3,7 @@ import { UseDarkTheme, UseSetAuthUser } from '../resources/ContextProvider';
 import styled from 'styled-components';
 import { confirmWrapperStyle,inputWrapperStyle,
     FlexScreenWrapper, InputBox, ConfirmButton, ForgetPasswordText } from '../resources/styles';
-import {useHistory} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const LoginModal = styled.div`
@@ -28,7 +28,7 @@ const Login = () => {
     const [rememberName, SetRememberName] = useState(rememberState);
 
     const darkTheme = UseDarkTheme();
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const setAuthUser = UseSetAuthUser();
     useEffect(() => {
@@ -62,7 +62,7 @@ const Login = () => {
                     accessToken: res.data.accessToken
                 });
             console.log("Logged in");
-            history.push('/');
+            navigate('/');
         }).catch(err =>{
             //login failed
             console.log(err.response);

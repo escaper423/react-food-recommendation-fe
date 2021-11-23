@@ -1,11 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
 import Header from '../components/Header'
 import { categoryId } from '../resources/config'
 import { UseAuthUser, UseDarkTheme } from '../resources/ContextProvider'
 import { BlockScreenWrapper, ConfirmButton, InputBox, SelectStyle } from '../resources/styles'
 import _ from 'lodash'
 import axios from 'axios'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { GetCategory } from '../resources/utils'
 import { baseURL } from '../resources/config'
 import { textDark, textLight } from '../resources/colors'
@@ -27,33 +27,38 @@ const FlexDiv = {
 const Write = () => {
     const user = UseAuthUser();
     const darkTheme = UseDarkTheme();
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const location = useLocation();
-    const boardData = location.state;
+    const LinkedState = location.state;
     
     const [category, setCategory] = useState("general");
+    const [boardId, setBoardId] = useState(-1);
     const [username, setUserName] = useState("");
     const [password, setPassword] = useState("");
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [isLoading, setIsLoading] = useState(true);
+    const [editType, setEditType] = useState("write");
     const editorRef = useRef(null);
 
 
     useEffect(() => {
-        if (boardData.editOption === "modify") {
-            console.log(boardData);
-            setCategory(boardData.category);
-            setTitle(boardData.title);
-            setContent(boardData.content);
+        console.log(LinkedState);
+        if (LinkedState.editOption === "modify") {
+            setEditType("modify")
+            setBoardId(LinkedState._id);
+            setPassword(LinkedState.password)
+            setCategory(LinkedState.category);
+            setTitle(LinkedState.title);
+            setContent(LinkedState.content);
         }
         setIsLoading(false);
     }, [])
 
-    async function handleSave() {
+     async function handleSave(){
         const savedData = await editorRef.current.save();
-        setContent(savedData)
+        setContent(savedData);
     };
 
     const ContentStyle = {
@@ -65,7 +70,7 @@ const Write = () => {
     const PostBoard = (e) => {
         e.preventDefault();
 
-        const boardItem = {
+        const boardItemToPut = {
             writer: (user) ? user.username : username,
             date: new Date().toString(),
             password: password,
@@ -76,18 +81,18 @@ const Write = () => {
             category: category
         }
 
-        console.log(boardItem);
+        
         axios({
-            method: (boardData.editOption === "write") ? "POST" : "PUT",
-            url: (boardData.editOption === "write") ? `${baseURL}/board`
+            method: (editType === "write") ? "POST" : "PUT",
+            url: (editType === "write") ? `${baseURL}/board`
                 :
-                `${baseURL}/board/${boardData.category}/${boardData._id}`,
-            data: boardItem,
+                `${baseURL}/board/${category}/${boardId}`,
+            data: boardItemToPut,
             params: {
-                query: (boardData.editOption === "modify") ? "modify" : null
+                query: (editType === "modify") ? "modify" : null
             }
         }).then(res => {
-            history.push('/board')
+            navigate('/board')
         }).catch(err => {
 
         })
@@ -135,7 +140,7 @@ const Write = () => {
                                     <InputBox darkTheme={darkTheme} width='300px' val={username} onChange={(e) => { setUserName(e.target.value) }} />}
                             </div>
                             <div className="board-write__password" style={FlexDiv}>
-                                <div style={TmpStyle}>비밀번호:</div><InputBox type="password" darkTheme={darkTheme} width='300px' onChange={(e) => { setPassword(e.target.value) }} />
+                                <div style={TmpStyle}>비밀번호:</div><InputBox type="password" darkTheme={darkTheme} val={password} width='300px' onChange={(e) => { setPassword(e.target.value) }} />
                             </div>
                             <div className="board-write__title" style={FlexDiv}>
                                 <div style={TmpStyle}>제목:</div><InputBox darkTheme={darkTheme} width='300px' val={title} onChange={(e) => { setTitle(e.target.value) }} />
@@ -154,7 +159,7 @@ const Write = () => {
                                 marginRight: '20px',
 
                             }}>
-                                <ConfirmButton val={(boardData.editOption) === "write" ? "글 쓰기" : "글 수정"} />
+                                <ConfirmButton val={editType === 'write'?"글 쓰기":"글 수정"} />
                             </div>
                         </form>
                     </div>

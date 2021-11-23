@@ -6,7 +6,7 @@ import {
     InputBox, ConfirmButton, FlexScreenWrapper
 } from '../resources/styles';
 import axios from 'axios';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const RegisterModal = styled.div`
         position: relative;
@@ -25,7 +25,7 @@ const SignUp = () => {
     const [confirmPassword, setConfirmPassword] = useState("");
 
     const darkTheme = UseDarkTheme();
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const HandleUsername = (e) => {
         return setUsername(e.target.value);
@@ -76,7 +76,7 @@ const SignUp = () => {
                     }
                 }).then(res => {
                     console.log(res.data);
-                    history.push('/login');
+                    navigate('/login');
                 })
                 .catch(err => {
                     console.log(err.response);
