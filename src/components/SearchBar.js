@@ -47,11 +47,14 @@ const SearchItemWrapper = styled.div`
     }
 
 `
-const SearchBar = ({ placeholder, darkTheme, data }) => {
+const SearchBar = ({ placeholder, darkTheme, data, forwardedRef }) => {
     const [inputText, setInputText] = useState("");
     const [filteredData, setFilteredData] = useState([]);
     const [isSearching, setIsSearching] = useState(false);
 
+    const GetValue = () => {
+        return inputText;
+    }
     const HandleFilter = (e) => {
         e.preventDefault();
         const newWord = e.target.value;
@@ -78,7 +81,7 @@ const SearchBar = ({ placeholder, darkTheme, data }) => {
 
     return (
         <div style={{ display: 'inline', position: 'relative' }}>
-            <SearchBarStyle darkTheme={darkTheme} placeholder={placeholder} onChange={HandleFilter} value={inputText} />
+            <SearchBarStyle darkTheme={darkTheme} placeholder={placeholder} onChange={HandleFilter} value={inputText} ref={forwardedRef} />
             {
                 isSearching &&
                 <SearchItemWrapper>

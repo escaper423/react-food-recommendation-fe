@@ -13,6 +13,7 @@ import InBoard from './pages/InBoard';
 import axios from 'axios';
 import Freeboard from './pages/Freeboard';
 import { screenDark, screenLight, textDark, textLight } from './resources/colors';
+import SearchResult from './pages/SearchResult';
 
 function App() {
   const darkTheme = UseDarkTheme();
@@ -51,6 +52,7 @@ function App() {
     <div className="app" style={appStyle}>
       <Routes>
             <Route path='/' exact element={<Home />} />
+            <Route path='/search' element={<SearchResult />} />
             <Route path='/contact' element={<Contact />} />
             <Route path='/signup' element={<SignUp />} />
             <Route path='/login' element={<Login />} />

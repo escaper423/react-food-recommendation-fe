@@ -191,9 +191,7 @@ export default function NavBar() {
         setCursorIndex(localStorage.getItem("navIndex"));
     }
     useEffect(() => {
-        return navigate(() => {
             setBarDropDownOpen(false)
-        })
     }, [navigate]);
     
     /*

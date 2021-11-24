@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { UseAuthUser, UseDarkTheme } from '../resources/ContextProvider';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { buttonActiveDark, buttonActiveLight, buttonDark, buttonLight } from '../resources/colors';
 import { BsSearch } from 'react-icons/bs'
 import SearchBar from '../components/SearchBar';
+import { Navigate, useNavigate } from 'react-router';
 
 
 const SearchButtonArea = styled.div`
@@ -15,12 +16,12 @@ const SearchButtonArea = styled.div`
     height: 40px;
     border-radius: 50%;
     border: 0;
-    background-color: ${props => props.darkTheme?buttonDark:buttonLight};
+    background-color: ${props => props.darkTheme ? buttonDark : buttonLight};
     margin: auto 14px;
     justify-content: center;
     
     &:hover{
-        background-color: ${props => props.darkTheme?buttonActiveDark:buttonActiveLight};
+        background-color: ${props => props.darkTheme ? buttonActiveDark : buttonActiveLight};
         transform: scale(1.2,1.2);
     }
 
@@ -47,11 +48,21 @@ const SearchBody = styled.div`
         display: block;
     }
 `
+
+
 const Home = () => {
     const darkTheme = UseDarkTheme();
     const user = UseAuthUser();
-    
-    const GetRecommendations = (e) =>{
+    const navigate = useNavigate();
+
+    const twoTimesAgo = useRef(null);
+    const oneTimeAgo = useRef(null);
+
+    const FindRecommendation = () => {
+        navigate(`/search?twoTimesAgo=${twoTimesAgo.current.value}&oneTimeAgo=${oneTimeAgo.current.value}`)
+    }
+
+    const GetRecommendations = (e) => {
         e.preventDefault();
     }
     localStorage.setItem("navIndex", -1);
@@ -67,20 +78,21 @@ const Home = () => {
                 height: '70vh',
                 backgroundColor: darkTheme ? '#333333' : '#eeeeee'
             }}>
-                        <h1>오늘머먹지</h1>
-                        <p>zumo!!</p>
-                    <SearchBody>
-                    <SearchBar darkTheme={darkTheme} placeholder="두끼 전"/><SearchBar darkTheme={darkTheme} placeholder="한끼 전"/>
-                    <SearchButtonArea darkTheme={darkTheme}>
-                    <SearchButton size="1.2em"/>
+                <h1>오늘머먹지</h1>
+                <p>zumo!!</p>
+                <SearchBody>
+                    <SearchBar darkTheme={darkTheme} placeholder="두끼 전" forwardedRef={twoTimesAgo}/>
+                    <SearchBar darkTheme={darkTheme} placeholder="한끼 전" forwardedRef={oneTimeAgo}/>
+                    <SearchButtonArea onClick={FindRecommendation} darkTheme={darkTheme} >
+                        <SearchButton size="1.2em" />
                     </SearchButtonArea>
-                    </SearchBody>
-                
+                </SearchBody>
+
             </div>
             <Footer />
-            
+
         </>
-        );
+    );
 }
 
-export default Home;    
+export default Home;
