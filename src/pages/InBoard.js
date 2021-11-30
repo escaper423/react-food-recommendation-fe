@@ -46,7 +46,7 @@ const InBoard = () => {
     const [commentUser, setCommentUser] = useState(user ? user.username : "");
     const [commentPass, setCommentPass] = useState("");
     const [commentContent, setCommentContent] = useState("");
-    
+
     //const [contentView, setContentView] = useState(null)
 
     const [comments, setComments] = useState("");
@@ -63,10 +63,10 @@ const InBoard = () => {
         const savedData = await editorRef.current.save();
         setCommentContent(savedData)
     };
-    
+
     useEffect(() => {
-        console.log("ItemInfo: "+itemInfo.content)
-        if (itemInfo){
+        console.log("ItemInfo: " + itemInfo.content)
+        if (itemInfo) {
             itemInfo.content = HTMLParser(editorjsParser(itemInfo.content))
         }
     }, [itemInfo])
@@ -76,8 +76,8 @@ const InBoard = () => {
         console.log(comments)
     }, [comments])
     useEffect(() => {
-        console.log("ID: "+itemID)
-        console.log("Category: "+itemCategory)
+        console.log("ID: " + itemID)
+        console.log("Category: " + itemCategory)
         commentPage.current = 1;
         //Getting an item
         axios({
@@ -108,7 +108,7 @@ const InBoard = () => {
     }, [])
 
     const AddComment = () => {
-        console.log("Iteminfo: "+itemInfo)
+        console.log("Iteminfo: " + itemInfo)
         setIsCommentLoading(true)
         commentPage.current += 1;
         axios({
@@ -176,25 +176,26 @@ const InBoard = () => {
                             }}>
                                 {itemInfo.content}
                             </div>
-
-                            <div style={{ width: '100%', borderBottom: '1px solid' }}>
-                                <CommentEditor
-                                    user={user}
-                                    darkTheme={darkTheme}
-                                    editorRef={editorRef}
-                                    setUsername={setCommentUser}
-                                    setPassword={setCommentPass}
-                                    commentData={commentContent}
-                                    saveHandler={HandleSave}
-                                    postHandler={PostComment} />
-                            </div>
-
+                            {
+                                user ?
+                                    <div style={{ width: '100%', borderBottom: '1px solid' }}>
+                                        <CommentEditor
+                                            user={user}
+                                            darkTheme={darkTheme}
+                                            editorRef={editorRef}
+                                            setUsername={setCommentUser}
+                                            setPassword={setCommentPass}
+                                            commentData={commentContent}
+                                            saveHandler={HandleSave}
+                                            postHandler={PostComment} />
+                                    </div> : null
+                            }
                             {
                                 _.map(comments, (comment) => {
                                     return <Comment key={comment.cid} data={comment} />
                                 })
                             }
-                            
+
                             {
                                 (commentCount.current > (commentPage.current * commentsPerPage)) &&
                                 <MoreCommentButton onClick={AddComment}>See other comments...</MoreCommentButton>

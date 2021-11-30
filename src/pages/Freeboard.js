@@ -5,7 +5,7 @@ import { BlockScreenWrapper, PageNumActiveStyle, PageNumButtonStyle, PageSkipBut
 import styled from 'styled-components'
 import { BsPencil, BsSearch } from 'react-icons/bs'
 import { screenDark, screenLight, textDark, textLight } from '../resources/colors'
-import { UseDarkTheme } from '../resources/ContextProvider'
+import { UseAuthUser, UseDarkTheme } from '../resources/ContextProvider'
 import { baseURL, categoryContents, searchOption, sortOrder } from '../resources/config'
 import _ from 'lodash'
 import axios from 'axios'
@@ -63,7 +63,6 @@ let boardPageRange;
 
 
 const Freeboard = () => {
-    localStorage.setItem("navIndex", 1);
 
     const [boardItems, setBoardItems] = useState(null);
     const [searchWord, setSearchWord] = useState("");
@@ -74,6 +73,7 @@ const Freeboard = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [pageArray, setPageArray] = useState([])
     const darkTheme = UseDarkTheme();
+    const user = UseAuthUser();
 
     const limitPerPage = 1;
 
@@ -254,11 +254,13 @@ const Freeboard = () => {
                                 }
                             </SelectStyle>
                         </div>
+                        { user?
                         <Link style={{ float: 'right', color: 'inherit', textDecoration: 'none' }}
                             to={"/board/write"} state={{ editOption: "write" }}
                         >
                             <WriteButton size='1.6rem' />
-                        </Link>
+                        </Link>:null
+                        }
                     </div>
 
                     {
@@ -289,7 +291,7 @@ const Freeboard = () => {
                             {
                                 <PageSkipButtonStyle onClick={ChangePage}>Next</PageSkipButtonStyle>
                             }
-                        </div>:<p> 게시된 글이 없습니다.</p>
+                        </div>:<p style={{lineHeight: '6em'}}> 게시된 글이 없습니다.</p>
                     }
                         <SelectStyle width="80px" defaultValue={searchFilter} style={{ marginRight: '10px' }} onChange={(e) => { setSearchFilter(e.target.value) }}>
                             {_.map(searchOption, (elem) => {

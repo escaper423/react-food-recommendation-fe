@@ -11,6 +11,12 @@ const barAnim = keyframes`
         width: ${props => props.amount}px;
     }
 `
+
+const balloonAnim = keyframes`
+    from{
+        bottom: -150px;
+    }
+`
 const FoodListBar = styled.div`
     position: relative;
     width: ${props => props.amount}px;
@@ -19,34 +25,39 @@ const FoodListBar = styled.div`
     margin-top: 12px;
     background-color: rgb(${props => parseInt(255 - (props.ratio * 255))}, ${props => parseInt(props.ratio * 255)}, 0);
     animation: ${barAnim} .7s ease-out;
-    &:hover & + div{
-        visibility: visible;
+    &:hover div{
+        display: block;
     }
 `
 
 const FoodListBalloon = styled.div`
-    visibility: hidden;
+    display: none;
+    font-size: .85em;
     position: absolute;
-    top: -50px;
-    width: 60px;
+    width: 100px;
     height: 50px;
+    left: 50%;
+    top: -200%;
     border-radius: 4px;
     background-color: white;
-    border: 1px solid black;
+    box-shadow: 0 4px 4px #222;
+    padding-left: 6px;
+    text-align: left;
+    color: black;
     z-index: 2;
-
+    transition: .15s;
+    animation: ${balloonAnim};
     &:after{
+        
+        z-index: -1;
         position:absolute;
         content: "";
-        left: 25px;
+        left: 50%;
         width: 10px;
         height: 10px;
-        border: 1px black transparent;
-        border-left: 0;
-        border-right: 0;
-        border-bottom: 0;
-        top: 50px;
-        background-color: white;
+        bottom: -4px;
+        background: white;
+        transform: translateX(-50%) rotate(45deg);
     }
 `
 
@@ -70,7 +81,14 @@ const FoodListItem = ({fData}) => {
             </div>
             <div>
                 <FoodListBar amount={fData.amount} ratio={fData.ratio}>
-                    <FoodListBalloon />
+                    <FoodListBalloon >
+                    {
+                        <>
+                        <p><b>{fData.name}</b></p>
+                        <p><b>Ratio: </b>{(fData.ratio * 100).toFixed(2)}%</p>
+                        </>
+                    }
+                    </FoodListBalloon>
                 </FoodListBar>
             </div>
         </div>

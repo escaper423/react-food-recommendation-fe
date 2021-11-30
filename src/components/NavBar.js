@@ -39,6 +39,7 @@ border-bottom: 3px solid transparent;
 
 &:hover,
 &.active{
+    border-bottom: 3px solid ${props => props.darkTheme?linkActiveDark:linkActiveLight};
     color: ${props => props.darkTheme ? linkActiveDark : linkActiveLight};
 }
 
@@ -135,22 +136,9 @@ const BarLink = styled(Link)`
     }
 `
 
-const AnimatedBar = styled.div`
-    display: ${props => props.cursorIndex < 0 || props.cursorIndex > 1?'none':'inline-block'};
-    position: absolute;
-    bottom: 0;
-    left: calc(${props => props.cursorIndex} * 104px + 12px);
-    width: 80px;
-    height: 3px;
-    background-color: ${props=>props.darkTheme?linkActiveDark:linkActiveLight};
-    transition: .2s;
-    
-`
-
 export default function NavBar() {
     const darkTheme = UseDarkTheme();
     const [barDropDownOpen, setBarDropDownOpen] = useState(false);
-    const [cursorIndex, setCursorIndex] = useState(localStorage.getItem("navIndex"));
     const barToggle = () => setBarDropDownOpen(!barDropDownOpen);
     const navigate = useNavigate();
     const user = UseAuthUser();
@@ -183,13 +171,6 @@ export default function NavBar() {
         )
     }
 
-    function MoveCursor(idx){
-        setCursorIndex(idx);
-    }
-
-    function UndoCursor(){
-        setCursorIndex(localStorage.getItem("navIndex"));
-    }
     useEffect(() => {
             setBarDropDownOpen(false)
     }, [navigate]);
@@ -203,15 +184,16 @@ export default function NavBar() {
     return (
         <React.Fragment>
             <Nav>
-                <NavLink exact to="/">
+                <NavLink darkTheme={darkTheme} exact to="/">
                     <img src={homeicon}></img>
                 </NavLink>
                 <Bar onClick={barToggle} darkTheme={darkTheme}></Bar>
                 <NavMenu className="header-nav-menu">
-                    <NavLink className="header-nav-contact" darkTheme={darkTheme} to="/contact" onMouseOver={() => { MoveCursor(0) }} onMouseLeave={() => {UndoCursor()}}>Contact</NavLink>
-                    <NavLink className="header-nav-freeboard" darkTheme={darkTheme} to="/board" onMouseOver={() => { MoveCursor(1) }} onMouseLeave={() => {UndoCursor()}}>Freeboard</NavLink>
+                    {user?<p style={{display:'inline-block'}}>{user.username} 님</p>:null}
+                    <NavLink className="header-nav-contact" darkTheme={darkTheme} to="/contact" >Contact</NavLink>
+                    <NavLink className="header-nav-freeboard" darkTheme={darkTheme} to="/board" >Freeboard</NavLink>
                     {userPanel()}
-                    <AnimatedBar darkTheme={darkTheme} cursorIndex={cursorIndex} />
+                    
                 </NavMenu>
 
                 {barDropDownOpen &&

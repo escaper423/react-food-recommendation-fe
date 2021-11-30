@@ -6,7 +6,6 @@ import Header from '../components/Header';
 
 
 const Contact = () => {
-    localStorage.setItem("navIndex", 0);
     
     return (
         <>

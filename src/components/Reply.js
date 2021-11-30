@@ -105,9 +105,13 @@ const Reply = ({ data }) => {
                         <a style={{ cursor: 'pointer', marginRight: '10px' }} onClick={DeleteReply} >
                             <RiDeleteBinLine size='1.2rem' />
                         </a>
-                        <a style={{ cursor: 'pointer' }} onClick={ToggleReply} >
+                        {
+                            user &&
+                            <a style={{ cursor: 'pointer' }} onClick={ToggleReply} >
                             <BsReply size='1.2rem' />
-                        </a>
+                            </a>
+                        }
+                        
                     </div>
                 </div>
             </div>

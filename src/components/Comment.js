@@ -117,9 +117,13 @@ const Comment = ({ data }) => {
                     <a style={{ cursor: 'pointer', marginRight: '10px' }} onClick={DeleteComment}>
                         <RiDeleteBinLine size='1.2rem' />
                     </a>
-                    <a style={{ cursor: 'pointer', marginRight: '10px' }} onClick={ToggleReply}>
+                    {
+                        user?
+                        <a style={{ cursor: 'pointer', marginRight: '10px' }} onClick={ToggleReply}>
                         <BsReply size='1.2rem' />
-                    </a>
+                        </a>:null
+                    }
+                    
                     {
                         replies.length ?
                             <a style={{ cursor: 'pointer' }} onClick={ToggleShowReply}>
