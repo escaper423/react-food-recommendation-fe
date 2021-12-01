@@ -21,7 +21,8 @@ export const searchOption = [
     "title","writer"
 ]
 
-export const baseURL = "http://localhost:3001"
+export const PORT = 3002
+export const baseURL = `http://localhost:${PORT}`
 
 export const EDITOR_JS_TOOLS = {
     embed: Embed,

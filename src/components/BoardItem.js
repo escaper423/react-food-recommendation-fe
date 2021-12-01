@@ -11,6 +11,7 @@ import ModalContainer from './ModalContainer'
 import {HiOutlinePencilAlt} from 'react-icons/hi';
 import {FaTimes} from 'react-icons/fa';
 import {LazyLoadImage} from 'react-lazy-load-image-component';
+import { baseURL } from '../resources/config'
 
 const BoardItem = ({ data }) => {
 
@@ -34,7 +35,7 @@ const BoardItem = ({ data }) => {
         setCommends(commends + 1);
         axios({
             method: "PUT",
-            url: `http://localhost:3001/board/${data.category}/${data._id}`,
+            url: `${baseURL}/board/${data.category}/${data._id}`,
             params: {
                 query: "voteup"
             }
@@ -45,7 +46,7 @@ const BoardItem = ({ data }) => {
         setCommends(commends - 1);
         axios({
             method: "PUT",
-            url: `http://localhost:3001/board/${data.category}/${data._id}`,
+            url: `${baseURL}/board/${data.category}/${data._id}`,
             params: {
                 query: "votedown"
             }
@@ -55,7 +56,7 @@ const BoardItem = ({ data }) => {
     const UpViews = () => {
         axios({
             method: "PUT",
-            url: `http://localhost:3001/board/${data.category}/${data._id}`,
+            url: `${baseURL}/board/${data.category}/${data._id}`,
             params: {
                 query: "view"
             }

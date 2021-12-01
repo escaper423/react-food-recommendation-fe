@@ -5,7 +5,7 @@ import { confirmWrapperStyle,inputWrapperStyle,
     FlexScreenWrapper, InputBox, ConfirmButton, ForgetPasswordText } from '../resources/styles';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
+import { baseURL } from '../resources/config';
 const LoginModal = styled.div`
         position: relative;
         width: 450px;
@@ -43,7 +43,7 @@ const Login = () => {
         console.log("Logging in...");
         axios({
             method: 'POST',
-            url: 'http://localhost:3001/login',
+            url: `${baseURL}/login`,
             withCredentials: true,
             credentials: 'include',
             data: {
