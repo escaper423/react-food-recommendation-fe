@@ -14,6 +14,7 @@ import axios from 'axios';
 import Freeboard from './pages/Freeboard';
 import { screenDark, screenLight, textDark, textLight } from './resources/colors';
 import SearchResult from './pages/SearchResult';
+import { baseURL } from './resources/config';
 
 function App() {
   const darkTheme = UseDarkTheme();
@@ -27,7 +28,7 @@ function App() {
 
     axios({
       method: 'GET',
-      url: 'http://localhost:3001/refresh',
+      url: `${baseURL}/refresh`,
       withCredentials: true,
     }).then((res) => {
       console.log(res.data);

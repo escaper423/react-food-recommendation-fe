@@ -36,7 +36,7 @@ const FoodListBalloon = styled.div`
     position: absolute;
     width: 100px;
     height: 50px;
-    left: 50%;
+    left: 20%;
     top: -200%;
     border-radius: 4px;
     background-color: white;

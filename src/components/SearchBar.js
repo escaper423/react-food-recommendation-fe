@@ -16,7 +16,7 @@ const SearchBarStyle = styled.input.attrs({ type: 'text' })`
     border-right: 0;
     margin: ${barMargin};
     background: transparent;
-    @media screen and (max-width: 600px){
+    @media screen and (max-width: 660px){
         width: 80%;
     }
 `

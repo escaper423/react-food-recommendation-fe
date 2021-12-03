@@ -75,7 +75,7 @@ const Freeboard = () => {
     const darkTheme = UseDarkTheme();
     const user = UseAuthUser();
 
-    const limitPerPage = 1;
+    const limitPerPage = 8;
 
     useEffect(() => {
         setBoardPage(1);

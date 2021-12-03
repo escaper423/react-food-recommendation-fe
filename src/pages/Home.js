@@ -25,7 +25,7 @@ const SearchButtonArea = styled.div`
         transform: scale(1.2,1.2);
     }
 
-    @media screen and (max-width: 600px){
+    @media screen and (max-width: 660px){
         margin: 20px auto;
         display: block;
         left: 50%;
@@ -44,7 +44,7 @@ const SearchButton = styled(BsSearch)`
 
 const SearchBody = styled.div`
     display: inline;
-    @media screen and (max-width: 600px){
+    @media screen and (max-width: 660px){
         display: block;
     }
 `
@@ -59,7 +59,12 @@ const Home = () => {
     const oneTimeAgo = useRef(null);
 
     const FindRecommendation = () => {
-        navigate(`/search?twoTimesAgo=${twoTimesAgo.current.value}&oneTimeAgo=${oneTimeAgo.current.value}`)
+        navigate(`/search`, {
+            state:{
+                twoTimesAgo: twoTimesAgo.current.value,
+                oneTimeAgo: oneTimeAgo.current.value,
+            },
+        })
     }
 
     const GetRecommendations = (e) => {
@@ -81,8 +86,8 @@ const Home = () => {
                 <h1>오늘머먹지</h1>
                 <p>zumo!!</p>
                 <SearchBody>
-                    <SearchBar darkTheme={darkTheme} placeholder="두끼 전" forwardedRef={twoTimesAgo}/>
-                    <SearchBar darkTheme={darkTheme} placeholder="한끼 전" forwardedRef={oneTimeAgo}/>
+                    <SearchBar darkTheme={darkTheme} placeholder="두끼 전" forwardedRef={twoTimesAgo} />
+                    <SearchBar darkTheme={darkTheme} placeholder="한끼 전" forwardedRef={oneTimeAgo} />
                     <SearchButtonArea onClick={FindRecommendation} darkTheme={darkTheme} >
                         <SearchButton size="1.2em" />
                     </SearchButtonArea>

@@ -1,8 +1,7 @@
 import React from 'react'
-import { useNavigate } from 'react-router'
+import { useLocation } from 'react-router'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import Chart from 'react-google-charts'
 import { LoadingStyle } from '../resources/styles'
 import { UseDarkTheme } from '../resources/ContextProvider'
 import { textDark, textLight } from '../resources/colors'
@@ -23,12 +22,12 @@ let sumAmount = 0;
 const barWidth = 390;
 
 const SearchResult = () => {
-    const navigate = useNavigate();
     const darkTheme = UseDarkTheme();
-    const queryParams = new URLSearchParams(window.location.search);
-    const twoTimesAgo = queryParams.get('twoTimesAgo')
-    const oneTimeAgo = queryParams.get('oneTimeAgo')
-
+    const {state} = useLocation()
+    
+    const {twoTimesAgo, oneTimeAgo} = state;
+    console.log("State: "+twoTimesAgo+" , "+oneTimeAgo)
+    //console.log("Params: "+twoTimesAgo+" , "+oneTimeAgo)
     const getSum = (data) => {
         let sum = 0;
         _.map(data, (elem) => {return sum += elem.amount})
@@ -37,9 +36,6 @@ const SearchResult = () => {
 
     sumAmount = getSum(dummyData);
 
-    
-
-    console.log(sumAmount)
     const showList = (elem) =>{
         elem.ratio = elem.amount/sumAmount
         elem.amount = parseInt(barWidth * elem.ratio)
