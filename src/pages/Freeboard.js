@@ -6,10 +6,10 @@ import styled from 'styled-components'
 import { BsPencil, BsSearch } from 'react-icons/bs'
 import { screenDark, screenLight, textDark, textLight } from '../resources/colors'
 import { UseAuthUser, UseDarkTheme } from '../resources/ContextProvider'
-import { baseURL, categoryContents, searchOption, sortOrder } from '../resources/config'
+import { baseURL, categoryContents, categoryId, searchOption, sortId, sortOrder } from '../resources/config'
 import _ from 'lodash'
 import axios from 'axios'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import Footer from '../components/Footer'
 
 
@@ -60,55 +60,40 @@ let boardItemCount;
 let endPage;
 //let endRange;
 let boardPageRange;
-
-
 const Freeboard = () => {
+    const navigate = useNavigate()
+    const loc = useLocation();
+
+    const queryParams = new URLSearchParams(window.location.search);
+    let page = queryParams.get("page") != undefined?queryParams.get("page"):1
+    let category = queryParams.get("category") != undefined?queryParams.get("category"):"all"
+    let priority = queryParams.get("priority") != undefined?queryParams.get("priority"):"recent"
+    let searchFilter = queryParams.get("searchFilter") != undefined?queryParams.get("searchFilter"):"title"
+    let target = queryParams.get("target") != undefined?queryParams.get("target"):""
 
     const [boardItems, setBoardItems] = useState(null);
-    const [searchWord, setSearchWord] = useState("");
-    const [searchFilter, setSearchFilter] = useState("title");
-    const [category, setCategory] = useState("all");
-    const [priority, setPriority] = useState("recent");
-    const [boardPage, setBoardPage] = useState(1);
     const [isLoading, setIsLoading] = useState(true);
     const [pageArray, setPageArray] = useState([])
+
     const darkTheme = UseDarkTheme();
     const user = UseAuthUser();
 
-    const limitPerPage = 8;
+    const limitPerPage = 3;
 
     useEffect(() => {
-        setBoardPage(1);
-        axios({
-            method: 'GET',
-            url: `${baseURL}/board/${category}`,
-            params: {
-                page: 1,
-                sort: priority,
-                filter: searchFilter,
-                limit: limitPerPage,
-                query: searchWord
-            }
-        })
-            .then(res => {
-                setBoardItems(res.data.boardItems);
-                Pagination(res.data.count);
-            }).then(() => {
-                setIsLoading(false);
-            })
-    }, [category, priority])
-
-    useEffect(() => {
+        console.log("useEffect loading")
         setIsLoading(true)
+        
+        console.log("URL params:"+queryParams.get("page"))
         axios({
             method: 'GET',
             url: `${baseURL}/board/${category}`,
             params: {
-                page: boardPage,
+                page: page,
                 sort: priority,
                 filter: searchFilter,
                 limit: limitPerPage,
-                query: searchWord
+                query: target,
             }
         })
             .then(res => {
@@ -117,32 +102,29 @@ const Freeboard = () => {
             }).then(() => {
                 setIsLoading(false);
             })
-    }, [boardPage])
+    }, [loc])
 
     const ChangePage = (e) => {
         const clickedValue = e.target.innerHTML;
         //Show previous page
         if (clickedValue === "Prev") {
-            setBoardPage(Math.max(1, ((boardPageRange - 1) * 10) + 10))
+            page = Math.max(1, ((boardPageRange - 1) * 10) + 10)
         }
-
         //Show next page
         else if (clickedValue === "Next") {
-            setBoardPage(Math.min(endPage, (Math.max(1, ((boardPageRange + 1) * 10 + 1)))))
+            page = Math.min(endPage, (Math.max(1, ((boardPageRange + 1) * 10 + 1))))
         }
-
         //Show selected page
         else {
-            setBoardPage(clickedValue)
+            page = clickedValue
         }
+        SearchBoard()
     }
-
-
 
     const Pagination = (count) => {
         boardItemCount = count;
-        boardPageRange = boardPage % 10 === 0 ? parseInt((boardPage / 10) - 1) : parseInt(boardPage / 10)
-        console.log("Page: " + boardPage + "\nPageRange: " + boardPageRange);
+        boardPageRange = page % 10 === 0 ? parseInt((page / 10) - 1) : parseInt(page / 10)
+        console.log("Page: " + page + "\nPageRange: " + boardPageRange);
         endPage = parseInt(boardItemCount % limitPerPage) === 0 ? parseInt(boardItemCount / limitPerPage) : parseInt(boardItemCount / limitPerPage) + 1;
         //endRange = parseInt(endPage % 10) === 0 ? parseInt(endPage / 10) - 1 : parseInt(endPage / 10);
 
@@ -161,56 +143,54 @@ const Freeboard = () => {
     }
 
     const SearchBoard = () => {
-        console.log("Searching Board with word " + searchWord);
-        setIsLoading(true);
-        axios({
-            method: 'GET',
-            url: `${baseURL}/board/${category}`,
-            params: {
-                page: 1,
-                sort: priority,
-                filter: searchFilter,
-                query: searchWord
-            }
-        }).then(res => {
-            setBoardItems(res.data.boardItems)
-            Pagination(res.data.count);
-        }).then(() => {
-            setSearchWord("");
-            setIsLoading(false);
-        })
+        console.log("Searching Board with word " + target);
+        navigate(`/board?page=${page}&category=${category}&priority=${priority}${searchFilter ? `&searchFilter=${searchFilter}` : ""}${target ? `&target=${target}` : ""}`)
     }
 
     const ChangeCategory = (e) => {
         console.log("Changing category...");
         const val = e.target.value;
-        if (val === "공지") {
-            setCategory("notice");
+        if (val === "notice") {
+            category = "notice"
         }
-        if (val === "일반") {
-            setCategory("general");
+        if (val === "general") {
+            category ="general"
         }
-        if (val === "질문") {
-            setCategory("question");
+        if (val === "question") {
+            category ="question"
         }
-        if (val === "의견") {
-            setCategory("feedback");
+        if (val === "feedback") {
+            category ="feedback"
         }
-        if (val === "모두") {
-            setCategory("all");
+        if (val === "all") {
+            category ="all"
         }
+        SearchBoard()
     }
 
     const ChangeSortOrder = (e) => {
         console.log("Changing sort order...");
-        if (e.target.value === "최근 글 우선") {
-            setPriority("recent")
+        if (e.target.value === "recent") {
+            priority = "recent";
         }
-        if (e.target.value === "조회수") {
-            setPriority("views")
+
+        if (e.target.value === "views") {
+            priority = "views";
         }
-        if (e.target.value === "추천수") {
-            setPriority("commends")
+
+        if (e.target.value === "commends") {
+            priority = "commends";
+        }
+        SearchBoard()
+    }
+
+    const ChangeFilter = (val) => {
+        console.log("Changing filter...")
+        if (ShowSearchFilter(val) === "제목") {
+            searchFilter = "title"
+        }
+        if (ShowSearchFilter(val) === "작성자") {
+            searchFilter = "writer"
         }
     }
 
@@ -221,11 +201,28 @@ const Freeboard = () => {
             return "작성자"
     }
 
+    const ShowCategory = (category) => {
+        for (let elem in categoryId) {
+            if (categoryId[elem] === category) {
+                return categoryContents[elem]
+            }
+        }
+    }
+    
+    const ShowSortOrder = (order) => {
+        for (let elem in sortId){
+            if (sortId[elem] === order){
+                return sortOrder[elem]
+            }
+        }
+    }
+
     if (isLoading)
         return <Header />
     else
         return (
             <>
+                
                 <Header />
                 <div className="board-title" style={{ margin: '40px 0', textAlign: 'center' }}>
                     <h1>Free Board</h1>
@@ -237,29 +234,33 @@ const Freeboard = () => {
                         <div className="board-header-dropdown">
                             <SelectStyle width="80px" className="board-category-selector" onChange={ChangeCategory}>
                                 {
-                                    _.map(categoryContents, (elem) => {
+                                    _.map(categoryId, (elem) => {
                                         return (
-                                            <option key={elem} value={elem} >{elem}</option>
+                                            (elem === category) ? <option key={elem} value={elem} selected>{ShowCategory(elem)}</option>
+                                                :
+                                                <option key={elem} value={elem}>{ShowCategory(elem)}</option>
                                         )
                                     })
                                 }
                             </SelectStyle>
 
                             <SelectStyle width="120px" className="board-sort-selector" style={{ marginLeft: '10px' }} onChange={ChangeSortOrder}>
-                                {_.map(sortOrder, (elem) => {
+                                {_.map(sortId, (elem) => {
                                     return (
-                                        <option key={elem} value={elem} >{elem}</option>
+                                        (elem === priority) ? <option key={elem} value={elem} selected >{ShowSortOrder(elem)}</option>
+                                        :
+                                        <option key={elem} value={elem} >{ShowSortOrder(elem)}</option>
                                     )
                                 })
                                 }
                             </SelectStyle>
                         </div>
-                        { user?
-                        <Link style={{ float: 'right', color: 'inherit', textDecoration: 'none' }}
-                            to={"/board/write"} state={{ editOption: "write" }}
-                        >
-                            <WriteButton size='1.6rem' />
-                        </Link>:null
+                        {user ?
+                            <Link style={{ float: 'right', color: 'inherit', textDecoration: 'none' }}
+                                to={"/board/write"} state={{ editOption: "write" }}
+                            >
+                                <WriteButton size='1.6rem' />
+                            </Link> : null
                         }
                     </div>
 
@@ -272,35 +273,35 @@ const Freeboard = () => {
 
 
                     <div className="board-footer" style={BoardFooterStyle}>{
-                        (boardItemCount)?
-                        <div className="board-footer__pagination" style={{ marginBottom: '20px' }}>
-                            {
-                                <PageSkipButtonStyle onClick={ChangePage}>Prev</PageSkipButtonStyle>
-                            }
-                            {
-                                _.map(pageArray, (elem) => {
+                        (boardItemCount) ?
+                            <div className="board-footer__pagination" style={{ marginBottom: '20px' }}>
+                                {
+                                    <PageSkipButtonStyle onClick={ChangePage}>Prev</PageSkipButtonStyle>
+                                }
+                                {
+                                    _.map(pageArray, (elem) => {
 
-                                    if (elem === parseInt(boardPage)) {
-                                        return <PageNumActiveStyle key={elem}>{elem}</PageNumActiveStyle>
-                                    }
-                                    else {
-                                        return <PageNumButtonStyle key={elem} onClick={(e) => { ChangePage(e) }}>{elem}</PageNumButtonStyle>
-                                    }
-                                })
-                            }
-                            {
-                                <PageSkipButtonStyle onClick={ChangePage}>Next</PageSkipButtonStyle>
-                            }
-                        </div>:<p style={{lineHeight: '6em'}}> 게시된 글이 없습니다.</p>
+                                        if (elem === parseInt(page)) {
+                                            return <PageNumActiveStyle key={elem}>{elem}</PageNumActiveStyle>
+                                        }
+                                        else {
+                                            return <PageNumButtonStyle key={elem} onClick={(e) => { ChangePage(e) }}>{elem}</PageNumButtonStyle>
+                                        }
+                                    })
+                                }
+                                {
+                                    <PageSkipButtonStyle onClick={ChangePage}>Next</PageSkipButtonStyle>
+                                }
+                            </div> : <p style={{ lineHeight: '6em' }}> 게시된 글이 없습니다.</p>
                     }
-                        <SelectStyle width="80px" defaultValue={searchFilter} style={{ marginRight: '10px' }} onChange={(e) => { setSearchFilter(e.target.value) }}>
+                        <SelectStyle width="80px" defaultValue={searchFilter} style={{ marginRight: '10px' }} onChange={(e) => { ChangeFilter(e.target.value) }}>
                             {_.map(searchOption, (elem) => {
                                 return (
                                     <option key={elem} value={elem}>{ShowSearchFilter(elem)}</option>
                                 )
                             })}
                         </SelectStyle>
-                        <SearchTextArea darkTheme={darkTheme} placeholder="Search..." onChange={(e) => { setSearchWord(e.target.value) }} />
+                        <SearchTextArea darkTheme={darkTheme} placeholder="Search..." onChange={(e) => { target = e.target.value }} />
                         <a style={{ cursor: 'pointer' }} >
                             <SearchButton size='1.4rem' style={{ verticalAlign: "middle" }} onClick={SearchBoard} />
                         </a>

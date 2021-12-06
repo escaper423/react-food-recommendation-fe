@@ -17,6 +17,10 @@ export const sortOrder = [
     "최근 글 우선","조회수","추천수",
 ]
 
+export const sortId = [
+    "recent", "views", "commends"
+]
+
 export const searchOption = [
     "title","writer"
 ]
