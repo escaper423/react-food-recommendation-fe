@@ -81,7 +81,7 @@ const Freeboard = () => {
     const limitPerPage = 3;
 
     useEffect(() => {
-        console.log("useEffect loading")
+        console.log("useEffect loading: "+category != 'all')
         setIsLoading(true)
         
         console.log("URL params:"+queryParams.get("page"))
@@ -165,6 +165,7 @@ const Freeboard = () => {
         if (val === "all") {
             category ="all"
         }
+        page = 1;
         SearchBoard()
     }
 
@@ -181,6 +182,7 @@ const Freeboard = () => {
         if (e.target.value === "commends") {
             priority = "commends";
         }
+        page = 1;
         SearchBoard()
     }
 
@@ -217,6 +219,10 @@ const Freeboard = () => {
         }
     }
 
+    const HandleSearch = () => {
+        page = 1;
+        SearchBoard()
+    }
     if (isLoading)
         return <Header />
     else
@@ -303,7 +309,7 @@ const Freeboard = () => {
                         </SelectStyle>
                         <SearchTextArea darkTheme={darkTheme} placeholder="Search..." onChange={(e) => { target = e.target.value }} />
                         <a style={{ cursor: 'pointer' }} >
-                            <SearchButton size='1.4rem' style={{ verticalAlign: "middle" }} onClick={SearchBoard} />
+                            <SearchButton size='1.4rem' style={{ verticalAlign: "middle" }} onClick={HandleSearch} />
                         </a>
                     </div>
                 </BlockScreenWrapper>
