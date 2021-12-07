@@ -87,10 +87,11 @@ const Freeboard = () => {
         console.log("URL params:"+queryParams.get("page"))
         axios({
             method: 'GET',
-            url: `${baseURL}/board/${category}`,
+            url: `${baseURL}/board`,
             params: {
                 page: page,
                 sort: priority,
+                category: category,
                 filter: searchFilter,
                 limit: limitPerPage,
                 query: target,
@@ -307,7 +308,7 @@ const Freeboard = () => {
                                 )
                             })}
                         </SelectStyle>
-                        <SearchTextArea darkTheme={darkTheme} placeholder="Search..." onChange={(e) => { target = e.target.value }} />
+                        <SearchTextArea darkTheme={darkTheme} placeholder="Search..." onChange={(e) => { target = e.target.value }} defaultValue={target}/>
                         <a style={{ cursor: 'pointer' }} >
                             <SearchButton size='1.4rem' style={{ verticalAlign: "middle" }} onClick={HandleSearch} />
                         </a>
