@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import Header from '../components/Header'
 import BoardItem from '../components/BoardItem'
 import { BlockScreenWrapper, PageNumActiveStyle, PageNumButtonStyle, PageSkipButtonStyle, SelectStyle } from '../resources/styles'
@@ -60,6 +60,7 @@ let boardItemCount;
 let endPage;
 //let endRange;
 let boardPageRange;
+
 const Freeboard = () => {
     const navigate = useNavigate()
     const loc = useLocation();
@@ -104,6 +105,29 @@ const Freeboard = () => {
                 setIsLoading(false);
             })
     }, [loc])
+
+    const OnEnterPressed = (e) =>{
+        e.preventDefault()
+        if (e.key === "Enter"){
+            HandleSearch()
+        }
+    }
+
+    useEffect(() => {
+        window.addEventListener('keyup', OnEnterPressed)
+
+        return () => {
+            window.removeEventListener('keyup',OnEnterPressed)
+        }
+
+    },[OnEnterPressed])
+
+    
+
+    const HandleSearch = () => {
+        page = 1;
+        SearchBoard()
+    }
 
     const ChangePage = (e) => {
         const clickedValue = e.target.innerHTML;
@@ -220,10 +244,8 @@ const Freeboard = () => {
         }
     }
 
-    const HandleSearch = () => {
-        page = 1;
-        SearchBoard()
-    }
+    
+
     if (isLoading)
         return <Header />
     else
@@ -233,7 +255,7 @@ const Freeboard = () => {
                 <Header />
                 <div className="board-title" style={{ margin: '40px 0', textAlign: 'center' }}>
                     <h1>Free Board</h1>
-                    <p>free gesipan do excrete any letters</p>
+                    <p>아무 글이나 자유롭게 써주세요.</p>
                 </div>
 
                 <BlockScreenWrapper>
