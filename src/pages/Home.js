@@ -7,6 +7,8 @@ import { buttonActiveDark, buttonActiveLight, buttonDark, buttonLight } from '..
 import { BsSearch } from 'react-icons/bs'
 import SearchBar from '../components/SearchBar';
 import { Navigate, useNavigate } from 'react-router';
+import axios from 'axios';
+import { dbURL } from '../resources/config';
 
 
 const SearchButtonArea = styled.div`
@@ -59,6 +61,20 @@ const Home = () => {
     const oneTimeAgo = useRef(null);
 
     const FindRecommendation = () => {
+        console.log("Recording")
+
+        axios({
+            method: 'POST',
+            url: `${dbURL}/record`,
+            params:{
+                before:twoTimesAgo.current.value,
+                now: oneTimeAgo.current.value
+            }
+        }).then(res => {
+            console.log(res.status)
+        })
+        
+
         navigate(`/search`, {
             state:{
                 twoTimesAgo: twoTimesAgo.current.value,
@@ -66,10 +82,7 @@ const Home = () => {
             },
         })
     }
-
-    const GetRecommendations = (e) => {
-        e.preventDefault();
-    }
+    
     localStorage.setItem("navIndex", -1);
     return (
         <>

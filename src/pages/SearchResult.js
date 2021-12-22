@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import { useLocation } from 'react-router'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
@@ -8,6 +8,8 @@ import { textDark, textLight } from '../resources/colors'
 import noImage from '../resources/icons/noimage.jpg'
 import FoodListItem from '../components/FoodListItem'
 import _ from 'lodash'
+import axios from 'axios'
+import { dbURL } from '../resources/config'
 
 const dummyData =
     [
@@ -21,13 +23,14 @@ const dummyData =
 let sumAmount = 0;
 const barWidth = 390;
 
+
 const SearchResult = () => {
+
     const darkTheme = UseDarkTheme();
     const {state} = useLocation()
     
     const {twoTimesAgo, oneTimeAgo} = state;
-    console.log("State: "+twoTimesAgo+" , "+oneTimeAgo)
-    //console.log("Params: "+twoTimesAgo+" , "+oneTimeAgo)
+    
     const getSum = (data) => {
         let sum = 0;
         _.map(data, (elem) => {return sum += elem.amount})

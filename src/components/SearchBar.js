@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
-import TestData from '../resources/data/testdata.json'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { textDark, textLight } from '../resources/colors'
+import axios from 'axios';
+import { dbURL } from '../resources/config';
 
 const barWidth = "256px";
 const barMargin = "5px 8px";
@@ -31,7 +32,7 @@ const SearchItemWrapper = styled.div`
     margin-top: 5px;
     width: ${barWidth};
     margin: ${barMargin};
-    max-height: 40px;
+    max-height: 120px;
     overflow-y: scroll;
     border-radius: 2px;
     background-color: white;
@@ -49,21 +50,33 @@ const SearchItemWrapper = styled.div`
 `
 const SearchBar = ({ placeholder, darkTheme, data, forwardedRef }) => {
     const [inputText, setInputText] = useState("");
+    const [foodData, setFoodData] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
     const [isSearching, setIsSearching] = useState(false);
 
     const GetValue = () => {
         return inputText;
     }
+
+    useEffect(() => {
+        axios({
+            url: `${dbURL}/foods`,
+            method: 'GET',
+        }).then(res =>{
+            setFoodData(res.data)
+        })
+
+    }, [])
+    
     const HandleFilter = (e) => {
         e.preventDefault();
         const newWord = e.target.value;
-        console.log(newWord);
         setInputText(newWord);
+        console.log(filteredData)
 
         if (newWord.length > 0) {
             setFilteredData(
-                TestData.filter(elem => {
+                foodData.filter(elem => {
                     return (elem.name.toLowerCase().includes(newWord.toLowerCase()));
                 })
             )

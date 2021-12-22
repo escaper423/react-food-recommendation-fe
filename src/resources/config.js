@@ -26,7 +26,9 @@ export const searchOption = [
 ]
 
 export const PORT = 3002
+export const PORT2 = 5000
 export const baseURL = `http://localhost:${PORT}`
+export const dbURL = `http://localhost:${PORT2}`
 
 export const EDITOR_JS_TOOLS = {
     embed: Embed,
