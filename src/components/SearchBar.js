@@ -23,6 +23,8 @@ const SearchBarStyle = styled.input.attrs({ type: 'text' })`
 `
 const SearchItem = styled.p`
     cursor: pointer;
+    font-size: .8em;
+    font-family: 굴림;
     padding: 3px 0;
 `
 
@@ -50,7 +52,6 @@ const SearchItemWrapper = styled.div`
 `
 const SearchBar = ({ placeholder, darkTheme, data, forwardedRef }) => {
     const [inputText, setInputText] = useState("");
-    const [foodData, setFoodData] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
     const [isSearching, setIsSearching] = useState(false);
 
@@ -58,25 +59,14 @@ const SearchBar = ({ placeholder, darkTheme, data, forwardedRef }) => {
         return inputText;
     }
 
-    useEffect(() => {
-        axios({
-            url: `${dbURL}/foods`,
-            method: 'GET',
-        }).then(res =>{
-            setFoodData(res.data)
-        })
-
-    }, [])
-    
     const HandleFilter = (e) => {
         e.preventDefault();
         const newWord = e.target.value;
         setInputText(newWord);
-        console.log(filteredData)
 
         if (newWord.length > 0) {
             setFilteredData(
-                foodData.filter(elem => {
+                data.filter(elem => {
                     return (elem.name.toLowerCase().includes(newWord.toLowerCase()));
                 })
             )

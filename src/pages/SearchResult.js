@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
@@ -11,41 +11,44 @@ import _ from 'lodash'
 import axios from 'axios'
 import { dbURL } from '../resources/config'
 
-const dummyData =
-    [
-        { "name": 'Title1', "species": '1', "amount":33},
-        { "name": 'Title2', "species": '2', "amount":17},
-        { "name": 'Title3', "species": '3', "amount":6},
-        { "name": 'Title4', "species": '4', "amount":3},
-        { "name": 'Title5', "species": '5', "amount":2},
-    ]
-
-let sumAmount = 0;
 const barWidth = 390;
 
-
 const SearchResult = () => {
+    const [sumAmount, setSumAmount] = useState(0)
+    const [queryData, setQueryData] = useState([])
+
+    useEffect(() => {
+        axios({
+            url: `${dbURL}/query`,
+            method: 'GET',
+            params: {
+                name: oneTimeAgo
+            }
+        }).then(res => {
+            console.log(res.data)
+            setQueryData(res.data[0])
+            setSumAmount(res.data[1])
+        })
+    }, [])
 
     const darkTheme = UseDarkTheme();
-    const {state} = useLocation()
-    
-    const {twoTimesAgo, oneTimeAgo} = state;
-    
+    const { state } = useLocation()
+
+    const { twoTimesAgo, oneTimeAgo } = state;
+
     const getSum = (data) => {
         let sum = 0;
-        _.map(data, (elem) => {return sum += elem.amount})
+        _.map(data, (elem) => { return sum += elem.amount })
         return sum;
     }
 
-    sumAmount = getSum(dummyData);
-
-    const showList = (elem) =>{
-        elem.ratio = elem.amount/sumAmount
+    const showList = (elem) => {
+        elem.ratio = elem.count / sumAmount
         elem.amount = parseInt(barWidth * elem.ratio)
-        return <FoodListItem fData={elem}/>
+        return <FoodListItem fData={elem} />
     }
 
-    return (
+    return(
         <>
             <Header />
             <div style={{
@@ -66,7 +69,7 @@ const SearchResult = () => {
                     </div>
                     <h2>추천 음식들</h2>
                     {
-                        _.map(dummyData, showList)
+                        _.map(queryData, showList)
                     }
 
                 </div>

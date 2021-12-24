@@ -75,9 +75,8 @@ const FoodListItem = ({fData}) => {
                 <img src={noImage} style={{borderRadius: '50%', height: '100%', width: '100%'}}></img>
             </div>
 
-            <div style={{textAlign:'left', marginLeft: '4px'}}>
+            <div style={{textAlign:'left', marginLeft: '4px', padding: '0 4px', width: '100px'}}>
                 <h4>{fData.name}</h4>
-                <p style={{fontSize: '14px'}}>{fData.species}</p>
             </div>
             <div>
                 <FoodListBar amount={fData.amount} ratio={fData.ratio}>

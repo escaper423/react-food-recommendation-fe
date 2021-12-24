@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { UseAuthUser, UseDarkTheme } from '../resources/ContextProvider';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -51,36 +51,51 @@ const SearchBody = styled.div`
     }
 `
 
-
 const Home = () => {
     const darkTheme = UseDarkTheme();
+    const [foodData, setFoodData] = useState([]);
     const user = UseAuthUser();
     const navigate = useNavigate();
 
     const twoTimesAgo = useRef(null);
     const oneTimeAgo = useRef(null);
 
-    const FindRecommendation = () => {
-        console.log("Recording")
-
+    useEffect(() => {
         axios({
-            method: 'POST',
-            url: `${dbURL}/record`,
-            params:{
-                before:twoTimesAgo.current.value,
-                now: oneTimeAgo.current.value
-            }
-        }).then(res => {
-            console.log(res.status)
+            url: `${dbURL}/foods`,
+            method: 'GET',
+        }).then(res =>{
+            setFoodData(res.data)
         })
-        
 
-        navigate(`/search`, {
-            state:{
-                twoTimesAgo: twoTimesAgo.current.value,
-                oneTimeAgo: oneTimeAgo.current.value,
-            },
-        })
+    }, [])
+
+    const FindRecommendation = () => {
+        const before = twoTimesAgo.current.value
+        const now = oneTimeAgo.current.value
+
+        if (foodData.find(o => o.name === before) && foodData.find(o => o.name === now)){
+            axios({
+                method: 'POST',
+                url: `${dbURL}/record`,
+                params:{
+                    before: before,
+                    now: now
+                }
+            }).then(res => {
+                console.log(res.status)
+            })
+            
+            navigate(`/search`, {
+                state:{
+                    twoTimesAgo: twoTimesAgo.current.value,
+                    oneTimeAgo: oneTimeAgo.current.value,
+                },
+            })
+        }
+        else{
+            console.log("안댐")
+        }
     }
     
     localStorage.setItem("navIndex", -1);
@@ -99,8 +114,8 @@ const Home = () => {
                 <h1>오늘머먹지</h1>
                 <p>zumo!!</p>
                 <SearchBody>
-                    <SearchBar darkTheme={darkTheme} placeholder="두끼 전" forwardedRef={twoTimesAgo} />
-                    <SearchBar darkTheme={darkTheme} placeholder="한끼 전" forwardedRef={oneTimeAgo} />
+                    <SearchBar darkTheme={darkTheme} placeholder="두끼 전" forwardedRef={twoTimesAgo} data={foodData}/>
+                    <SearchBar darkTheme={darkTheme} placeholder="한끼 전" forwardedRef={oneTimeAgo} data={foodData}/>
                     <SearchButtonArea onClick={FindRecommendation} darkTheme={darkTheme} >
                         <SearchButton size="1.2em" />
                     </SearchButtonArea>
