@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react'
 import noImage from '../resources/icons/noimage.jpg'
 import styled, { keyframes } from 'styled-components';
+import axios from 'axios';
+import { dbURL } from '../resources/config';
 
 const barAnim = keyframes`
     from{
@@ -62,6 +64,19 @@ const FoodListBalloon = styled.div`
 `
 
 const FoodListItem = ({fData}) => {
+    const [imgUrl,setImgUrl] = useState("");
+
+    useEffect(() => {
+        axios({
+            url: `${dbURL}/image`,
+            method: 'GET',
+            params: {
+                query: fData.name
+            },
+        }).then(res =>{
+            setImgUrl(res.data);
+        })
+    },[])
 
     return (
         <div style={{display: 'flex', 
@@ -71,8 +86,8 @@ const FoodListItem = ({fData}) => {
         margin: '10px 0',
         marginLeft: '6px'
         }}>
-            <div styles={{width: '50px' , height: '50px', position:'relative'}}>
-                <img src={noImage} style={{borderRadius: '50%', height: '100%', width: '100%'}}></img>
+            <div styles={{width: '80px', height: '80px'}}>
+                <img src={imgUrl} style={{borderRadius: '10px', height: '50px', width: '50px', position:'relative'}} loading='lazy'></img>
             </div>
 
             <div style={{textAlign:'left', marginLeft: '4px', padding: '0 4px', width: '100px'}}>
@@ -84,7 +99,7 @@ const FoodListItem = ({fData}) => {
                     {
                         <>
                         <p><b>{fData.name}</b></p>
-                        <p><b>Ratio: </b>{(fData.ratio * 100).toFixed(2)}%</p>
+                        <p><b>비율: </b>{(fData.ratio * 100).toFixed(2)}%</p>
                         </>
                     }
                     </FoodListBalloon>

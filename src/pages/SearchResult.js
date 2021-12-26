@@ -16,6 +16,7 @@ const barWidth = 390;
 const SearchResult = () => {
     const [sumAmount, setSumAmount] = useState(0)
     const [queryData, setQueryData] = useState([])
+    const [lastFoodImage, setLastFoodImage] = useState("")
 
     useEffect(() => {
         axios({
@@ -25,10 +26,20 @@ const SearchResult = () => {
                 name: oneTimeAgo
             }
         }).then(res => {
-            console.log(res.data)
-            setQueryData(res.data[0].slice(0,10))
+            setQueryData(res.data[0].slice(0, 10))
             setSumAmount(res.data[1])
         })
+
+        axios({
+            url: `${dbURL}/image`,
+            method: 'GET',
+            params: {
+                query: oneTimeAgo
+            },
+        }).then(res => {
+            setLastFoodImage(res.data)
+        })
+
     }, [])
 
     const darkTheme = UseDarkTheme();
@@ -41,14 +52,14 @@ const SearchResult = () => {
         _.map(data, (elem) => { return sum += elem.amount })
         return sum;
     }
-
+    
     const showList = (elem) => {
         elem.ratio = elem.count / sumAmount
         elem.amount = parseInt(barWidth * elem.ratio)
         return <FoodListItem fData={elem} />
     }
 
-    return(
+    return (
         <>
             <Header />
             <div style={{
@@ -65,7 +76,7 @@ const SearchResult = () => {
                     <p>가장 최근에 먹은 음식</p>
                     <div style={{ width: '192px', height: '192px', margin: 'auto', marginBottom: '30px' }}>
                         <img style={{ borderRadius: '10px', width: '100%', height: '100%' }}
-                            src={noImage} alt="Food Image" loading="lazy" />
+                            src={lastFoodImage} alt="Food Image" loading="lazy" />
                     </div>
                     <h2>추천 음식들</h2>
                     {
