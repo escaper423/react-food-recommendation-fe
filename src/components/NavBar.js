@@ -190,7 +190,6 @@ export default function NavBar() {
                 <Bar onClick={barToggle} darkTheme={darkTheme}></Bar>
                 <NavMenu className="header-nav-menu">
                     {user?<p style={{display:'inline-block'}}>{user.username} 님</p>:null}
-                    <NavLink className="header-nav-contact" darkTheme={darkTheme} to="/contact" >Contact</NavLink>
                     <NavLink className="header-nav-freeboard" darkTheme={darkTheme} to="/board" >Freeboard</NavLink>
                     {userPanel()}
                     
@@ -198,7 +197,6 @@ export default function NavBar() {
 
                 {barDropDownOpen &&
                     <BarMenu darkTheme={darkTheme}>
-                        <BarLink darkTheme={darkTheme} to="/contact">Contact</BarLink>
                         <BarLink darkTheme={darkTheme} to="/board">Freeboard</BarLink>
 
                         {userBarPanel()}
