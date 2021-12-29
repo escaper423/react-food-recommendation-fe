@@ -7,6 +7,7 @@ import {
 } from '../resources/styles';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { baseURL } from '../resources/config';
 
 const RegisterModal = styled.div`
         position: relative;
@@ -66,7 +67,7 @@ const SignUp = () => {
             axios(
                 {
                     method: 'POST',
-                    url: 'http://127.0.0.1:3001/register',
+                    url: `${baseURL}/register`,
                     data: {
                         username: username,
                         email: email,
