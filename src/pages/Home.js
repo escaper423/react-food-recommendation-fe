@@ -112,7 +112,7 @@ const Home = () => {
                 backgroundColor: darkTheme ? '#333333' : '#eeeeee'
             }}>
                 <h1>오늘머먹지</h1>
-                <p>zumo!!</p>
+                <p>한끼 전, 두끼 전에 무엇을 드셨는지 적어주세요.</p>
                 <SearchBody>
                     <SearchBar darkTheme={darkTheme} placeholder="두끼 전" forwardedRef={twoTimesAgo} data={foodData}/>
                     <SearchBar darkTheme={darkTheme} placeholder="한끼 전" forwardedRef={oneTimeAgo} data={foodData}/>
