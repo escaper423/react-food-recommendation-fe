@@ -1,12 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { UseAuthUser, UseDarkTheme } from '../resources/ContextProvider';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
 import styled from 'styled-components';
 import { buttonActiveDark, buttonActiveLight, buttonDark, buttonLight } from '../resources/colors';
 import { BsSearch } from 'react-icons/bs'
 import SearchBar from '../components/SearchBar';
-import { Navigate, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 import axios from 'axios';
 import { dbURL } from '../resources/config';
 
@@ -101,7 +99,6 @@ const Home = () => {
     localStorage.setItem("navIndex", -1);
     return (
         <>
-            <Header />
             <div style={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -122,8 +119,6 @@ const Home = () => {
                 </SearchBody>
 
             </div>
-            <Footer />
-
         </>
     );
 }

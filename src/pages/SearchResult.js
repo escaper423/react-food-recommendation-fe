@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router'
-import Header from '../components/Header'
 import Footer from '../components/Footer'
-import { LoadingStyle } from '../resources/styles'
 import { UseDarkTheme } from '../resources/ContextProvider'
-import { textDark, textLight } from '../resources/colors'
-import noImage from '../resources/icons/noimage.jpg'
 import FoodListItem from '../components/FoodListItem'
 import _ from 'lodash'
 import axios from 'axios'
@@ -61,7 +57,6 @@ const SearchResult = () => {
 
     return (
         <>
-            <Header />
             <div style={{
                 display: 'flex',
                 textAlign: 'center',

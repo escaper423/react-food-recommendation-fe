@@ -3,6 +3,7 @@ import React, { useEffect, useRef } from 'react';
 import { UseDarkTheme, UseSetAuthUser, UseSetDarkTheme } from './resources/ContextProvider';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
+import Header from './components/Header';
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
 import Logout from './pages/Logout';
@@ -51,6 +52,7 @@ function App() {
   return (
     <Router>
     <div className="app" style={appStyle}>
+      <Header />
       <Routes>
             <Route path='/' exact element={<Home />} />
             <Route path='/search' element={<SearchResult />} />

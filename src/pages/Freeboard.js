@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import Header from '../components/Header'
 import BoardItem from '../components/BoardItem'
 import { BlockScreenWrapper, PageNumActiveStyle, PageNumButtonStyle, PageSkipButtonStyle, SelectStyle } from '../resources/styles'
 import styled from 'styled-components'
@@ -10,7 +9,6 @@ import { baseURL, categoryContents, categoryId, searchOption, sortId, sortOrder 
 import _ from 'lodash'
 import axios from 'axios'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
-import Footer from '../components/Footer'
 
 
 const BoardHeaderStyle = {
@@ -247,12 +245,10 @@ const Freeboard = () => {
     
 
     if (isLoading)
-        return <Header />
+        return null
     else
         return (
             <>
-                
-                <Header />
                 <div className="board-title" style={{ margin: '40px 0', textAlign: 'center' }}>
                     <h1>Free Board</h1>
                     <p>아무 글이나 자유롭게 써주세요.</p>
@@ -336,7 +332,6 @@ const Freeboard = () => {
                         </a>
                     </div>
                 </BlockScreenWrapper>
-                <Footer />
             </>
         )
 }

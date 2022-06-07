@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useParams } from 'react-router-dom'
 import Comment from '../components/Comment'
-import Header from '../components/Header'
 import { UseAuthUser, UseDarkTheme } from '../resources/ContextProvider'
 import { BlockScreenWrapper, LoadingStyle } from '../resources/styles'
 import _ from 'lodash'
@@ -151,7 +150,6 @@ const InBoard = () => {
 
     else return (
         <>
-            <Header />
             {!isLoading &&
                 <div>
                     <BlockScreenWrapper>
@@ -204,12 +202,8 @@ const InBoard = () => {
                                 isCommentLoading &&
                                 <LoadingStyle />
                             }
-
-
                         </div>
-
                     </BlockScreenWrapper>
-
                 </div>
             }
         </>
